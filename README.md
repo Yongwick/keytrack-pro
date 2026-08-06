@@ -1,20 +1,18 @@
-# KeyTrack Pro · Fase 2
+# KeyTrack Pro V3
 
 Incluye:
 
-- Marca, OEM y FCC ID
-- Frecuencia y tipo de chip
-- Botones y batería
-- Estado del producto
-- Proveedor
-- Costo, precio y valor de inventario
-- Compatibilidad por vehículo
-- Escáner, fotos, historial, roles y sincronización
-- Exportación CSV ampliada
+- Buscador por vehículo
+- Equivalencias entre marcas
+- Fotografías adicionales
+- Documentos PDF por producto
+- Tablas para compatibilidad por año, marca y modelo
+- Base preparada para catálogo maestro
+- Escáner, fotos, historial, roles, costos y sincronización
 
 ## Instalación
 
-1. Ejecuta `fase2.sql` en Supabase SQL Editor.
+1. Ejecuta `fase3.sql` en Supabase SQL Editor.
 2. Sube a GitHub y reemplaza:
    - index.html
    - manifest.webmanifest

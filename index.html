@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#08111f">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/icon.svg">
-<title>KeyTrack Pro · Fase 2</title>
+<title>KeyTrack Pro · V3</title>
 <style>
 :root{--bg:#07101f;--panel:#101b2d;--panel2:#152238;--text:#f5f7fb;--muted:#93a4ba;--accent:#4f8cff;--line:#25344b;--danger:#ef4444;--ok:#22c55e;--warn:#f59e0b}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#07101f,#0a1424 45%,#07101f);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;min-height:100vh}
@@ -27,7 +27,7 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 <body>
 <div id="auth" class="auth">
  <div class="authbox card">
-  <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Fase 2 · Catálogo profesional</div></div></div>
+  <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">V3 · Catálogo inteligente</div></div></div>
   <div class="tabs"><button id="tl" class="btn primary">Iniciar sesión</button><button id="ts" class="btn">Crear cuenta</button></div>
   <form id="af" class="stack">
    <div id="namebox"><label>Nombre</label><input id="fullname" class="field"></div>
@@ -41,7 +41,7 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 
 <div id="app" class="app hidden">
 <header>
- <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Catálogo · Vehículos · Costos · Reportes</div></div></div>
+ <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Vehículos · Equivalencias · Documentos · Multiimagen</div></div></div>
  <div class="row">
   <span class="status"><span id="dot" class="dot"></span><span id="cloud">Conectando…</span></span>
   <span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
@@ -60,6 +60,19 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
  <input id="search" class="field" placeholder="Buscar nombre, SKU, serie, código, FCC ID…">
  <select id="filter" class="field"><option value="">Todas las categorías</option><option>Llave</option><option>Control</option><option>Máquina</option><option>Herramienta</option><option>Accesorio</option><option>Otro</option></select>
  <button id="scan" class="btn">📷 Escanear</button><button id="clear" class="btn">Limpiar</button>
+</section>
+
+<section class="card" style="margin-bottom:14px">
+  <div class="row">
+    <div><h3>Buscador por vehículo</h3><div class="muted">Filtra productos compatibles por marca, modelo y año.</div></div>
+    <div class="row" style="flex:1;justify-content:flex-end">
+      <input id="vehicleMake" class="field" placeholder="Marca" style="max-width:180px">
+      <input id="vehicleModel" class="field" placeholder="Modelo" style="max-width:180px">
+      <input id="vehicleYear" class="field" type="number" placeholder="Año" style="max-width:120px">
+      <button id="vehicleSearch" class="btn">Buscar</button>
+      <button id="vehicleClear" class="btn">Limpiar</button>
+    </div>
+  </div>
 </section>
 
 <section class="panel">
@@ -93,7 +106,9 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
    <div><label>Costo</label><input id="icost" class="field" type="number" step="0.01" min="0"></div>
    <div><label>Precio de venta</label><input id="iprice" class="field" type="number" step="0.01" min="0"></div>
    <div class="span"><label>Compatibilidad por vehículo</label><input id="ivehicle" class="field" placeholder="Toyota Camry 2018-2024, Lexus ES…"></div>
-   <div><label>Fotografía</label><input id="iphoto" class="field" type="file" accept="image/*" capture="environment"></div>
+   <div><label>Fotografías adicionales</label><input id="iphotos" class="field" type="file" accept="image/*" multiple></div>
+   <div><label>Documento PDF</label><input id="idoc" class="field" type="file" accept="application/pdf"></div>
+   <div class="span"><label>Equivalencias</label><input id="iequiv" class="field" placeholder="Xhorse, KeyDIY, Autel, Ilco..."></div>
    <div class="span"><label>Notas</label><textarea id="inotes" class="field"></textarea></div>
   </div>
   <div class="row fa"><button id="icancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div>
@@ -134,14 +149,22 @@ $('#logout').onclick=()=>sb.auth.signOut();
 
 async function loadProfile(){let r=await sb.from('profiles').select('full_name,role').eq('id',session.user.id).single();profile=r.data||{role:'employee'};$('#role').textContent=profile.role}
 async function load(){$('#cloud').textContent='Sincronizando…';$('#dot').classList.remove('ok');let a=await sb.from('locations').select('id,name').order('name');if(a.error)return toast(a.error.message);locs=a.data||[];$('#iloc').innerHTML='<option value="">Sin ubicación</option>'+locs.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');let r=await sb.from('products').select('*,locations(name)').order('created_at',{ascending:false});if(r.error)return toast(r.error.message);items=r.data||[];$('#cloud').textContent='Sincronizado';$('#dot').classList.add('ok');render()}
-function list(){let q=val('#search').toLowerCase(),c=$('#filter').value;return items.filter(x=>(!c||x.category===c)&&(!q||[x.name,x.sku,x.serial_number,x.barcode,x.fcc_id,x.ic_number,x.brand,x.oem_number,x.frequency,x.chip_type,x.vehicle_compatibility,x.supplier,x.locations?.name,x.notes].join(' ').toLowerCase().includes(q)))}
+function list(){let q=val('#search').toLowerCase(),c=$('#filter').value;return items.filter(x=>(!c||x.category===c)&&(!q||[x.name,x.sku,x.serial_number,x.barcode,x.fcc_id,x.ic_number,x.brand,x.oem_number,x.frequency,x.chip_type,x.vehicle_compatibility,x.supplier,x.equivalences,x.locations?.name,x.notes].join(' ').toLowerCase().includes(q)))}
 function render(){let a=list();$('#body').innerHTML=a.map(x=>`<tr><td>${x.image_url?`<img class="thumb" src="${esc(x.image_url)}" alt="">`:'—'}</td><td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td><td>${esc(x.brand||'—')}<div class="muted">${esc(x.fcc_id||'Sin FCC')}</div></td><td>${esc(x.sku||'—')}<div class="muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</div></td><td>${esc(x.vehicle_compatibility||'—')}</td><td>${esc(x.locations?.name||'—')}</td><td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td><td><div class="acts"><button class="btn small" data-a="m" data-id="${x.id}">±</button><button class="btn small" data-a="h" data-id="${x.id}">Historial</button><button class="btn small" data-a="e" data-id="${x.id}">Editar</button>${profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}</div></td></tr>`).join('');$('#count').textContent=a.length+' resultados';$('#si').textContent=items.length;$('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);$('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;$('#sz').textContent=items.filter(x=>x.quantity===0).length}
 
-function openItem(x){$('#ititle').textContent=x?'Editar artículo':'Nuevo artículo';$('#iid').value=x?.id||'';$('#oldimg').value=x?.image_url||'';$('#iname').value=x?.name||'';$('#icat').value=x?.category||'Llave';$('#iq').value=x?.quantity??1;$('#ibrand').value=x?.brand||'';$('#isku').value=x?.sku||'';$('#ioem').value=x?.oem_number||'';$('#iser').value=x?.serial_number||'';$('#iloc').value=x?.location_id||'';$('#imin').value=x?.minimum_quantity??2;$('#ibar').value=x?.barcode||'';$('#ifcc').value=x?.fcc_id||'';$('#iic').value=x?.ic_number||'';$('#ifreq').value=x?.frequency||'';$('#ichip').value=x?.chip_type||'';$('#ibuttons').value=x?.button_count??'';$('#ibattery').value=x?.battery_type||'';$('#icondition').value=x?.condition_status||'Nuevo';$('#isupplier').value=x?.supplier||'';$('#icost').value=x?.cost??'';$('#iprice').value=x?.sale_price??'';$('#ivehicle').value=x?.vehicle_compatibility||'';$('#inotes').value=x?.notes||'';$('#iphoto').value='';$('#item').showModal()}
+function openItem(x){$('#ititle').textContent=x?'Editar artículo':'Nuevo artículo';$('#iid').value=x?.id||'';$('#oldimg').value=x?.image_url||'';$('#iname').value=x?.name||'';$('#icat').value=x?.category||'Llave';$('#iq').value=x?.quantity??1;$('#ibrand').value=x?.brand||'';$('#isku').value=x?.sku||'';$('#ioem').value=x?.oem_number||'';$('#iser').value=x?.serial_number||'';$('#iloc').value=x?.location_id||'';$('#imin').value=x?.minimum_quantity??2;$('#ibar').value=x?.barcode||'';$('#ifcc').value=x?.fcc_id||'';$('#iic').value=x?.ic_number||'';$('#ifreq').value=x?.frequency||'';$('#ichip').value=x?.chip_type||'';$('#ibuttons').value=x?.button_count??'';$('#ibattery').value=x?.battery_type||'';$('#icondition').value=x?.condition_status||'Nuevo';$('#isupplier').value=x?.supplier||'';$('#icost').value=x?.cost??'';$('#iprice').value=x?.sale_price??'';$('#ivehicle').value=x?.vehicle_compatibility||'';$('#iequiv').value=x?.equivalences||'';$('#inotes').value=x?.notes||'';$('#iphoto').value='';$('#item').showModal()}
 $('#add').onclick=()=>openItem();$('#ix').onclick=$('#icancel').onclick=()=>$('#item').close();
 
-async function uploadPhoto(file){if(!file)return null;let ext=(file.name.split('.').pop()||'jpg').toLowerCase(),path=`${session.user.id}/${crypto.randomUUID()}.${ext}`;let u=await sb.storage.from('product-images').upload(path,file,{upsert:false});if(u.error)throw u.error;return sb.storage.from('product-images').getPublicUrl(path).data.publicUrl}
-$('#if').onsubmit=async e=>{e.preventDefault();let id=val('#iid');try{let image=val('#oldimg')||null,file=$('#iphoto').files[0];if(file)image=await uploadPhoto(file);let p={name:val('#iname'),category:$('#icat').value,quantity:+$('#iq').value,brand:val('#ibrand')||null,sku:val('#isku')||null,oem_number:val('#ioem')||null,serial_number:val('#iser')||null,location_id:$('#iloc').value||null,minimum_quantity:+$('#imin').value,barcode:val('#ibar')||null,fcc_id:val('#ifcc')||null,ic_number:val('#iic')||null,frequency:val('#ifreq')||null,chip_type:val('#ichip')||null,button_count:+$('#ibuttons').value||null,battery_type:val('#ibattery')||null,condition_status:$('#icondition').value,supplier:val('#isupplier')||null,cost:+$('#icost').value||0,sale_price:+$('#iprice').value||0,vehicle_compatibility:val('#ivehicle')||null,notes:val('#inotes')||null,image_url:image};let r=id?await sb.from('products').update(p).eq('id',id):await sb.from('products').insert({...p,created_by:session.user.id});if(r.error)throw r.error;$('#item').close();toast('Guardado');load()}catch(err){toast(err.message)}};
+async function uploadFile(bucket,file){if(!file)return null;let ext=(file.name.split('.').pop()||'bin').toLowerCase(),path=`${session.user.id}/${crypto.randomUUID()}.${ext}`;let u=await sb.storage.from(bucket).upload(path,file,{upsert:false});if(u.error)throw u.error;return sb.storage.from(bucket).getPublicUrl(path).data.publicUrl}
+async function uploadPhoto(file){return uploadFile('product-images',file)}
+$('#if').onsubmit=async e=>{e.preventDefault();let id=val('#iid');try{let image=val('#oldimg')||null,file=$('#iphoto').files[0];if(file)image=await uploadPhoto(file);
+let extraImages=[];for(const f of $('#iphotos').files){extraImages.push(await uploadPhoto(f))}
+let documentUrl=null;if($('#idoc').files[0])documentUrl=await uploadFile('product-documents',$('#idoc').files[0]);let p={name:val('#iname'),category:$('#icat').value,quantity:+$('#iq').value,brand:val('#ibrand')||null,sku:val('#isku')||null,oem_number:val('#ioem')||null,serial_number:val('#iser')||null,location_id:$('#iloc').value||null,minimum_quantity:+$('#imin').value,barcode:val('#ibar')||null,fcc_id:val('#ifcc')||null,ic_number:val('#iic')||null,frequency:val('#ifreq')||null,chip_type:val('#ichip')||null,button_count:+$('#ibuttons').value||null,battery_type:val('#ibattery')||null,condition_status:$('#icondition').value,supplier:val('#isupplier')||null,cost:+$('#icost').value||0,sale_price:+$('#iprice').value||0,vehicle_compatibility:val('#ivehicle')||null,equivalences:val('#iequiv')||null,notes:val('#inotes')||null,image_url:image,document_url:documentUrl};let r=id?await sb.from('products').update(p).eq('id',id):await sb.from('products').insert({...p,created_by:session.user.id}).select('id');if(r.error)throw r.error;
+if(extraImages.length){
+  const productId=id||r.data?.[0]?.id;
+  if(productId) await sb.from('product_images').insert(extraImages.map((url,idx)=>({product_id:productId,image_url:url,sort_order:idx})));
+}
+$('#item').close();toast('Guardado');load()}catch(err){toast(err.message)}};
 
 $('#body').onclick=async e=>{let b=e.target.closest('button');if(!b)return;let x=items.find(i=>i.id===b.dataset.id);if(b.dataset.a==='e')openItem(x);if(b.dataset.a==='d'&&confirm('¿Borrar '+x.name+'?')){let r=await sb.from('products').delete().eq('id',x.id);r.error?toast(r.error.message):load()}if(b.dataset.a==='m'){$('#mid').value=x.id;$('#mtitle').textContent='Movimiento: '+x.name;$('#move').showModal()}if(b.dataset.a==='h')showHistory(x)};
 $('#mx').onclick=$('#mcancel').onclick=()=>$('#move').close();
@@ -155,6 +178,10 @@ function stopScanner(){if(stream)stream.getTracks().forEach(t=>t.stop());stream=
 $('#scan').onclick=()=>startScanner('search');$('#scanField').onclick=()=>startScanner('field');$('#sx').onclick=stopScanner;$('#manual').onclick=()=>{let c=prompt('Escribe o pega el código:');if(c)applyScan(c);stopScanner()};
 
 $('#search').oninput=$('#filter').onchange=render;$('#clear').onclick=()=>{$('#search').value='';$('#filter').value='';render()};
+
+$('#vehicleSearch').onclick=()=>{const make=val('#vehicleMake').toLowerCase(),model=val('#vehicleModel').toLowerCase(),year=val('#vehicleYear');const q=[make,model,year].filter(Boolean).join(' ');$('#search').value=q;render()};
+$('#vehicleClear').onclick=()=>{$('#vehicleMake').value='';$('#vehicleModel').value='';$('#vehicleYear').value='';$('#search').value='';render()};
+
 $('#csv').onclick=()=>{let r=[['Nombre','Categoría','Marca','SKU','OEM','Serie','Ubicación','Cantidad','Mínimo','Código','FCC ID','IC','Frecuencia','Chip','Botones','Batería','Estado','Proveedor','Costo','Precio','Vehículo','Foto','Notas'],...items.map(x=>[x.name,x.category,x.brand,x.sku,x.oem_number,x.serial_number,x.locations?.name,x.quantity,x.minimum_quantity,x.barcode,x.fcc_id,x.ic_number,x.frequency,x.chip_type,x.button_count,x.battery_type,x.condition_status,x.supplier,x.cost,x.sale_price,x.vehicle_compatibility,x.image_url,x.notes])],csv=r.map(a=>a.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n'),b=new Blob(['\ufeff'+csv],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='keytrack-fase1.csv';a.click()};
 
 sb.auth.onAuthStateChange(async(_,s)=>{session=s;$('#auth').classList.toggle('hidden',!!s);$('#app').classList.toggle('hidden',!s);if(s){$('#user').textContent=s.user.email;await loadProfile();load()}});

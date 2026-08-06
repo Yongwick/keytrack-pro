@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1220" />
+  <meta name="description" content="Inventario de llaves, controles, máquinas y herramientas." />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" href="/icon.svg" />
+  <title>KeyTrack Pro</title>
+  <style>
+    :root{
+      --bg:#07101f;--panel:#101b2d;--panel2:#152238;--text:#f5f7fb;--muted:#93a4ba;
+      --accent:#4f8cff;--accent2:#2563eb;--danger:#ef4444;--ok:#22c55e;--warn:#f59e0b;
+      --line:#25344b;--shadow:0 18px 45px rgba(0,0,0,.28);--radius:18px
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#07101f,#0a1424 45%,#07101f);color:var(--text);min-height:100vh}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    .app{max-width:1180px;margin:auto;padding:18px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0 22px}
+    .brand{display:flex;align-items:center;gap:13px}
+    .logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:grid;place-items:center;box-shadow:var(--shadow)}
+    .logo svg{width:27px;height:27px}
+    h1{font-size:1.35rem;margin:0}.subtitle{color:var(--muted);font-size:.9rem;margin-top:2px}
+    .top-actions{display:flex;gap:10px}
+    .btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:11px 14px;border-radius:13px;font-weight:700}
+    .btn:hover{filter:brightness(1.08)}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent}
+    .btn.danger{background:#3a1520;border-color:#6d2434;color:#fecdd3}
+    .btn.small{padding:8px 10px;border-radius:10px;font-size:.87rem}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
+    .stat{background:rgba(16,27,45,.92);border:1px solid var(--line);border-radius:var(--radius);padding:17px;box-shadow:var(--shadow)}
+    .stat .label{color:var(--muted);font-size:.83rem}.stat .value{font-size:1.65rem;font-weight:850;margin-top:6px}
+    .toolbar{display:grid;grid-template-columns:1fr 180px auto;gap:10px;background:rgba(16,27,45,.92);border:1px solid var(--line);padding:13px;border-radius:var(--radius);margin-bottom:15px}
+    .field{width:100%;border:1px solid var(--line);background:#0a1424;color:var(--text);border-radius:12px;padding:12px;outline:none}
+    .field:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,140,255,.15)}
+    .content{display:grid;grid-template-columns:1fr;gap:15px}
+    .panel{background:rgba(16,27,45,.94);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .panel-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
+    .panel-head h2{margin:0;font-size:1.05rem}
+    .table-wrap{overflow:auto}
+    table{width:100%;border-collapse:collapse;min-width:820px}
+    th,td{text-align:left;padding:13px 15px;border-bottom:1px solid var(--line);vertical-align:middle}
+    th{color:#aebbd0;font-size:.77rem;text-transform:uppercase;letter-spacing:.05em;background:#0c1728;position:sticky;top:0}
+    td{font-size:.91rem}
+    tr:hover td{background:rgba(79,140,255,.045)}
+    .name{font-weight:800}.sub{font-size:.78rem;color:var(--muted);margin-top:3px}
+    .badge{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:.75rem;font-weight:800;background:#1b2c48;color:#bfd3ff}
+    .qty{font-weight:850}.low{color:#fbbf24}.zero{color:#fb7185}
+    .actions{display:flex;gap:6px;white-space:nowrap}
+    .empty{padding:55px 20px;text-align:center;color:var(--muted)}
+    dialog{border:1px solid var(--line);border-radius:20px;background:var(--panel);color:var(--text);width:min(680px,calc(100% - 24px));padding:0;box-shadow:0 30px 90px rgba(0,0,0,.6)}
+    dialog::backdrop{background:rgba(0,0,0,.68);backdrop-filter:blur(3px)}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;padding:17px 19px;border-bottom:1px solid var(--line)}
+    .modal-head h3{margin:0}.close{background:transparent;border:0;color:var(--muted);font-size:1.5rem}
+    form{padding:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+    label{display:block;color:#bdc8d8;font-size:.81rem;font-weight:750;margin-bottom:6px}
+    .span2{grid-column:1/-1}
+    textarea{min-height:82px;resize:vertical}
+    .modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
+    .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(25px);opacity:0;background:#17243a;border:1px solid var(--line);padding:12px 16px;border-radius:13px;box-shadow:var(--shadow);transition:.25s;z-index:99}
+    .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+    .footer{color:var(--muted);font-size:.78rem;text-align:center;padding:22px 0 8px}
+    @media(max-width:760px){
+      .app{padding:12px}header{align-items:flex-start}.top-actions{flex-direction:column}
+      .stats{grid-template-columns:1fr 1fr}.toolbar{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.span2{grid-column:auto}
+      .btn .desktop{display:none}.stat{padding:14px}.stat .value{font-size:1.35rem}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="8" cy="12" r="4"/><path d="M12 12h9m-3 0v3m-3-3v2"/></svg>
+      </div>
+      <div><h1>KeyTrack Pro</h1><div class="subtitle">Inventario profesional para llaves, controles y equipos</div></div>
+    </div>
+    <div class="top-actions">
+      <button class="btn" id="exportBtn">Exportar CSV</button>
+      <button class="btn primary" id="addBtn">＋ <span class="desktop">Nuevo artículo</span></button>
+    </div>
+  </header>
+
+  <section class="stats">
+    <div class="stat"><div class="label">Artículos diferentes</div><div class="value" id="statItems">0</div></div>
+    <div class="stat"><div class="label">Unidades totales</div><div class="value" id="statUnits">0</div></div>
+    <div class="stat"><div class="label">Inventario bajo</div><div class="value" id="statLow">0</div></div>
+    <div class="stat"><div class="label">Sin existencia</div><div class="value" id="statZero">0</div></div>
+  </section>
+
+  <section class="toolbar">
+    <input class="field" id="search" placeholder="Buscar por nombre, SKU, serie o ubicación…" />
+    <select class="field" id="categoryFilter">
+      <option value="">Todas las categorías</option>
+      <option>Llave</option><option>Control</option><option>Máquina</option><option>Herramienta</option><option>Accesorio</option><option>Otro</option>
+    </select>
+    <button class="btn" id="clearBtn">Limpiar filtros</button>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><h2>Inventario</h2><span class="subtitle" id="resultsText"></span></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Artículo</th><th>Categoría</th><th>SKU / Serie</th><th>Ubicación</th><th>Cantidad</th><th>Acciones</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="empty" id="empty" hidden>No hay artículos que coincidan con la búsqueda.</div>
+    </div>
+  </section>
+  <div class="footer">Los datos se guardan en este dispositivo. Usa “Exportar CSV” como respaldo.</div>
+</div>
+
+<dialog id="itemDialog">
+  <div class="modal-head"><h3 id="dialogTitle">Nuevo artículo</h3><button class="close" type="button" id="closeDialog">×</button></div>
+  <form id="itemForm">
+    <input type="hidden" id="itemId">
+    <div class="grid">
+      <div class="span2"><label>Nombre *</label><input class="field" id="name" required placeholder="Ej. Control Toyota 3 botones"></div>
+      <div><label>Categoría *</label><select class="field" id="category" required><option>Llave</option><option>Control</option><option>Máquina</option><option>Herramienta</option><option>Accesorio</option><option>Otro</option></select></div>
+      <div><label>Cantidad *</label><input class="field" id="quantity" type="number" min="0" value="1" required></div>
+      <div><label>SKU</label><input class="field" id="sku" placeholder="SKU-001"></div>
+      <div><label>Número de serie</label><input class="field" id="serial" placeholder="Opcional"></div>
+      <div><label>Ubicación</label><input class="field" id="location" placeholder="Estante A / Caja 3"></div>
+      <div><label>Inventario mínimo</label><input class="field" id="minimum" type="number" min="0" value="2"></div>
+      <div class="span2"><label>Notas</label><textarea class="field" id="notes" placeholder="Compatibilidad, proveedor, condición, etc."></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn" type="button" id="cancelBtn">Cancelar</button><button class="btn primary" type="submit">Guardar artículo</button></div>
+  </form>
+</dialog>
+
+<dialog id="moveDialog">
+  <div class="modal-head"><h3 id="moveTitle">Movimiento</h3><button class="close" type="button" id="closeMove">×</button></div>
+  <form id="moveForm">
+    <input type="hidden" id="moveId">
+    <div class="grid">
+      <div><label>Tipo</label><select class="field" id="moveType"><option value="in">Entrada</option><option value="out">Salida</option></select></div>
+      <div><label>Cantidad</label><input class="field" id="moveQty" type="number" min="1" value="1" required></div>
+      <div class="span2"><label>Motivo / nota</label><input class="field" id="moveNote" placeholder="Compra, venta, préstamo, ajuste…"></div>
+    </div>
+    <div class="modal-actions"><button class="btn" type="button" id="cancelMove">Cancelar</button><button class="btn primary" type="submit">Aplicar movimiento</button></div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY='keytrack_pro_v1';
+const seed=[
+ {id:crypto.randomUUID(),name:'Control Toyota 3 botones',category:'Control',sku:'TOY-3B-001',serial:'',location:'Estante A1',quantity:8,minimum:3,notes:'Ejemplo inicial',moves:[]},
+ {id:crypto.randomUUID(),name:'Llave transponder Honda',category:'Llave',sku:'HON-TP-046',serial:'',location:'Caja 4',quantity:2,minimum:4,notes:'Ejemplo inicial',moves:[]},
+ {id:crypto.randomUUID(),name:'Programador de llaves',category:'Máquina',sku:'MACH-001',serial:'SN-2026-001',location:'Oficina',quantity:1,minimum:1,notes:'Ejemplo inicial',moves:[]}
+];
+let items=JSON.parse(localStorage.getItem(KEY)||'null')||seed;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function save(){localStorage.setItem(KEY,JSON.stringify(items))}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+function filtered(){
+ const q=$('#search').value.trim().toLowerCase(), c=$('#categoryFilter').value;
+ return items.filter(i=>(!c||i.category===c)&&(!q||[i.name,i.sku,i.serial,i.location,i.notes].join(' ').toLowerCase().includes(q)));
+}
+function render(){
+ const list=filtered(), body=$('#tbody'); body.innerHTML='';
+ list.forEach(i=>{
+  const cls=i.quantity===0?'zero':i.quantity<=i.minimum?'low':'';
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><div class="name">${esc(i.name)}</div><div class="sub">${esc(i.notes||'Sin notas')}</div></td>
+   <td><span class="badge">${esc(i.category)}</span></td>
+   <td><div>${esc(i.sku||'—')}</div><div class="sub">${esc(i.serial||'Sin serie')}</div></td>
+   <td>${esc(i.location||'—')}</td><td class="qty ${cls}">${i.quantity}</td>
+   <td><div class="actions"><button class="btn small" data-act="move" data-id="${i.id}">±</button><button class="btn small" data-act="edit" data-id="${i.id}">Editar</button><button class="btn small danger" data-act="del" data-id="${i.id}">Borrar</button></div></td>`;
+  body.appendChild(tr);
+ });
+ $('#empty').hidden=list.length>0; $('#resultsText').textContent=`${list.length} resultado${list.length===1?'':'s'}`;
+ $('#statItems').textContent=items.length;
+ $('#statUnits').textContent=items.reduce((a,b)=>a+Number(b.quantity||0),0);
+ $('#statLow').textContent=items.filter(i=>i.quantity>0&&i.quantity<=i.minimum).length;
+ $('#statZero').textContent=items.filter(i=>i.quantity===0).length;
+}
+function openItem(item){
+ $('#dialogTitle').textContent=item?'Editar artículo':'Nuevo artículo';
+ $('#itemId').value=item?.id||''; $('#name').value=item?.name||''; $('#category').value=item?.category||'Llave';
+ $('#quantity').value=item?.quantity??1; $('#sku').value=item?.sku||''; $('#serial').value=item?.serial||'';
+ $('#location').value=item?.location||''; $('#minimum').value=item?.minimum??2; $('#notes').value=item?.notes||'';
+ $('#itemDialog').showModal();
+}
+$('#addBtn').onclick=()=>openItem(null);
+$('#closeDialog').onclick=$('#cancelBtn').onclick=()=>$('#itemDialog').close();
+$('#itemForm').onsubmit=e=>{
+ e.preventDefault(); const id=$('#itemId').value;
+ const data={name:$('#name').value.trim(),category:$('#category').value,quantity:Number($('#quantity').value),sku:$('#sku').value.trim(),serial:$('#serial').value.trim(),location:$('#location').value.trim(),minimum:Number($('#minimum').value),notes:$('#notes').value.trim()};
+ if(id){const x=items.find(i=>i.id===id);Object.assign(x,data)} else items.unshift({id:crypto.randomUUID(),...data,moves:[]});
+ save();render();$('#itemDialog').close();toast(id?'Artículo actualizado':'Artículo agregado');
+};
+$('#tbody').onclick=e=>{
+ const b=e.target.closest('button');if(!b)return;const i=items.find(x=>x.id===b.dataset.id);if(!i)return;
+ if(b.dataset.act==='edit')openItem(i);
+ if(b.dataset.act==='del'&&confirm(`¿Borrar "${i.name}"?`)){items=items.filter(x=>x.id!==i.id);save();render();toast('Artículo borrado')}
+ if(b.dataset.act==='move'){ $('#moveId').value=i.id;$('#moveTitle').textContent=`Movimiento: ${i.name}`;$('#moveQty').value=1;$('#moveNote').value='';$('#moveDialog').showModal()}
+};
+$('#closeMove').onclick=$('#cancelMove').onclick=()=>$('#moveDialog').close();
+$('#moveForm').onsubmit=e=>{
+ e.preventDefault();const i=items.find(x=>x.id===$('#moveId').value),q=Number($('#moveQty').value),type=$('#moveType').value;
+ if(!i||q<1)return;if(type==='out'&&q>i.quantity){toast('No hay suficiente existencia');return}
+ i.quantity+=type==='in'?q:-q;i.moves=i.moves||[];i.moves.unshift({date:new Date().toISOString(),type,qty:q,note:$('#moveNote').value.trim()});
+ save();render();$('#moveDialog').close();toast(type==='in'?'Entrada registrada':'Salida registrada');
+};
+$('#search').oninput=$('#categoryFilter').onchange=render;
+$('#clearBtn').onclick=()=>{$('#search').value='';$('#categoryFilter').value='';render()};
+$('#exportBtn').onclick=()=>{
+ const rows=[['Nombre','Categoría','SKU','Serie','Ubicación','Cantidad','Mínimo','Notas'],...items.map(i=>[i.name,i.category,i.sku,i.serial,i.location,i.quantity,i.minimum,i.notes])];
+ const csv=rows.map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n');
+ const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);a.download=`keytrack-inventario-${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(a.href);
+};
+save();render();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+</script>
+</body></html>

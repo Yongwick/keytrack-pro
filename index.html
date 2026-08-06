@@ -432,6 +432,7 @@ async function load(){
     );
 
     if(typeof renderOperationalSelects==='function')renderOperationalSelects();
+    if(!$('#dashboardView').classList.contains('hidden'))renderDashboard();
 
   }catch(err){
     console.error('Error de sincronización:',err);
@@ -503,6 +504,55 @@ function list(){
       x.notes
     ].join(' ').toLowerCase().includes(q))
   );
+}
+
+
+function renderDashboard(){
+  const totalCost=items.reduce((sum,p)=>sum+(Number(p.cost||0)*Number(p.quantity||0)),0);
+  const totalSale=items.reduce((sum,p)=>sum+(Number(p.sale_price||0)*Number(p.quantity||0)),0);
+  const margin=totalSale-totalCost;
+
+  $('#dashCost').textContent='$'+totalCost.toFixed(2);
+  $('#dashRetail').textContent='$'+totalSale.toFixed(2);
+  $('#dashMargin').textContent='$'+margin.toFixed(2);
+
+  const today=new Date().toISOString().slice(0,10);
+  const todayMovements=movements.filter(m=>String(m.created_at||'').slice(0,10)===today);
+  $('#dashToday').textContent=todayMovements.length;
+
+  const critical=items
+    .filter(p=>Number(p.quantity||0)<=Number(p.minimum_quantity||0))
+    .sort((a,b)=>Number(a.quantity||0)-Number(b.quantity||0))
+    .slice(0,8);
+
+  $('#criticalList').innerHTML=critical.length
+    ? critical.map(p=>`
+      <div class="history-item">
+        <b>${esc(p.name)}</b>
+        <div class="muted">Cantidad: ${p.quantity} · Mínimo: ${p.minimum_quantity||0}</div>
+      </div>`).join('')
+    : '<div class="muted">No hay productos críticos.</div>';
+
+  const valuable=[...items]
+    .sort((a,b)=>(Number(b.cost||0)*Number(b.quantity||0))-(Number(a.cost||0)*Number(a.quantity||0)))
+    .slice(0,8);
+
+  $('#valueList').innerHTML=valuable.length
+    ? valuable.map(p=>`
+      <div class="history-item">
+        <b>${esc(p.name)}</b>
+        <div class="muted">$${(Number(p.cost||0)*Number(p.quantity||0)).toFixed(2)} · ${p.quantity} unidades</div>
+      </div>`).join('')
+    : '<div class="muted">No hay productos para mostrar.</div>';
+
+  const recent=[...movements].slice(0,8);
+  $('#recentList').innerHTML=recent.length
+    ? recent.map(m=>`
+      <div class="history-item">
+        <b>${esc(m.products?.name||'Producto')}</b>
+        <div class="muted">${m.movement_type||'movimiento'} · ${m.quantity} · ${new Date(m.created_at).toLocaleString()}</div>
+      </div>`).join('')
+    : '<div class="muted">No hay actividad reciente.</div>';
 }
 
 function render(){let a=list();$('#body').innerHTML=a.map(x=>`<tr><td>${x.image_url?`<img class="thumb" src="${esc(x.image_url)}" alt="">`:'—'}</td><td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td><td>${esc(x.brand||'—')}<div class="muted">${esc(x.fcc_id||'Sin FCC')}</div></td><td>${esc(x.sku||'—')}<div class="muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</div></td><td>${esc(x.vehicle_compatibility||'—')}</td><td>${esc(x.locations?.name||'—')}</td><td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td><td><div class="acts"><button class="btn small" data-a="m" data-id="${x.id}">±</button><button class="btn small" data-a="v" data-id="${x.id}">Ver ficha</button><button class="btn small" data-a="h" data-id="${x.id}">Historial</button><button class="btn small" data-a="e" data-id="${x.id}">Editar</button>${profile?.role==='owner'||profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}</div></td></tr>`).join('');$('#count').textContent=a.length+' resultados';$('#si').textContent=items.length;$('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);$('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;$('#sz').textContent=items.filter(x=>x.quantity===0).length}

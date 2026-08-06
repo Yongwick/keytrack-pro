@@ -1,20 +1,22 @@
-# KeyTrack Pro · Corrección Ver ficha y Editar
+# KeyTrack Pro · Corrección del Dashboard
 
-Esta actualización activa correctamente los botones:
+Esta actualización repara los cálculos del Dashboard:
 
-- Ver ficha
-- Editar
-- Historial
-- Entrada/salida de inventario
-- Borrar para usuarios owner, admin y manager
+- Valor total al costo
+- Valor total de venta
+- Margen potencial
+- Movimientos del día
+- Inventario crítico
+- Productos más valiosos
+- Actividad reciente
 
 ## Instalación
 
 1. Reemplaza en GitHub solamente:
    - `index.html`
    - `README.md`
-2. No ejecutes ningún archivo SQL.
+2. No ejecutes ningún SQL.
 3. Espera el despliegue de Vercel.
-4. Recarga con `Ctrl + F5` o abre la aplicación en incógnito.
+4. Recarga con `Ctrl + F5`.
 
-La ficha muestra todos los datos principales del producto y permite abrir directamente el formulario de edición.
+Los valores se calculan con los productos ya cargados en el inventario.

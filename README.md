@@ -1,19 +1,20 @@
-# KeyTrack Pro · Sincronización robusta
+# KeyTrack Pro · Corrección `list is not defined`
 
-Esta versión evita que un error en Clientes, Proveedores, Compras, Ventas o Movimientos deje vacío el inventario.
+Esta versión corrige el error que detenía la sincronización del inventario:
 
-## Cambio principal
+```text
+list is not defined
+```
 
-1. Carga y muestra primero los productos.
-2. Después carga los módulos secundarios.
-3. Si un módulo secundario falla, el inventario continúa visible.
-4. Los detalles del módulo que falle quedan registrados en la consola como advertencia.
+La función de filtrado del inventario faltaba en el archivo anterior.
 
 ## Instalación
 
 1. Reemplaza en GitHub solamente:
    - `index.html`
    - `README.md`
-2. No ejecutes ningún archivo SQL.
+2. No ejecutes ningún SQL.
 3. Espera el despliegue de Vercel.
 4. Recarga con `Ctrl + F5` o abre la aplicación en incógnito.
+
+Después deben aparecer los productos y las unidades del inventario.

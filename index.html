@@ -477,6 +477,32 @@ document.querySelectorAll('[data-view]').forEach(button=>{
   });
 });
 
+
+function list(){
+  const q=val('#search').toLowerCase();
+  const c=$('#filter').value;
+  return items.filter(x=>
+    (!c || x.category===c) &&
+    (!q || [
+      x.name,
+      x.sku,
+      x.serial_number,
+      x.barcode,
+      x.fcc_id,
+      x.ic_number,
+      x.brand,
+      x.oem_number,
+      x.frequency,
+      x.chip_type,
+      x.vehicle_compatibility,
+      x.supplier,
+      x.equivalences,
+      x.locations?.name,
+      x.notes
+    ].join(' ').toLowerCase().includes(q))
+  );
+}
+
 function render(){let a=list();$('#body').innerHTML=a.map(x=>`<tr><td>${x.image_url?`<img class="thumb" src="${esc(x.image_url)}" alt="">`:'—'}</td><td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td><td>${esc(x.brand||'—')}<div class="muted">${esc(x.fcc_id||'Sin FCC')}</div></td><td>${esc(x.sku||'—')}<div class="muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</div></td><td>${esc(x.vehicle_compatibility||'—')}</td><td>${esc(x.locations?.name||'—')}</td><td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td><td><div class="acts"><button class="btn small" data-a="m" data-id="${x.id}">±</button><button class="btn small" data-a="v" data-id="${x.id}">Ver ficha</button><button class="btn small" data-a="h" data-id="${x.id}">Historial</button><button class="btn small" data-a="e" data-id="${x.id}">Editar</button>${profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}</div></td></tr>`).join('');$('#count').textContent=a.length+' resultados';$('#si').textContent=items.length;$('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);$('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;$('#sz').textContent=items.filter(x=>x.quantity===0).length}
 
 function openItem(x){$('#ititle').textContent=x?'Editar artículo':'Nuevo artículo';$('#iid').value=x?.id||'';$('#oldimg').value=x?.image_url||'';$('#iname').value=x?.name||'';$('#icat').value=x?.category||'Llave';$('#iq').value=x?.quantity??1;$('#ibrand').value=x?.brand||'';$('#isku').value=x?.sku||'';$('#ioem').value=x?.oem_number||'';$('#iser').value=x?.serial_number||'';$('#iloc').value=x?.location_id||'';$('#imin').value=x?.minimum_quantity??2;$('#ibar').value=x?.barcode||'';$('#ifcc').value=x?.fcc_id||'';$('#iic').value=x?.ic_number||'';$('#ifreq').value=x?.frequency||'';$('#ichip').value=x?.chip_type||'';$('#ibuttons').value=x?.button_count??'';$('#ibattery').value=x?.battery_type||'';$('#icondition').value=x?.condition_status||'Nuevo';$('#isupplier').value=x?.supplier||'';$('#icost').value=x?.cost??'';$('#iprice').value=x?.sale_price??'';$('#ivehicle').value=x?.vehicle_compatibility||'';$('#iequiv').value=x?.equivalences||'';$('#inotes').value=x?.notes||'';if($('#iphoto')) $('#iphoto').value=''; if($('#iphotos')) $('#iphotos').value=''; if($('#idoc')) $('#idoc').value=''; if($('#itemError'))$('#itemError').textContent='';$('#item').showModal()}

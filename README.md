@@ -1,28 +1,22 @@
-# KeyTrack Pro · Sucursales Pro
+# KeyTrack Pro · Corrección para guardar productos
 
-Esta actualización incluye:
+Esta versión corrige el formulario de producto.
 
-- Menú lateral profesional
-- Sucursales en tarjetas
-- Ubicaciones jerárquicas por sucursal
-- Tipos: bodega, mostrador, estante, caja fuerte, vehículo y otros
-- Información completa de sucursal
-- Editar y eliminar sucursales
-- Editar y eliminar ubicaciones
-- Al eliminar una ubicación, los productos se conservan y quedan sin ubicación
-- Resumen de productos, unidades y valor por sucursal
+## Cambios
+
+- Guarda primero el producto y después intenta subir fotografías/PDF.
+- Si falla una fotografía, el producto sí queda guardado.
+- Muestra el error dentro del formulario.
+- Evita pulsaciones dobles mientras está guardando.
+- Corrige las políticas de Storage para fotografías y documentos.
 
 ## Instalación
 
-1. Ejecuta `sucursales-pro.sql` en Supabase SQL Editor.
-2. Reemplaza en GitHub:
-   - index.html
-   - manifest.webmanifest
-   - icon.svg
-   - vercel.json
-   - README.md
-3. Espera el despliegue de Vercel y recarga con Ctrl + F5.
+1. Ejecuta `guardar-producto-fix.sql` en Supabase SQL Editor.
+2. Reemplaza en GitHub solamente:
+   - `index.html`
+   - `README.md`
+3. Espera el despliegue de Vercel.
+4. Recarga con `Ctrl + F5`.
 
-## Limpieza de ubicaciones
-
-Ahora puedes eliminar ubicaciones directamente desde el módulo **Sucursales**. Ya no necesitas entrar a Supabase para limpiarlas.
+No necesitas volver a ejecutar los demás archivos SQL.

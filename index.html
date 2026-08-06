@@ -337,21 +337,48 @@ async function loadProfile(){
 }
 async function load(){
   if(!companyId)return;
-  $('#cloud').textContent='Sincronizando…';$('#dot').classList.remove('ok');
-  let a=await sb.from('locations').select('*').eq('company_id',companyId).order('name');
-  if(a.error)return toast(a.error.message);
-  locs=a.data||[];
-  $('#iloc').innerHTML='<option value="">Sin ubicación</option>'+locs.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');
-  let r=await sb.from('products').select('*,locations(name)').eq('company_id',companyId).order('created_at',{ascending:false});
-  if(r.error)return toast(r.error.message);
-  items=r.data||[];
-  let mm=await sb.from('inventory_movements').select('*,products(name)').eq('company_id',companyId).order('created_at',{ascending:false}).limit(100);movements=mm.data||[];
-  let cu=await sb.from('customers').select('*').eq('company_id',companyId).order('created_at',{ascending:false});customers=cu.data||[];
-  let sp=await sb.from('suppliers').select('*').eq('company_id',companyId).order('created_at',{ascending:false});suppliers=sp.data||[];
-  let po=await sb.from('purchase_orders').select('*,suppliers(name)').eq('company_id',companyId).order('created_at',{ascending:false});purchases=po.data||[];
-  let sa=await sb.from('sales').select('*,customers(name)').eq('company_id',companyId).order('created_at',{ascending:false});sales=sa.data||[];
-  renderOperationalSelects();
-  $('#cloud').textContent='Sincronizado';$('#dot').classList.add('ok');render();
+  $('#cloud').textContent='Sincronizando…';
+  $('#dot').classList.remove('ok');
+
+  try{
+    const a=await sb.from('locations').select('*').eq('company_id',companyId).order('name');
+    if(a.error)throw new Error('Ubicaciones: '+a.error.message);
+    locs=a.data||[];
+    $('#iloc').innerHTML='<option value="">Sin ubicación</option>'+locs.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');
+
+    const r=await sb.from('products').select('*,locations(name)').eq('company_id',companyId).order('created_at',{ascending:false});
+    if(r.error)throw new Error('Productos: '+r.error.message);
+    items=r.data||[];
+
+    const mm=await sb.from('inventory_movements').select('*,products(name)').eq('company_id',companyId).order('created_at',{ascending:false}).limit(100);
+    if(mm.error)throw new Error('Movimientos: '+mm.error.message);
+    movements=mm.data||[];
+
+    const cu=await sb.from('customers').select('*').eq('company_id',companyId).order('created_at',{ascending:false});
+    if(cu.error)throw new Error('Clientes: '+cu.error.message);
+    customers=cu.data||[];
+
+    const sp=await sb.from('suppliers').select('*').eq('company_id',companyId).order('created_at',{ascending:false});
+    if(sp.error)throw new Error('Proveedores: '+sp.error.message);
+    suppliers=sp.data||[];
+
+    const po=await sb.from('purchase_orders').select('*,suppliers(name)').eq('company_id',companyId).order('created_at',{ascending:false});
+    if(po.error)throw new Error('Compras: '+po.error.message);
+    purchases=po.data||[];
+
+    const sa=await sb.from('sales').select('*,customers(name)').eq('company_id',companyId).order('created_at',{ascending:false});
+    if(sa.error)throw new Error('Ventas: '+sa.error.message);
+    sales=sa.data||[];
+
+    renderOperationalSelects();
+    render();
+    $('#cloud').textContent='Sincronizado';
+    $('#dot').classList.add('ok');
+  }catch(err){
+    console.error('Error de sincronización:',err);
+    $('#cloud').textContent='Error al sincronizar';
+    toast(err.message||'No se pudo sincronizar');
+  }
 }
 
 // Navegación principal
@@ -370,6 +397,7 @@ function switchView(name){
     button.classList.toggle('active', button.dataset.view === name);
   });
 
+  if(name === 'inventory') load();
   if(name === 'dashboard') renderDashboard();
   if(name === 'movements') renderMovements();
   if(name === 'branches') renderBranches();

@@ -1,25 +1,15 @@
-# KeyTrack Pro · Corrección del menú lateral
+# KeyTrack Pro · Reparar inventario visible
 
-Esta versión repara los botones laterales:
-
-- Inventario
-- Dashboard
-- Ficha de producto
-- Movimientos
-- Sucursales
-- Clientes
-- Proveedores
-- Compras
-- Ventas
-- Super Admin
+El Panel Super Admin cuenta los productos usando una función administrativa, pero la pantalla de Inventario los consulta bajo las políticas RLS de la empresa. Esta actualización repara esas políticas y vuelve a cargar el inventario al pulsar **Inventario**.
 
 ## Instalación
 
-1. Reemplaza en GitHub solamente:
+1. Ejecuta `reparar-inventario.sql` en Supabase SQL Editor.
+2. El resultado final debe mostrar la empresa, `4` productos y `20` unidades.
+3. Reemplaza en GitHub:
    - `index.html`
    - `README.md`
-2. No ejecutes ningún archivo SQL.
-3. Espera el despliegue de Vercel.
-4. Recarga con `Ctrl + F5` o abre la aplicación en incógnito.
+4. Espera el despliegue de Vercel.
+5. Recarga con `Ctrl + F5` y pulsa **Inventario**.
 
-La corrección conserva los arreglos anteriores del inicio de sesión y del guardado de productos.
+No borra ningún producto.

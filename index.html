@@ -48,6 +48,8 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 @media(max-width:980px){.layout-shell{grid-template-columns:1fr}.sidebar{position:static;max-height:none}.sidebar .nav{flex-direction:row!important;overflow:auto!important}.sidebar .nav .btn{width:auto;white-space:nowrap}.branch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:680px){.branch-grid{grid-template-columns:1fr}}
 
+.detail-grid{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(320px,1.2fr);gap:16px}
+@media(max-width:760px){.detail-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -503,7 +505,7 @@ function list(){
   );
 }
 
-function render(){let a=list();$('#body').innerHTML=a.map(x=>`<tr><td>${x.image_url?`<img class="thumb" src="${esc(x.image_url)}" alt="">`:'—'}</td><td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td><td>${esc(x.brand||'—')}<div class="muted">${esc(x.fcc_id||'Sin FCC')}</div></td><td>${esc(x.sku||'—')}<div class="muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</div></td><td>${esc(x.vehicle_compatibility||'—')}</td><td>${esc(x.locations?.name||'—')}</td><td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td><td><div class="acts"><button class="btn small" data-a="m" data-id="${x.id}">±</button><button class="btn small" data-a="v" data-id="${x.id}">Ver ficha</button><button class="btn small" data-a="h" data-id="${x.id}">Historial</button><button class="btn small" data-a="e" data-id="${x.id}">Editar</button>${profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}</div></td></tr>`).join('');$('#count').textContent=a.length+' resultados';$('#si').textContent=items.length;$('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);$('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;$('#sz').textContent=items.filter(x=>x.quantity===0).length}
+function render(){let a=list();$('#body').innerHTML=a.map(x=>`<tr><td>${x.image_url?`<img class="thumb" src="${esc(x.image_url)}" alt="">`:'—'}</td><td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td><td>${esc(x.brand||'—')}<div class="muted">${esc(x.fcc_id||'Sin FCC')}</div></td><td>${esc(x.sku||'—')}<div class="muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</div></td><td>${esc(x.vehicle_compatibility||'—')}</td><td>${esc(x.locations?.name||'—')}</td><td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td><td><div class="acts"><button class="btn small" data-a="m" data-id="${x.id}">±</button><button class="btn small" data-a="v" data-id="${x.id}">Ver ficha</button><button class="btn small" data-a="h" data-id="${x.id}">Historial</button><button class="btn small" data-a="e" data-id="${x.id}">Editar</button>${profile?.role==='owner'||profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}</div></td></tr>`).join('');$('#count').textContent=a.length+' resultados';$('#si').textContent=items.length;$('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);$('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;$('#sz').textContent=items.filter(x=>x.quantity===0).length}
 
 function openItem(x){$('#ititle').textContent=x?'Editar artículo':'Nuevo artículo';$('#iid').value=x?.id||'';$('#oldimg').value=x?.image_url||'';$('#iname').value=x?.name||'';$('#icat').value=x?.category||'Llave';$('#iq').value=x?.quantity??1;$('#ibrand').value=x?.brand||'';$('#isku').value=x?.sku||'';$('#ioem').value=x?.oem_number||'';$('#iser').value=x?.serial_number||'';$('#iloc').value=x?.location_id||'';$('#imin').value=x?.minimum_quantity??2;$('#ibar').value=x?.barcode||'';$('#ifcc').value=x?.fcc_id||'';$('#iic').value=x?.ic_number||'';$('#ifreq').value=x?.frequency||'';$('#ichip').value=x?.chip_type||'';$('#ibuttons').value=x?.button_count??'';$('#ibattery').value=x?.battery_type||'';$('#icondition').value=x?.condition_status||'Nuevo';$('#isupplier').value=x?.supplier||'';$('#icost').value=x?.cost??'';$('#iprice').value=x?.sale_price??'';$('#ivehicle').value=x?.vehicle_compatibility||'';$('#iequiv').value=x?.equivalences||'';$('#inotes').value=x?.notes||'';if($('#iphoto')) $('#iphoto').value=''; if($('#iphotos')) $('#iphotos').value=''; if($('#idoc')) $('#idoc').value=''; if($('#itemError'))$('#itemError').textContent='';$('#item').showModal()}
 $('#add').onclick=()=>openItem();$('#ix').onclick=$('#icancel').onclick=()=>$('#item').close();
@@ -608,6 +610,167 @@ $('#if').onsubmit=async e=>{
     saveBtn.textContent='Guardar';
   }
 };
+
+function renderProductDetail(product){
+  if(!product){
+    $('#detailBody').innerHTML='<div class="muted">Sin producto seleccionado.</div>';
+    return;
+  }
+
+  const money=value=>Number(value||0).toFixed(2);
+  $('#detailBody').innerHTML=`
+    <div class="detail-grid">
+      <div class="card">
+        ${product.image_url?`<img src="${esc(product.image_url)}" alt="" style="width:100%;max-height:320px;object-fit:contain;border-radius:12px">`:'<div class="muted">Sin fotografía</div>'}
+      </div>
+      <div class="card">
+        <h2>${esc(product.name)}</h2>
+        <div class="history">
+          <div class="history-item"><b>Categoría:</b> ${esc(product.category||'—')}</div>
+          <div class="history-item"><b>Marca:</b> ${esc(product.brand||'—')}</div>
+          <div class="history-item"><b>SKU:</b> ${esc(product.sku||'—')}</div>
+          <div class="history-item"><b>OEM:</b> ${esc(product.oem_number||'—')}</div>
+          <div class="history-item"><b>FCC ID:</b> ${esc(product.fcc_id||'—')}</div>
+          <div class="history-item"><b>IC:</b> ${esc(product.ic_number||'—')}</div>
+          <div class="history-item"><b>Frecuencia:</b> ${esc(product.frequency||'—')}</div>
+          <div class="history-item"><b>Chip:</b> ${esc(product.chip_type||'—')}</div>
+          <div class="history-item"><b>Botones:</b> ${product.button_count??'—'}</div>
+          <div class="history-item"><b>Batería:</b> ${esc(product.battery_type||'—')}</div>
+          <div class="history-item"><b>Ubicación:</b> ${esc(product.locations?.name||'Sin ubicación')}</div>
+          <div class="history-item"><b>Cantidad:</b> ${product.quantity}</div>
+          <div class="history-item"><b>Costo:</b> $${money(product.cost)}</div>
+          <div class="history-item"><b>Precio:</b> $${money(product.sale_price)}</div>
+          <div class="history-item"><b>Vehículos:</b> ${esc(product.vehicle_compatibility||'—')}</div>
+          <div class="history-item"><b>Equivalencias:</b> ${esc(product.equivalences||'—')}</div>
+          <div class="history-item"><b>Notas:</b> ${esc(product.notes||'Sin notas')}</div>
+        </div>
+        <div class="row" style="margin-top:14px">
+          <button id="detailEditButton" class="btn primary">Editar producto</button>
+        </div>
+      </div>
+    </div>`;
+
+  $('#detailEditButton').onclick=()=>openItem(product);
+}
+
+async function openProductHistory(product){
+  $('#htitle').textContent='Historial · '+product.name;
+  $('#hbody').innerHTML='<div class="history-item muted">Cargando…</div>';
+  $('#history').showModal();
+
+  const result=await sb.from('inventory_movements')
+    .select('*')
+    .eq('company_id',companyId)
+    .eq('product_id',product.id)
+    .order('created_at',{ascending:false});
+
+  if(result.error){
+    $('#hbody').innerHTML='<div class="history-item" style="color:#fb7185">'+esc(result.error.message)+'</div>';
+    return;
+  }
+
+  const rows=result.data||[];
+  $('#hbody').innerHTML=rows.length?rows.map(m=>`
+    <div class="history-item">
+      <b>${m.movement_type==='in'?'Entrada':m.movement_type==='out'?'Salida':'Ajuste'} · ${m.quantity}</b>
+      <div class="muted">${new Date(m.created_at).toLocaleString()} · ${esc(m.note||'Sin nota')}</div>
+    </div>`).join(''):'<div class="history-item muted">Sin movimientos registrados.</div>';
+}
+
+function openMovement(product){
+  $('#mid').value=product.id;
+  $('#mtitle').textContent='Movimiento · '+product.name;
+  $('#mtype').value='in';
+  $('#mq').value=1;
+  $('#mnote').value='';
+  $('#move').showModal();
+}
+
+$('#mx').onclick=$('#mcancel').onclick=()=>$('#move').close();
+$('#hx').onclick=()=>$('#history').close();
+
+$('#mf').onsubmit=async event=>{
+  event.preventDefault();
+
+  const product=items.find(x=>x.id===$('#mid').value);
+  if(!product)return toast('Producto no encontrado');
+
+  const quantity=Number($('#mq').value||0);
+  if(quantity<=0)return toast('La cantidad debe ser mayor que cero');
+
+  const type=$('#mtype').value;
+  const nextQuantity=type==='out'?product.quantity-quantity:product.quantity+quantity;
+  if(nextQuantity<0)return toast('No hay suficientes unidades');
+
+  const updateResult=await sb.from('products')
+    .update({quantity:nextQuantity})
+    .eq('id',product.id)
+    .eq('company_id',companyId);
+
+  if(updateResult.error)return toast(updateResult.error.message);
+
+  const movementResult=await sb.from('inventory_movements').insert({
+    company_id:companyId,
+    product_id:product.id,
+    movement_type:type,
+    quantity,
+    note:val('#mnote')||null,
+    created_by:session.user.id
+  });
+
+  if(movementResult.error)return toast(movementResult.error.message);
+
+  $('#move').close();
+  toast('Movimiento registrado');
+  await load();
+};
+
+$('#body').addEventListener('click',async event=>{
+  const button=event.target.closest('button[data-a]');
+  if(!button)return;
+
+  event.preventDefault();
+  event.stopPropagation();
+
+  const product=items.find(x=>x.id===button.dataset.id);
+  if(!product)return toast('No se encontró el producto');
+
+  const action=button.dataset.a;
+
+  if(action==='e'){
+    openItem(product);
+    return;
+  }
+
+  if(action==='v'){
+    renderProductDetail(product);
+    switchView('detail');
+    return;
+  }
+
+  if(action==='h'){
+    await openProductHistory(product);
+    return;
+  }
+
+  if(action==='m'){
+    openMovement(product);
+    return;
+  }
+
+  if(action==='d'){
+    if(!confirm(`¿Eliminar "${product.name}"?`))return;
+    const result=await sb.from('products')
+      .delete()
+      .eq('id',product.id)
+      .eq('company_id',companyId);
+
+    if(result.error)return toast(result.error.message);
+    toast('Producto eliminado');
+    await load();
+  }
+});
+
 function renderOperationalSelects(){if($('#purchaseSupplier'))$('#purchaseSupplier').innerHTML='<option value="">Selecciona proveedor</option>'+suppliers.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');if($('#saleCustomer'))$('#saleCustomer').innerHTML='<option value="">Venta sin cliente</option>'+customers.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('')}
 function renderCustomers(){$('#customersBody').innerHTML=customers.length?customers.map(x=>`<div class="history-item"><b>${esc(x.name)}</b>${x.company?` · ${esc(x.company)}`:''}<div class="muted">${esc(x.phone||'Sin teléfono')} · ${esc(x.email||'Sin correo')}</div></div>`).join(''):'<div class="history-item muted">Sin clientes.</div>'}
 function renderSuppliers(){$('#suppliersBody').innerHTML=suppliers.length?suppliers.map(x=>`<div class="history-item"><b>${esc(x.name)}</b><div class="muted">${esc(x.contact_name||'Sin contacto')} · ${esc(x.phone||'Sin teléfono')} · ${esc(x.email||'Sin correo')}</div></div>`).join(''):'<div class="history-item muted">Sin proveedores.</div>'}

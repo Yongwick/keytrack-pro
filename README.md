@@ -1,20 +1,20 @@
-# KeyTrack Pro · Corrección `list is not defined`
+# KeyTrack Pro · Corrección Ver ficha y Editar
 
-Esta versión corrige el error que detenía la sincronización del inventario:
+Esta actualización activa correctamente los botones:
 
-```text
-list is not defined
-```
-
-La función de filtrado del inventario faltaba en el archivo anterior.
+- Ver ficha
+- Editar
+- Historial
+- Entrada/salida de inventario
+- Borrar para usuarios owner, admin y manager
 
 ## Instalación
 
 1. Reemplaza en GitHub solamente:
    - `index.html`
    - `README.md`
-2. No ejecutes ningún SQL.
+2. No ejecutes ningún archivo SQL.
 3. Espera el despliegue de Vercel.
 4. Recarga con `Ctrl + F5` o abre la aplicación en incógnito.
 
-Después deben aparecer los productos y las unidades del inventario.
+La ficha muestra todos los datos principales del producto y permite abrir directamente el formulario de edición.

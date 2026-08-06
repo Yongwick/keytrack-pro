@@ -311,7 +311,7 @@ if(mode==='signup'&&!val('#companyname')){return $('#err').textContent='Escribe 
 let r=mode==='login'
  ? await sb.auth.signInWithPassword({email:val('#email'),password:val('#pass')})
  : await sb.auth.signUp({email:val('#email'),password:val('#pass'),options:{data:{full_name:val('#fullname'),company_name:val('#companyname')}}});
-if(r.error)$('#err').textContent=r.error.message;
+if(r.error){$('#err').textContent=r.error.message;console.error('Error de inicio de sesión:',r.error);}
 else if(mode==='signup'&&!r.data.session)toast('Revisa tu correo para confirmar la cuenta');
 };
 $('#logout').onclick=()=>sb.auth.signOut();
@@ -457,6 +457,53 @@ $('#if').onsubmit=async e=>{
     saveBtn.disabled=false;
     saveBtn.textContent='Guardar';
   }
+};
+async function loadSuperAdmin(){
+  if(!isPlatformAdmin)return toast('Acceso restringido');
+  $('#saBody').innerHTML='<tr><td colspan="8" class="muted">Cargando empresas…</td></tr>';
+  const [companiesResult,plansResult]=await Promise.all([sb.rpc('platform_list_companies'),sb.rpc('platform_list_plans')]);
+  if(companiesResult.error)return toast(companiesResult.error.message);
+  if(plansResult.error)return toast(plansResult.error.message);
+  saCompanies=companiesResult.data||[];saPlans=plansResult.data||[];
+  $('#cadPlan').innerHTML=saPlans.map(p=>`<option value="${p.code}">${esc(p.name)}</option>`).join('');
+  renderSuperAdmin();
+}
+function renderSuperAdmin(){
+  const q=val('#saSearch').toLowerCase(),status=$('#saStatusFilter').value;
+  const filtered=saCompanies.filter(c=>{const text=[c.company_name,c.owner_email,c.plan_name,c.plan_code].join(' ').toLowerCase();return(!q||text.includes(q))&&(!status||c.subscription_status===status)});
+  $('#saCompanies').textContent=saCompanies.length;
+  $('#saActive').textContent=saCompanies.filter(c=>c.subscription_status==='active').length;
+  $('#saUsers').textContent=saCompanies.reduce((n,c)=>n+Number(c.member_count||0),0);
+  $('#saProducts').textContent=saCompanies.reduce((n,c)=>n+Number(c.product_count||0),0);
+  $('#saCount').textContent=`${filtered.length} empresas`;
+  $('#saBody').innerHTML=filtered.length?filtered.map(c=>`<tr>
+    <td><b>${esc(c.company_name)}</b><div class="muted">${esc(c.owner_email||'Sin propietario')}</div></td>
+    <td><span class="plan-pill">${esc(c.plan_name||'Gratis')}</span></td>
+    <td><b class="status-${esc(c.subscription_status)}">${esc(c.subscription_status)}</b></td>
+    <td>${c.member_count||0} / ${c.max_users||'∞'}</td>
+    <td>${c.product_count||0} / ${c.max_products||'∞'}</td>
+    <td>${c.total_units||0}</td><td>${new Date(c.created_at).toLocaleDateString()}</td>
+    <td><button class="btn small" data-sa-edit="${c.company_id}">Administrar</button></td>
+  </tr>`).join(''):'<tr><td colspan="8" class="muted">No se encontraron empresas.</td></tr>';
+  document.querySelectorAll('[data-sa-edit]').forEach(b=>b.onclick=()=>openCompanyAdmin(b.dataset.saEdit));
+}
+function openCompanyAdmin(id){
+  const c=saCompanies.find(x=>x.company_id===id);if(!c)return;
+  $('#cadId').value=c.company_id;$('#cadName').textContent=c.company_name;$('#cadPlan').value=c.plan_code||'free';$('#cadStatus').value=c.subscription_status||'trial';
+  $('#cadUsersLimit').value=c.max_users||1;$('#cadProductsLimit').value=c.max_products||100;
+  $('#cadTrialEnds').value=c.trial_ends_at?String(c.trial_ends_at).slice(0,10):'';$('#cadPeriodEnds').value=c.current_period_ends_at?String(c.current_period_ends_at).slice(0,10):'';
+  $('#cadNotes').value=c.admin_notes||'';$('#companyAdminDialog').showModal();
+}
+$('#cadX').onclick=$('#cadCancel').onclick=()=>$('#companyAdminDialog').close();
+$('#companyAdminForm').onsubmit=async e=>{
+  e.preventDefault();
+  const r=await sb.rpc('platform_update_company_subscription',{
+    target_company:$('#cadId').value,new_plan_code:$('#cadPlan').value,new_status:$('#cadStatus').value,
+    new_max_users:+$('#cadUsersLimit').value,new_max_products:+$('#cadProductsLimit').value,
+    new_trial_ends_at:$('#cadTrialEnds').value||null,new_period_ends_at:$('#cadPeriodEnds').value||null,new_admin_notes:val('#cadNotes')||null
+  });
+  if(r.error)return toast(r.error.message);
+  $('#companyAdminDialog').close();toast('Empresa actualizada');loadSuperAdmin();
 };
 if($('#saSearch')) $('#saSearch').oninput=renderSuperAdmin;if($('#saStatusFilter')) $('#saStatusFilter').onchange=renderSuperAdmin;if($('#saRefresh')) $('#saRefresh').onclick=loadSuperAdmin;
 

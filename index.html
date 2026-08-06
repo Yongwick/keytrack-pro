@@ -341,43 +341,100 @@ async function load(){
   $('#dot').classList.remove('ok');
 
   try{
-    const a=await sb.from('locations').select('*').eq('company_id',companyId).order('name');
-    if(a.error)throw new Error('Ubicaciones: '+a.error.message);
-    locs=a.data||[];
-    $('#iloc').innerHTML='<option value="">Sin ubicación</option>'+locs.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');
+    // 1. Cargar primero lo esencial: ubicaciones y productos.
+    const locationsResult=await sb.from('locations')
+      .select('*')
+      .eq('company_id',companyId)
+      .order('name');
 
-    const r=await sb.from('products').select('*,locations(name)').eq('company_id',companyId).order('created_at',{ascending:false});
-    if(r.error)throw new Error('Productos: '+r.error.message);
-    items=r.data||[];
+    if(locationsResult.error){
+      console.warn('No se pudieron cargar las ubicaciones:',locationsResult.error);
+      locs=[];
+    }else{
+      locs=locationsResult.data||[];
+    }
 
-    const mm=await sb.from('inventory_movements').select('*,products(name)').eq('company_id',companyId).order('created_at',{ascending:false}).limit(100);
-    if(mm.error)throw new Error('Movimientos: '+mm.error.message);
-    movements=mm.data||[];
+    if($('#iloc')){
+      $('#iloc').innerHTML='<option value="">Sin ubicación</option>'+
+        locs.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');
+    }
 
-    const cu=await sb.from('customers').select('*').eq('company_id',companyId).order('created_at',{ascending:false});
-    if(cu.error)throw new Error('Clientes: '+cu.error.message);
-    customers=cu.data||[];
+    const productsResult=await sb.from('products')
+      .select('*,locations(name)')
+      .eq('company_id',companyId)
+      .order('created_at',{ascending:false});
 
-    const sp=await sb.from('suppliers').select('*').eq('company_id',companyId).order('created_at',{ascending:false});
-    if(sp.error)throw new Error('Proveedores: '+sp.error.message);
-    suppliers=sp.data||[];
+    if(productsResult.error)throw new Error('Productos: '+productsResult.error.message);
 
-    const po=await sb.from('purchase_orders').select('*,suppliers(name)').eq('company_id',companyId).order('created_at',{ascending:false});
-    if(po.error)throw new Error('Compras: '+po.error.message);
-    purchases=po.data||[];
+    items=productsResult.data||[];
 
-    const sa=await sb.from('sales').select('*,customers(name)').eq('company_id',companyId).order('created_at',{ascending:false});
-    if(sa.error)throw new Error('Ventas: '+sa.error.message);
-    sales=sa.data||[];
-
-    renderOperationalSelects();
+    // Mostrar el inventario inmediatamente, aunque falle un módulo secundario.
     render();
     $('#cloud').textContent='Sincronizado';
     $('#dot').classList.add('ok');
+
+    // 2. Cargar módulos secundarios sin bloquear el inventario.
+    const safeLoad=async(label,promise,fallback=[])=>{
+      try{
+        const result=await promise;
+        if(result.error){
+          console.warn(label+':',result.error);
+          return fallback;
+        }
+        return result.data||fallback;
+      }catch(error){
+        console.warn(label+':',error);
+        return fallback;
+      }
+    };
+
+    movements=await safeLoad(
+      'Movimientos',
+      sb.from('inventory_movements')
+        .select('*,products(name)')
+        .eq('company_id',companyId)
+        .order('created_at',{ascending:false})
+        .limit(100)
+    );
+
+    customers=await safeLoad(
+      'Clientes',
+      sb.from('customers')
+        .select('*')
+        .eq('company_id',companyId)
+        .order('created_at',{ascending:false})
+    );
+
+    suppliers=await safeLoad(
+      'Proveedores',
+      sb.from('suppliers')
+        .select('*')
+        .eq('company_id',companyId)
+        .order('created_at',{ascending:false})
+    );
+
+    purchases=await safeLoad(
+      'Compras',
+      sb.from('purchase_orders')
+        .select('*,suppliers(name)')
+        .eq('company_id',companyId)
+        .order('created_at',{ascending:false})
+    );
+
+    sales=await safeLoad(
+      'Ventas',
+      sb.from('sales')
+        .select('*,customers(name)')
+        .eq('company_id',companyId)
+        .order('created_at',{ascending:false})
+    );
+
+    if(typeof renderOperationalSelects==='function')renderOperationalSelects();
+
   }catch(err){
     console.error('Error de sincronización:',err);
     $('#cloud').textContent='Error al sincronizar';
-    toast(err.message||'No se pudo sincronizar');
+    toast(err.message||'No se pudo cargar el inventario');
   }
 }
 

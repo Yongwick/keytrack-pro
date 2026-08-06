@@ -17,3 +17,6 @@ Incluye:
 3. Entra con la primera cuenta creada. Aparecerá el botón `Super Admin`.
 
 Esta versión administra planes y estados, pero todavía no procesa pagos reales.
+
+
+Corrección: reparado el inicio de sesión y añadida la vista faltante de Super Admin.

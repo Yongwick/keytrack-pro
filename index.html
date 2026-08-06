@@ -133,6 +133,36 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 <section id="suppliersView" class="hidden panel"><div class="panelhead row"><h3>Proveedores</h3><button id="newSupplier" class="btn primary">+ Nuevo proveedor</button></div><div id="suppliersBody" class="history"></div></section>
 <section id="purchasesView" class="hidden panel"><div class="panelhead row"><h3>Órdenes de compra</h3><button id="newPurchase" class="btn primary">+ Nueva compra</button></div><div id="purchasesBody" class="history"></div></section>
 <section id="salesView" class="hidden panel"><div class="panelhead row"><h3>Ventas</h3><button id="newSale" class="btn primary">+ Nueva venta</button></div><div id="salesBody" class="history"></div></section>
+
+<section id="superadminView" class="hidden">
+  <section class="stats">
+    <div class="card"><div class="muted">Empresas</div><div id="saCompanies" class="num">0</div></div>
+    <div class="card"><div class="muted">Empresas activas</div><div id="saActive" class="num">0</div></div>
+    <div class="card"><div class="muted">Usuarios</div><div id="saUsers" class="num">0</div></div>
+    <div class="card"><div class="muted">Productos</div><div id="saProducts" class="num">0</div></div>
+  </section>
+  <section class="tools card">
+    <input id="saSearch" class="field" placeholder="Buscar empresa, plan o propietario…">
+    <select id="saStatusFilter" class="field">
+      <option value="">Todos los estados</option>
+      <option value="active">Activa</option>
+      <option value="trial">Prueba</option>
+      <option value="suspended">Suspendida</option>
+      <option value="cancelled">Cancelada</option>
+    </select>
+    <button id="saRefresh" class="btn">Actualizar</button>
+  </section>
+  <section class="panel">
+    <div class="panelhead row">
+      <div><h3>Administración de empresas</h3><div class="muted">Planes, estado y consumo de cada cuenta.</div></div>
+      <span id="saCount" class="muted"></span>
+    </div>
+    <div class="table"><table>
+      <thead><tr><th>Empresa</th><th>Plan</th><th>Estado</th><th>Usuarios</th><th>Productos</th><th>Unidades</th><th>Creada</th><th>Acciones</th></tr></thead>
+      <tbody id="saBody"></tbody>
+    </table></div>
+  </section>
+</section>
 </div>
 
 <dialog id="item">
@@ -405,7 +435,7 @@ $('#companyAdminForm').onsubmit=async e=>{
   if(r.error)return toast(r.error.message);
   $('#companyAdminDialog').close();toast('Empresa actualizada');loadSuperAdmin();
 };
-$('#saSearch').oninput=renderSuperAdmin;$('#saStatusFilter').onchange=renderSuperAdmin;$('#saRefresh').onclick=loadSuperAdmin;
+if($('#saSearch')) $('#saSearch').oninput=renderSuperAdmin;if($('#saStatusFilter')) $('#saStatusFilter').onchange=renderSuperAdmin;if($('#saRefresh')) $('#saRefresh').onclick=loadSuperAdmin;
 
 async function startScanner(target){scanTarget=target;$('#scanner').showModal();$('#scanmsg').textContent='Solicitando cámara…';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});$('#video').srcObject=stream;await $('#video').play();if(!('BarcodeDetector'in window)){$('#scanmsg').textContent='Este navegador no permite detección automática. Usa “Ingresar manualmente”.';return}let detector=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','itf']});let active=true;const loop=async()=>{if(!active||!stream)return;try{let codes=await detector.detect($('#video'));if(codes[0]){applyScan(codes[0].rawValue);active=false;stopScanner();return}}catch{}requestAnimationFrame(loop)};loop()}catch(err){$('#scanmsg').textContent='No se pudo abrir la cámara: '+err.message}}
 function applyScan(code){if(scanTarget==='field')$('#ibar').value=code;else{$('#search').value=code;render()}toast('Código detectado: '+code)}

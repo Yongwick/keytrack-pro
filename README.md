@@ -1,15 +1,10 @@
-# KeyTrack Pro · Reparar inventario visible
+# KeyTrack Pro · Corrección de sincronización
 
-El Panel Super Admin cuenta los productos usando una función administrativa, pero la pantalla de Inventario los consulta bajo las políticas RLS de la empresa. Esta actualización repara esas políticas y vuelve a cargar el inventario al pulsar **Inventario**.
+Corrige el error `renderOperationalSelects is not defined` que detenía la sincronización después de cargar productos, clientes, proveedores, compras y ventas.
 
 ## Instalación
 
-1. Ejecuta `reparar-inventario.sql` en Supabase SQL Editor.
-2. El resultado final debe mostrar la empresa, `4` productos y `20` unidades.
-3. Reemplaza en GitHub:
-   - `index.html`
-   - `README.md`
-4. Espera el despliegue de Vercel.
-5. Recarga con `Ctrl + F5` y pulsa **Inventario**.
-
-No borra ningún producto.
+1. Reemplaza en GitHub solamente `index.html` y `README.md`.
+2. No ejecutes SQL.
+3. Espera el despliegue de Vercel.
+4. Recarga con `Ctrl + F5` o abre en incógnito.

@@ -397,7 +397,7 @@ function switchView(name){
     button.classList.toggle('active', button.dataset.view === name);
   });
 
-  if(name === 'inventory') load();
+  if(name === 'inventory' && $('#cloud').textContent!=='Sincronizando…') load();
   if(name === 'dashboard') renderDashboard();
   if(name === 'movements') renderMovements();
   if(name === 'branches') renderBranches();
@@ -525,6 +525,18 @@ $('#if').onsubmit=async e=>{
     saveBtn.textContent='Guardar';
   }
 };
+function renderOperationalSelects(){if($('#purchaseSupplier'))$('#purchaseSupplier').innerHTML='<option value="">Selecciona proveedor</option>'+suppliers.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');if($('#saleCustomer'))$('#saleCustomer').innerHTML='<option value="">Venta sin cliente</option>'+customers.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('')}
+function renderCustomers(){$('#customersBody').innerHTML=customers.length?customers.map(x=>`<div class="history-item"><b>${esc(x.name)}</b>${x.company?` · ${esc(x.company)}`:''}<div class="muted">${esc(x.phone||'Sin teléfono')} · ${esc(x.email||'Sin correo')}</div></div>`).join(''):'<div class="history-item muted">Sin clientes.</div>'}
+function renderSuppliers(){$('#suppliersBody').innerHTML=suppliers.length?suppliers.map(x=>`<div class="history-item"><b>${esc(x.name)}</b><div class="muted">${esc(x.contact_name||'Sin contacto')} · ${esc(x.phone||'Sin teléfono')} · ${esc(x.email||'Sin correo')}</div></div>`).join(''):'<div class="history-item muted">Sin proveedores.</div>'}
+function renderPurchases(){$('#purchasesBody').innerHTML=purchases.length?purchases.map(x=>`<div class="history-item"><b>${esc(x.suppliers?.name||'Proveedor')}</b> · $${Number(x.total||0).toFixed(2)}<div class="muted">${esc(x.status)} · ${new Date(x.created_at).toLocaleString()}</div></div>`).join(''):'<div class="history-item muted">Sin órdenes de compra.</div>'}
+function renderSales(){$('#salesBody').innerHTML=sales.length?sales.map(x=>`<div class="history-item"><b>${esc(x.customers?.name||'Venta general')}</b> · $${Number(x.total||0).toFixed(2)}<div class="muted">${esc(x.status)} · ${esc(x.payment_method||'Sin método')} · ${new Date(x.created_at).toLocaleString()}</div></div>`).join(''):'<div class="history-item muted">Sin ventas.</div>'}
+$('#newCustomer').onclick=()=>$('#customerDialog').showModal();$('#customerX').onclick=$('#customerCancel').onclick=()=>$('#customerDialog').close();$('#customerForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('customers').insert({company_id:companyId,name:val('#customerName'),phone:val('#customerPhone')||null,email:val('#customerEmail')||null,company:val('#customerCompany')||null,notes:val('#customerNotes')||null,created_by:session.user.id});if(r.error)return toast(r.error.message);$('#customerDialog').close();e.target.reset();load()};
+$('#newSupplier').onclick=()=>$('#supplierDialog').showModal();$('#supplierX').onclick=$('#supplierCancel').onclick=()=>$('#supplierDialog').close();$('#supplierForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('suppliers').insert({company_id:companyId,name:val('#supplierName'),contact_name:val('#supplierContact')||null,phone:val('#supplierPhone')||null,email:val('#supplierEmail')||null,website:val('#supplierWebsite')||null,notes:val('#supplierNotes')||null});if(r.error)return toast(r.error.message);$('#supplierDialog').close();e.target.reset();load()};
+$('#newPurchase').onclick=()=>$('#purchaseDialog').showModal();$('#purchaseX').onclick=$('#purchaseCancel').onclick=()=>$('#purchaseDialog').close();$('#purchaseForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('purchase_orders').insert({company_id:companyId,supplier_id:$('#purchaseSupplier').value,status:$('#purchaseStatus').value,expected_date:$('#purchaseExpected').value||null,total:+$('#purchaseTotal').value||0,notes:val('#purchaseNotes')||null,created_by:session.user.id});if(r.error)return toast(r.error.message);$('#purchaseDialog').close();e.target.reset();load()};
+$('#newSale').onclick=()=>$('#saleDialog').showModal();$('#saleX').onclick=$('#saleCancel').onclick=()=>$('#saleDialog').close();$('#saleForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('sales').insert({company_id:companyId,customer_id:$('#saleCustomer').value||null,status:$('#saleStatus').value,total:+$('#saleTotal').value||0,payment_method:$('#salePayment').value,notes:val('#saleNotes')||null,created_by:session.user.id});if(r.error)return toast(r.error.message);$('#saleDialog').close();e.target.reset();load()};
+
+
+
 async function loadSuperAdmin(){
   if(!isPlatformAdmin)return toast('Acceso restringido');
   $('#saBody').innerHTML='<tr><td colspan="8" class="muted">Cargando empresas…</td></tr>';

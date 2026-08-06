@@ -1,36 +1,19 @@
-# KeyTrack Pro Multiempresa
+# KeyTrack Pro SaaS — Panel Super Admin
 
-Esta versión permite crear cuentas completamente independientes.
+Incluye:
 
-Cada empresa tiene sus propios:
-
-- Productos e inventario
-- Sucursales
-- Clientes
-- Proveedores
-- Compras
-- Ventas
-- Movimientos
-- Usuarios y roles
-
-Las políticas RLS de Supabase impiden que una empresa consulte o modifique los datos de otra.
+- Vista global de empresas
+- Estadísticas de usuarios, productos y unidades
+- Planes Gratis, Pro, Business y Enterprise
+- Estados: prueba, activa, suspendida y cancelada
+- Límites personalizados por empresa
+- Fechas de prueba y renovación
+- Notas administrativas
 
 ## Instalación
 
-1. Ejecuta `multiempresa.sql` completo en Supabase SQL Editor.
-2. Reemplaza en GitHub:
-   - `index.html`
-   - `manifest.webmanifest`
-   - `icon.svg`
-   - `vercel.json`
-   - `README.md`
-3. Espera el despliegue de Vercel.
-4. Para probar:
-   - Conserva tu cuenta actual como Empresa Principal.
-   - Crea otra cuenta desde modo incógnito.
-   - Escribe un nombre de empresa diferente.
-   - Los inventarios aparecerán completamente separados.
+1. Ejecuta `superadmin.sql` en Supabase SQL Editor.
+2. Reemplaza en GitHub: `index.html`, `manifest.webmanifest`, `icon.svg`, `vercel.json` y `README.md`.
+3. Entra con la primera cuenta creada. Aparecerá el botón `Super Admin`.
 
-## Importante
-
-Los registros de la base de datos quedan aislados por empresa. Los buckets de imágenes permanecen públicos para conservar las fotografías existentes; las nuevas cargas quedan organizadas en carpetas separadas por empresa.
+Esta versión administra planes y estados, pero todavía no procesa pagos reales.

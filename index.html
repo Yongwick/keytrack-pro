@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#08111f">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/icon.svg">
-<title>KeyTrack Pro Multiempresa</title>
+<title>KeyTrack Pro SaaS Admin</title>
 <style>
 :root{--bg:#07101f;--panel:#101b2d;--panel2:#152238;--text:#f5f7fb;--muted:#93a4ba;--accent:#4f8cff;--line:#25344b;--danger:#ef4444;--ok:#22c55e;--warn:#f59e0b}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#07101f,#0a1424 45%,#07101f);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;min-height:100vh}
@@ -30,6 +30,8 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 .detail-card{padding:14px;border:1px solid var(--line);border-radius:14px;background:#0b1626}
 @media(max-width:760px){.kpi-grid,.detail-grid{grid-template-columns:1fr}}
 
+.plan-pill{display:inline-flex;padding:5px 9px;border-radius:999px;background:#1b3155;font-weight:700}
+.status-active{color:#4ade80}.status-trial{color:#facc15}.status-suspended,.status-cancelled{color:#fb7185}
 </style>
 </head>
 <body>
@@ -50,7 +52,7 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 
 <div id="app" class="app hidden">
 <header>
- <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Cada empresa administra únicamente sus propios datos</div></div></div>
+ <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Multiempresa · Operación SaaS con panel administrativo</div></div></div>
  <div class="row">
   <span class="status"><span id="dot" class="dot"></span><span id="cloud">Conectando…</span></span>
   <span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
@@ -62,7 +64,7 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
   <button class="btn" data-view="dashboard">Dashboard</button>
   <button class="btn" data-view="detail">Ficha de producto</button>
   <button class="btn" data-view="movements">Movimientos</button>
-  <button class="btn" data-view="branches">Sucursales</button><button class="btn" data-view="customers">Clientes</button><button class="btn" data-view="suppliers">Proveedores</button><button class="btn" data-view="purchases">Compras</button><button class="btn" data-view="sales">Ventas</button>
+  <button class="btn" data-view="branches">Sucursales</button><button class="btn" data-view="customers">Clientes</button><button class="btn" data-view="suppliers">Proveedores</button><button class="btn" data-view="purchases">Compras</button><button class="btn" data-view="sales">Ventas</button><button id="superAdminNav" class="btn hidden" data-view="superadmin">Super Admin</button>
 </div>
 
 
@@ -200,12 +202,30 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 <dialog id="supplierDialog"><div class="dh row"><h3>Nuevo proveedor</h3><button id="supplierX" class="btn">×</button></div><form id="supplierForm"><div class="grid"><div><label>Nombre *</label><input id="supplierName" class="field" required></div><div><label>Contacto</label><input id="supplierContact" class="field"></div><div><label>Teléfono</label><input id="supplierPhone" class="field"></div><div><label>Correo</label><input id="supplierEmail" class="field" type="email"></div><div><label>Sitio web</label><input id="supplierWebsite" class="field"></div><div class="span"><label>Notas</label><textarea id="supplierNotes" class="field"></textarea></div></div><div class="row fa"><button id="supplierCancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div></form></dialog>
 <dialog id="purchaseDialog"><div class="dh row"><h3>Nueva orden de compra</h3><button id="purchaseX" class="btn">×</button></div><form id="purchaseForm"><div class="grid"><div><label>Proveedor *</label><select id="purchaseSupplier" class="field" required></select></div><div><label>Estado</label><select id="purchaseStatus" class="field"><option value="draft">Borrador</option><option value="ordered">Ordenada</option><option value="received">Recibida</option><option value="cancelled">Cancelada</option></select></div><div><label>Fecha esperada</label><input id="purchaseExpected" class="field" type="date"></div><div><label>Total</label><input id="purchaseTotal" class="field" type="number" min="0" step="0.01"></div><div class="span"><label>Notas</label><textarea id="purchaseNotes" class="field"></textarea></div></div><div class="row fa"><button id="purchaseCancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div></form></dialog>
 <dialog id="saleDialog"><div class="dh row"><h3>Nueva venta</h3><button id="saleX" class="btn">×</button></div><form id="saleForm"><div class="grid"><div><label>Cliente</label><select id="saleCustomer" class="field"></select></div><div><label>Estado</label><select id="saleStatus" class="field"><option value="completed">Completada</option><option value="draft">Borrador</option><option value="cancelled">Cancelada</option></select></div><div><label>Total</label><input id="saleTotal" class="field" type="number" min="0" step="0.01"></div><div><label>Método de pago</label><select id="salePayment" class="field"><option>Efectivo</option><option>Tarjeta</option><option>Transferencia</option><option>Otro</option></select></div><div class="span"><label>Notas</label><textarea id="saleNotes" class="field"></textarea></div></div><div class="row fa"><button id="saleCancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div></form></dialog>
+
+<dialog id="companyAdminDialog">
+ <div class="dh row"><div><h3>Administrar empresa</h3><div id="cadName" class="muted"></div></div><button id="cadX" class="btn">×</button></div>
+ <form id="companyAdminForm">
+  <input id="cadId" type="hidden">
+  <div class="grid">
+   <div><label>Plan</label><select id="cadPlan" class="field"></select></div>
+   <div><label>Estado</label><select id="cadStatus" class="field"><option value="trial">Prueba</option><option value="active">Activa</option><option value="suspended">Suspendida</option><option value="cancelled">Cancelada</option></select></div>
+   <div><label>Límite de usuarios</label><input id="cadUsersLimit" class="field" type="number" min="1"></div>
+   <div><label>Límite de productos</label><input id="cadProductsLimit" class="field" type="number" min="1"></div>
+   <div><label>Fin de prueba</label><input id="cadTrialEnds" class="field" type="date"></div>
+   <div><label>Renovación</label><input id="cadPeriodEnds" class="field" type="date"></div>
+   <div class="span"><label>Notas administrativas</label><textarea id="cadNotes" class="field"></textarea></div>
+  </div>
+  <div class="row fa"><button id="cadCancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar cambios</button></div>
+ </form>
+</dialog>
+
 <div id="toast" class="toast"></div>
 
 <script type="module">
 import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 const sb=createClient('https://ngzoyfxnbonjqeprkpxp.supabase.co','sb_publishable_IZfg7e_-acYq6QHpceVTxQ_GIiXLI-G');
-const $=s=>document.querySelector(s);let mode='login',session=null,profile=null,companyId=null,companyName='',items=[],locs=[],movements=[],customers=[],suppliers=[],purchases=[],sales=[],stream=null,scanTarget='search';
+const $=s=>document.querySelector(s);let mode='login',session=null,profile=null,companyId=null,companyName='',items=[],locs=[],movements=[],customers=[],suppliers=[],purchases=[],sales=[],saCompanies=[],saPlans=[],isPlatformAdmin=false,stream=null,scanTarget='search';
 const toast=m=>{let t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)};
 const val=id=>$(id).value.trim(),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function authMode(m){mode=m;$('#namebox').classList.toggle('hidden',m==='login');$('#companybox').classList.toggle('hidden',m==='login');$('#tl').classList.toggle('primary',m==='login');$('#ts').classList.toggle('primary',m==='signup');$('#as').textContent=m==='login'?'Iniciar sesión':'Crear cuenta';$('#err').textContent=''}
@@ -234,6 +254,9 @@ async function loadProfile(){
   profile={role:r.data.role||'employee'};
   $('#role').textContent=profile.role;
   $('#companyBadge').textContent=companyName;
+  let adminCheck=await sb.rpc('is_platform_admin');
+  isPlatformAdmin=adminCheck.data===true;
+  $('#superAdminNav').classList.toggle('hidden',!isPlatformAdmin);
   return true;
 }
 async function load(){
@@ -278,13 +301,13 @@ $('#hx').onclick=()=>$('#history').close();
 
 
 function switchView(name){
-  ['inventory','dashboard','detail','movements','branches','customers','suppliers','purchases','sales'].forEach(v=>{
+  ['inventory','dashboard','detail','movements','branches','customers','suppliers','purchases','sales','superadmin'].forEach(v=>{
     const el=$('#'+v+'View'); if(el) el.classList.toggle('hidden',v!==name);
   });
   document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===name));
   if(name==='dashboard')renderDashboard();
   if(name==='movements')renderMovements();
-  if(name==='branches')renderBranches();if(name==='customers')renderCustomers();if(name==='suppliers')renderSuppliers();if(name==='purchases')renderPurchases();if(name==='sales')renderSales();
+  if(name==='branches')renderBranches();if(name==='customers')renderCustomers();if(name==='suppliers')renderSuppliers();if(name==='purchases')renderPurchases();if(name==='sales')renderSales();if(name==='superadmin')loadSuperAdmin();
 }
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
 
@@ -333,6 +356,56 @@ $('#newCustomer').onclick=()=>$('#customerDialog').showModal();$('#customerX').o
 $('#newSupplier').onclick=()=>$('#supplierDialog').showModal();$('#supplierX').onclick=$('#supplierCancel').onclick=()=>$('#supplierDialog').close();$('#supplierForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('suppliers').insert({company_id:companyId,name:val('#supplierName'),contact_name:val('#supplierContact')||null,phone:val('#supplierPhone')||null,email:val('#supplierEmail')||null,website:val('#supplierWebsite')||null,notes:val('#supplierNotes')||null});if(r.error)return toast(r.error.message);$('#supplierDialog').close();e.target.reset();load()};
 $('#newPurchase').onclick=()=>$('#purchaseDialog').showModal();$('#purchaseX').onclick=$('#purchaseCancel').onclick=()=>$('#purchaseDialog').close();$('#purchaseForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('purchase_orders').insert({company_id:companyId,supplier_id:$('#purchaseSupplier').value,status:$('#purchaseStatus').value,expected_date:$('#purchaseExpected').value||null,total:+$('#purchaseTotal').value||0,notes:val('#purchaseNotes')||null,created_by:session.user.id});if(r.error)return toast(r.error.message);$('#purchaseDialog').close();e.target.reset();load()};
 $('#newSale').onclick=()=>$('#saleDialog').showModal();$('#saleX').onclick=$('#saleCancel').onclick=()=>$('#saleDialog').close();$('#saleForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('sales').insert({company_id:companyId,customer_id:$('#saleCustomer').value||null,status:$('#saleStatus').value,total:+$('#saleTotal').value||0,payment_method:$('#salePayment').value,notes:val('#saleNotes')||null,created_by:session.user.id});if(r.error)return toast(r.error.message);$('#saleDialog').close();e.target.reset();load()};
+
+
+async function loadSuperAdmin(){
+  if(!isPlatformAdmin)return toast('Acceso restringido');
+  $('#saBody').innerHTML='<tr><td colspan="8" class="muted">Cargando empresas…</td></tr>';
+  const [companiesResult,plansResult]=await Promise.all([sb.rpc('platform_list_companies'),sb.rpc('platform_list_plans')]);
+  if(companiesResult.error)return toast(companiesResult.error.message);
+  if(plansResult.error)return toast(plansResult.error.message);
+  saCompanies=companiesResult.data||[];saPlans=plansResult.data||[];
+  $('#cadPlan').innerHTML=saPlans.map(p=>`<option value="${p.code}">${esc(p.name)}</option>`).join('');
+  renderSuperAdmin();
+}
+function renderSuperAdmin(){
+  const q=val('#saSearch').toLowerCase(),status=$('#saStatusFilter').value;
+  const filtered=saCompanies.filter(c=>{const text=[c.company_name,c.owner_email,c.plan_name,c.plan_code].join(' ').toLowerCase();return(!q||text.includes(q))&&(!status||c.subscription_status===status)});
+  $('#saCompanies').textContent=saCompanies.length;
+  $('#saActive').textContent=saCompanies.filter(c=>c.subscription_status==='active').length;
+  $('#saUsers').textContent=saCompanies.reduce((n,c)=>n+Number(c.member_count||0),0);
+  $('#saProducts').textContent=saCompanies.reduce((n,c)=>n+Number(c.product_count||0),0);
+  $('#saCount').textContent=`${filtered.length} empresas`;
+  $('#saBody').innerHTML=filtered.length?filtered.map(c=>`<tr>
+    <td><b>${esc(c.company_name)}</b><div class="muted">${esc(c.owner_email||'Sin propietario')}</div></td>
+    <td><span class="plan-pill">${esc(c.plan_name||'Gratis')}</span></td>
+    <td><b class="status-${esc(c.subscription_status)}">${esc(c.subscription_status)}</b></td>
+    <td>${c.member_count||0} / ${c.max_users||'∞'}</td>
+    <td>${c.product_count||0} / ${c.max_products||'∞'}</td>
+    <td>${c.total_units||0}</td><td>${new Date(c.created_at).toLocaleDateString()}</td>
+    <td><button class="btn small" data-sa-edit="${c.company_id}">Administrar</button></td>
+  </tr>`).join(''):'<tr><td colspan="8" class="muted">No se encontraron empresas.</td></tr>';
+  document.querySelectorAll('[data-sa-edit]').forEach(b=>b.onclick=()=>openCompanyAdmin(b.dataset.saEdit));
+}
+function openCompanyAdmin(id){
+  const c=saCompanies.find(x=>x.company_id===id);if(!c)return;
+  $('#cadId').value=c.company_id;$('#cadName').textContent=c.company_name;$('#cadPlan').value=c.plan_code||'free';$('#cadStatus').value=c.subscription_status||'trial';
+  $('#cadUsersLimit').value=c.max_users||1;$('#cadProductsLimit').value=c.max_products||100;
+  $('#cadTrialEnds').value=c.trial_ends_at?String(c.trial_ends_at).slice(0,10):'';$('#cadPeriodEnds').value=c.current_period_ends_at?String(c.current_period_ends_at).slice(0,10):'';
+  $('#cadNotes').value=c.admin_notes||'';$('#companyAdminDialog').showModal();
+}
+$('#cadX').onclick=$('#cadCancel').onclick=()=>$('#companyAdminDialog').close();
+$('#companyAdminForm').onsubmit=async e=>{
+  e.preventDefault();
+  const r=await sb.rpc('platform_update_company_subscription',{
+    target_company:$('#cadId').value,new_plan_code:$('#cadPlan').value,new_status:$('#cadStatus').value,
+    new_max_users:+$('#cadUsersLimit').value,new_max_products:+$('#cadProductsLimit').value,
+    new_trial_ends_at:$('#cadTrialEnds').value||null,new_period_ends_at:$('#cadPeriodEnds').value||null,new_admin_notes:val('#cadNotes')||null
+  });
+  if(r.error)return toast(r.error.message);
+  $('#companyAdminDialog').close();toast('Empresa actualizada');loadSuperAdmin();
+};
+$('#saSearch').oninput=renderSuperAdmin;$('#saStatusFilter').onchange=renderSuperAdmin;$('#saRefresh').onclick=loadSuperAdmin;
 
 async function startScanner(target){scanTarget=target;$('#scanner').showModal();$('#scanmsg').textContent='Solicitando cámara…';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});$('#video').srcObject=stream;await $('#video').play();if(!('BarcodeDetector'in window)){$('#scanmsg').textContent='Este navegador no permite detección automática. Usa “Ingresar manualmente”.';return}let detector=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','itf']});let active=true;const loop=async()=>{if(!active||!stream)return;try{let codes=await detector.detect($('#video'));if(codes[0]){applyScan(codes[0].rawValue);active=false;stopScanner();return}}catch{}requestAnimationFrame(loop)};loop()}catch(err){$('#scanmsg').textContent='No se pudo abrir la cámara: '+err.message}}
 function applyScan(code){if(scanTarget==='field')$('#ibar').value=code;else{$('#search').value=code;render()}toast('Código detectado: '+code)}

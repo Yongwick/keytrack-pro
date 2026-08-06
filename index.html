@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#08111f">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/icon.svg">
-<title>KeyTrack Pro Enterprise 1.0</title>
+<title>KeyTrack Pro Enterprise 2.0</title>
 <style>
 :root{--bg:#07101f;--panel:#101b2d;--panel2:#152238;--text:#f5f7fb;--muted:#93a4ba;--accent:#4f8cff;--line:#25344b;--danger:#ef4444;--ok:#22c55e;--warn:#f59e0b}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#07101f,#0a1424 45%,#07101f);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;min-height:100vh}
@@ -35,7 +35,7 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 <body>
 <div id="auth" class="auth">
  <div class="authbox card">
-  <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 1.0 · ERP para cerrajería automotriz</div></div></div>
+  <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 2.0 · Operación comercial</div></div></div>
   <div class="tabs"><button id="tl" class="btn primary">Iniciar sesión</button><button id="ts" class="btn">Crear cuenta</button></div>
   <form id="af" class="stack">
    <div id="namebox"><label>Nombre</label><input id="fullname" class="field"></div>
@@ -49,7 +49,7 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 
 <div id="app" class="app hidden">
 <header>
- <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Dashboard · Catálogo · Vehículos · Reportes · Sucursales</div></div></div>
+ <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Inventario · Compras · Ventas · Clientes · Proveedores</div></div></div>
  <div class="row">
   <span class="status"><span id="dot" class="dot"></span><span id="cloud">Conectando…</span></span>
   <span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
@@ -61,7 +61,7 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
   <button class="btn" data-view="dashboard">Dashboard</button>
   <button class="btn" data-view="detail">Ficha de producto</button>
   <button class="btn" data-view="movements">Movimientos</button>
-  <button class="btn" data-view="branches">Sucursales</button>
+  <button class="btn" data-view="branches">Sucursales</button><button class="btn" data-view="customers">Clientes</button><button class="btn" data-view="suppliers">Proveedores</button><button class="btn" data-view="purchases">Compras</button><button class="btn" data-view="sales">Ventas</button>
 </div>
 
 
@@ -126,6 +126,10 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
   <div class="panelhead row"><h3>Sucursales y ubicaciones</h3><button id="newBranch" class="btn primary">+ Nueva ubicación</button></div>
   <div id="branchesBody" class="history"></div>
 </section>
+<section id="customersView" class="hidden panel"><div class="panelhead row"><h3>Clientes</h3><button id="newCustomer" class="btn primary">+ Nuevo cliente</button></div><div id="customersBody" class="history"></div></section>
+<section id="suppliersView" class="hidden panel"><div class="panelhead row"><h3>Proveedores</h3><button id="newSupplier" class="btn primary">+ Nuevo proveedor</button></div><div id="suppliersBody" class="history"></div></section>
+<section id="purchasesView" class="hidden panel"><div class="panelhead row"><h3>Órdenes de compra</h3><button id="newPurchase" class="btn primary">+ Nueva compra</button></div><div id="purchasesBody" class="history"></div></section>
+<section id="salesView" class="hidden panel"><div class="panelhead row"><h3>Ventas</h3><button id="newSale" class="btn primary">+ Nueva venta</button></div><div id="salesBody" class="history"></div></section>
 </div>
 
 <dialog id="item">
@@ -191,12 +195,16 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
  </div><div class="row fa"><button id="branchCancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div></form>
 </dialog>
 
+<dialog id="customerDialog"><div class="dh row"><h3>Nuevo cliente</h3><button id="customerX" class="btn">×</button></div><form id="customerForm"><div class="grid"><div><label>Nombre *</label><input id="customerName" class="field" required></div><div><label>Teléfono</label><input id="customerPhone" class="field"></div><div><label>Correo</label><input id="customerEmail" class="field" type="email"></div><div><label>Empresa</label><input id="customerCompany" class="field"></div><div class="span"><label>Notas</label><textarea id="customerNotes" class="field"></textarea></div></div><div class="row fa"><button id="customerCancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div></form></dialog>
+<dialog id="supplierDialog"><div class="dh row"><h3>Nuevo proveedor</h3><button id="supplierX" class="btn">×</button></div><form id="supplierForm"><div class="grid"><div><label>Nombre *</label><input id="supplierName" class="field" required></div><div><label>Contacto</label><input id="supplierContact" class="field"></div><div><label>Teléfono</label><input id="supplierPhone" class="field"></div><div><label>Correo</label><input id="supplierEmail" class="field" type="email"></div><div><label>Sitio web</label><input id="supplierWebsite" class="field"></div><div class="span"><label>Notas</label><textarea id="supplierNotes" class="field"></textarea></div></div><div class="row fa"><button id="supplierCancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div></form></dialog>
+<dialog id="purchaseDialog"><div class="dh row"><h3>Nueva orden de compra</h3><button id="purchaseX" class="btn">×</button></div><form id="purchaseForm"><div class="grid"><div><label>Proveedor *</label><select id="purchaseSupplier" class="field" required></select></div><div><label>Estado</label><select id="purchaseStatus" class="field"><option value="draft">Borrador</option><option value="ordered">Ordenada</option><option value="received">Recibida</option><option value="cancelled">Cancelada</option></select></div><div><label>Fecha esperada</label><input id="purchaseExpected" class="field" type="date"></div><div><label>Total</label><input id="purchaseTotal" class="field" type="number" min="0" step="0.01"></div><div class="span"><label>Notas</label><textarea id="purchaseNotes" class="field"></textarea></div></div><div class="row fa"><button id="purchaseCancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div></form></dialog>
+<dialog id="saleDialog"><div class="dh row"><h3>Nueva venta</h3><button id="saleX" class="btn">×</button></div><form id="saleForm"><div class="grid"><div><label>Cliente</label><select id="saleCustomer" class="field"></select></div><div><label>Estado</label><select id="saleStatus" class="field"><option value="completed">Completada</option><option value="draft">Borrador</option><option value="cancelled">Cancelada</option></select></div><div><label>Total</label><input id="saleTotal" class="field" type="number" min="0" step="0.01"></div><div><label>Método de pago</label><select id="salePayment" class="field"><option>Efectivo</option><option>Tarjeta</option><option>Transferencia</option><option>Otro</option></select></div><div class="span"><label>Notas</label><textarea id="saleNotes" class="field"></textarea></div></div><div class="row fa"><button id="saleCancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div></form></dialog>
 <div id="toast" class="toast"></div>
 
 <script type="module">
 import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 const sb=createClient('https://ngzoyfxnbonjqeprkpxp.supabase.co','sb_publishable_IZfg7e_-acYq6QHpceVTxQ_GIiXLI-G');
-const $=s=>document.querySelector(s);let mode='login',session=null,profile=null,items=[],locs=[],movements=[],stream=null,scanTarget='search';
+const $=s=>document.querySelector(s);let mode='login',session=null,profile=null,items=[],locs=[],movements=[],customers=[],suppliers=[],purchases=[],sales=[],stream=null,scanTarget='search';
 const toast=m=>{let t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)};
 const val=id=>$(id).value.trim(),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function authMode(m){mode=m;$('#namebox').classList.toggle('hidden',m==='login');$('#tl').classList.toggle('primary',m==='login');$('#ts').classList.toggle('primary',m==='signup');$('#as').textContent=m==='login'?'Iniciar sesión':'Crear cuenta';$('#err').textContent=''}
@@ -205,7 +213,7 @@ $('#af').onsubmit=async e=>{e.preventDefault();$('#err').textContent='';let r=mo
 $('#logout').onclick=()=>sb.auth.signOut();
 
 async function loadProfile(){let r=await sb.from('profiles').select('full_name,role').eq('id',session.user.id).single();profile=r.data||{role:'employee'};$('#role').textContent=profile.role}
-async function load(){$('#cloud').textContent='Sincronizando…';$('#dot').classList.remove('ok');let a=await sb.from('locations').select('id,name').order('name');if(a.error)return toast(a.error.message);locs=a.data||[];$('#iloc').innerHTML='<option value="">Sin ubicación</option>'+locs.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');let r=await sb.from('products').select('*,locations(name)').order('created_at',{ascending:false});if(r.error)return toast(r.error.message);items=r.data||[];let mm=await sb.from('inventory_movements').select('*,products(name)').order('created_at',{ascending:false}).limit(100);movements=mm.data||[];$('#cloud').textContent='Sincronizado';$('#dot').classList.add('ok');render()}
+async function load(){$('#cloud').textContent='Sincronizando…';$('#dot').classList.remove('ok');let a=await sb.from('locations').select('id,name').order('name');if(a.error)return toast(a.error.message);locs=a.data||[];$('#iloc').innerHTML='<option value="">Sin ubicación</option>'+locs.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');let r=await sb.from('products').select('*,locations(name)').order('created_at',{ascending:false});if(r.error)return toast(r.error.message);items=r.data||[];let mm=await sb.from('inventory_movements').select('*,products(name)').order('created_at',{ascending:false}).limit(100);movements=mm.data||[];let cu=await sb.from('customers').select('*').order('created_at',{ascending:false});customers=cu.data||[];let sp=await sb.from('suppliers').select('*').order('created_at',{ascending:false});suppliers=sp.data||[];let po=await sb.from('purchase_orders').select('*,suppliers(name)').order('created_at',{ascending:false});purchases=po.data||[];let sa=await sb.from('sales').select('*,customers(name)').order('created_at',{ascending:false});sales=sa.data||[];renderOperationalSelects();$('#cloud').textContent='Sincronizado';$('#dot').classList.add('ok');render()}
 function list(){let q=val('#search').toLowerCase(),c=$('#filter').value;return items.filter(x=>(!c||x.category===c)&&(!q||[x.name,x.sku,x.serial_number,x.barcode,x.fcc_id,x.ic_number,x.brand,x.oem_number,x.frequency,x.chip_type,x.vehicle_compatibility,x.supplier,x.equivalences,x.locations?.name,x.notes].join(' ').toLowerCase().includes(q)))}
 function render(){let a=list();$('#body').innerHTML=a.map(x=>`<tr><td>${x.image_url?`<img class="thumb" src="${esc(x.image_url)}" alt="">`:'—'}</td><td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td><td>${esc(x.brand||'—')}<div class="muted">${esc(x.fcc_id||'Sin FCC')}</div></td><td>${esc(x.sku||'—')}<div class="muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</div></td><td>${esc(x.vehicle_compatibility||'—')}</td><td>${esc(x.locations?.name||'—')}</td><td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td><td><div class="acts"><button class="btn small" data-a="m" data-id="${x.id}">±</button><button class="btn small" data-a="v" data-id="${x.id}">Ver ficha</button><button class="btn small" data-a="h" data-id="${x.id}">Historial</button><button class="btn small" data-a="e" data-id="${x.id}">Editar</button>${profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}</div></td></tr>`).join('');$('#count').textContent=a.length+' resultados';$('#si').textContent=items.length;$('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);$('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;$('#sz').textContent=items.filter(x=>x.quantity===0).length}
 
@@ -231,13 +239,13 @@ $('#hx').onclick=()=>$('#history').close();
 
 
 function switchView(name){
-  ['inventory','dashboard','detail','movements','branches'].forEach(v=>{
+  ['inventory','dashboard','detail','movements','branches','customers','suppliers','purchases','sales'].forEach(v=>{
     const el=$('#'+v+'View'); if(el) el.classList.toggle('hidden',v!==name);
   });
   document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===name));
   if(name==='dashboard')renderDashboard();
   if(name==='movements')renderMovements();
-  if(name==='branches')renderBranches();
+  if(name==='branches')renderBranches();if(name==='customers')renderCustomers();if(name==='suppliers')renderSuppliers();if(name==='purchases')renderPurchases();if(name==='sales')renderSales();
 }
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
 
@@ -275,6 +283,17 @@ function renderMovements(){
 function renderBranches(){
   $('#branchesBody').innerHTML=locs.length?locs.map(l=>`<div class="history-item"><b>${esc(l.name)}</b><div class="muted">${esc(l.address||'Sin dirección')}</div></div>`).join(''):'<div class="history-item muted">Sin ubicaciones.</div>';
 }
+
+
+function renderOperationalSelects(){if($('#purchaseSupplier'))$('#purchaseSupplier').innerHTML='<option value="">Selecciona proveedor</option>'+suppliers.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');if($('#saleCustomer'))$('#saleCustomer').innerHTML='<option value="">Venta sin cliente</option>'+customers.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('')}
+function renderCustomers(){$('#customersBody').innerHTML=customers.length?customers.map(x=>`<div class="history-item"><b>${esc(x.name)}</b>${x.company?` · ${esc(x.company)}`:''}<div class="muted">${esc(x.phone||'Sin teléfono')} · ${esc(x.email||'Sin correo')}</div></div>`).join(''):'<div class="history-item muted">Sin clientes.</div>'}
+function renderSuppliers(){$('#suppliersBody').innerHTML=suppliers.length?suppliers.map(x=>`<div class="history-item"><b>${esc(x.name)}</b><div class="muted">${esc(x.contact_name||'Sin contacto')} · ${esc(x.phone||'Sin teléfono')} · ${esc(x.email||'Sin correo')}</div></div>`).join(''):'<div class="history-item muted">Sin proveedores.</div>'}
+function renderPurchases(){$('#purchasesBody').innerHTML=purchases.length?purchases.map(x=>`<div class="history-item"><b>${esc(x.suppliers?.name||'Proveedor')}</b> · $${Number(x.total||0).toFixed(2)}<div class="muted">${esc(x.status)} · ${new Date(x.created_at).toLocaleString()}</div></div>`).join(''):'<div class="history-item muted">Sin órdenes de compra.</div>'}
+function renderSales(){$('#salesBody').innerHTML=sales.length?sales.map(x=>`<div class="history-item"><b>${esc(x.customers?.name||'Venta general')}</b> · $${Number(x.total||0).toFixed(2)}<div class="muted">${esc(x.status)} · ${esc(x.payment_method||'Sin método')} · ${new Date(x.created_at).toLocaleString()}</div></div>`).join(''):'<div class="history-item muted">Sin ventas.</div>'}
+$('#newCustomer').onclick=()=>$('#customerDialog').showModal();$('#customerX').onclick=$('#customerCancel').onclick=()=>$('#customerDialog').close();$('#customerForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('customers').insert({name:val('#customerName'),phone:val('#customerPhone')||null,email:val('#customerEmail')||null,company:val('#customerCompany')||null,notes:val('#customerNotes')||null,created_by:session.user.id});if(r.error)return toast(r.error.message);$('#customerDialog').close();e.target.reset();load()};
+$('#newSupplier').onclick=()=>$('#supplierDialog').showModal();$('#supplierX').onclick=$('#supplierCancel').onclick=()=>$('#supplierDialog').close();$('#supplierForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('suppliers').insert({name:val('#supplierName'),contact_name:val('#supplierContact')||null,phone:val('#supplierPhone')||null,email:val('#supplierEmail')||null,website:val('#supplierWebsite')||null,notes:val('#supplierNotes')||null});if(r.error)return toast(r.error.message);$('#supplierDialog').close();e.target.reset();load()};
+$('#newPurchase').onclick=()=>$('#purchaseDialog').showModal();$('#purchaseX').onclick=$('#purchaseCancel').onclick=()=>$('#purchaseDialog').close();$('#purchaseForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('purchase_orders').insert({supplier_id:$('#purchaseSupplier').value,status:$('#purchaseStatus').value,expected_date:$('#purchaseExpected').value||null,total:+$('#purchaseTotal').value||0,notes:val('#purchaseNotes')||null,created_by:session.user.id});if(r.error)return toast(r.error.message);$('#purchaseDialog').close();e.target.reset();load()};
+$('#newSale').onclick=()=>$('#saleDialog').showModal();$('#saleX').onclick=$('#saleCancel').onclick=()=>$('#saleDialog').close();$('#saleForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('sales').insert({customer_id:$('#saleCustomer').value||null,status:$('#saleStatus').value,total:+$('#saleTotal').value||0,payment_method:$('#salePayment').value,notes:val('#saleNotes')||null,created_by:session.user.id});if(r.error)return toast(r.error.message);$('#saleDialog').close();e.target.reset();load()};
 
 async function startScanner(target){scanTarget=target;$('#scanner').showModal();$('#scanmsg').textContent='Solicitando cámara…';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});$('#video').srcObject=stream;await $('#video').play();if(!('BarcodeDetector'in window)){$('#scanmsg').textContent='Este navegador no permite detección automática. Usa “Ingresar manualmente”.';return}let detector=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','itf']});let active=true;const loop=async()=>{if(!active||!stream)return;try{let codes=await detector.detect($('#video'));if(codes[0]){applyScan(codes[0].rawValue);active=false;stopScanner();return}}catch{}requestAnimationFrame(loop)};loop()}catch(err){$('#scanmsg').textContent='No se pudo abrir la cámara: '+err.message}}
 function applyScan(code){if(scanTarget==='field')$('#ibar').value=code;else{$('#search').value=code;render()}toast('Código detectado: '+code)}

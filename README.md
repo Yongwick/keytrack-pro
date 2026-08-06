@@ -1,27 +1,8 @@
-# KeyTrack Pro Enterprise 1.0 — Corrección
+# KeyTrack Pro Enterprise 2.0
 
-Incluye:
-
-- Dashboard con valor del inventario
-- Margen potencial
-- Productos críticos
-- Actividad reciente
-- Ficha completa de producto
-- Movimientos recientes
-- Sucursales y ubicaciones
-- Base para proveedores y órdenes de compra
-- Catálogo, vehículos, equivalencias, fotos y documentos
+Incluye inventario, dashboard, ficha de producto, movimientos, sucursales, clientes, proveedores, compras y ventas.
 
 ## Instalación
-
-1. Ejecuta `enterprise1.sql` en Supabase SQL Editor.
-2. Sube a GitHub y reemplaza:
-   - index.html
-   - manifest.webmanifest
-   - icon.svg
-   - vercel.json
-   - README.md
+1. Ejecuta `enterprise2.sql` en Supabase.
+2. Reemplaza `index.html`, `manifest.webmanifest`, `icon.svg`, `vercel.json` y `README.md` en GitHub.
 3. Vercel desplegará automáticamente.
-
-
-Corrección: se repararon los botones **+ Nuevo** y **Editar**.

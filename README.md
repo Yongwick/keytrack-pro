@@ -1,15 +1,24 @@
-# KeyTrack Pro · Fase 1
+# KeyTrack Pro · Fase 2
 
 Incluye:
-- Escáner de códigos de barras y QR
-- Fotografías de productos
-- Historial de entradas y salidas
-- Roles de usuario
-- Sincronización en tiempo real
-- Búsqueda por SKU, serie, código, FCC ID e IC
+
+- Marca, OEM y FCC ID
+- Frecuencia y tipo de chip
+- Botones y batería
+- Estado del producto
+- Proveedor
+- Costo, precio y valor de inventario
+- Compatibilidad por vehículo
+- Escáner, fotos, historial, roles y sincronización
+- Exportación CSV ampliada
 
 ## Instalación
-1. Ejecuta `fase1.sql` en Supabase SQL Editor.
-2. Sube `index.html`, `manifest.webmanifest`, `icon.svg`, `vercel.json` y `README.md` a GitHub reemplazando los anteriores.
-3. No es necesario subir `fase1.sql` a Vercel, aunque puede permanecer en GitHub como respaldo.
-4. Vercel desplegará automáticamente.
+
+1. Ejecuta `fase2.sql` en Supabase SQL Editor.
+2. Sube a GitHub y reemplaza:
+   - index.html
+   - manifest.webmanifest
+   - icon.svg
+   - vercel.json
+   - README.md
+3. Vercel desplegará automáticamente.

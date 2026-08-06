@@ -1,4 +1,4 @@
-# KeyTrack Pro Enterprise 1.0
+# KeyTrack Pro Enterprise 1.0 — Corrección
 
 Incluye:
 
@@ -22,3 +22,6 @@ Incluye:
    - vercel.json
    - README.md
 3. Vercel desplegará automáticamente.
+
+
+Corrección: se repararon los botones **+ Nuevo** y **Editar**.

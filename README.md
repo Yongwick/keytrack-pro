@@ -1,18 +1,20 @@
-# KeyTrack Pro V3
+# KeyTrack Pro Enterprise 1.0
 
 Incluye:
 
-- Buscador por vehículo
-- Equivalencias entre marcas
-- Fotografías adicionales
-- Documentos PDF por producto
-- Tablas para compatibilidad por año, marca y modelo
-- Base preparada para catálogo maestro
-- Escáner, fotos, historial, roles, costos y sincronización
+- Dashboard con valor del inventario
+- Margen potencial
+- Productos críticos
+- Actividad reciente
+- Ficha completa de producto
+- Movimientos recientes
+- Sucursales y ubicaciones
+- Base para proveedores y órdenes de compra
+- Catálogo, vehículos, equivalencias, fotos y documentos
 
 ## Instalación
 
-1. Ejecuta `fase3.sql` en Supabase SQL Editor.
+1. Ejecuta `enterprise1.sql` en Supabase SQL Editor.
 2. Sube a GitHub y reemplaza:
    - index.html
    - manifest.webmanifest

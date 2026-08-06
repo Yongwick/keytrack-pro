@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#08111f">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/icon.svg">
-<title>KeyTrack Pro · V3</title>
+<title>KeyTrack Pro Enterprise 1.0</title>
 <style>
 :root{--bg:#07101f;--panel:#101b2d;--panel2:#152238;--text:#f5f7fb;--muted:#93a4ba;--accent:#4f8cff;--line:#25344b;--danger:#ef4444;--ok:#22c55e;--warn:#f59e0b}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#07101f,#0a1424 45%,#07101f);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;min-height:100vh}
@@ -22,12 +22,20 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 .auth{min-height:100vh;display:grid;place-items:center;padding:18px}.authbox{width:min(450px,100%);padding:22px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:17px 0}.stack{display:grid;gap:11px}.err{color:#fda4af;min-height:20px}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--panel2);padding:11px 15px;border-radius:12px;display:none;z-index:100}.toast.on{display:block}
 .scanbox{display:grid;gap:10px}video{width:100%;max-height:55vh;background:#000;border-radius:14px}.history{max-height:52vh;overflow:auto}.history-item{padding:11px;border-bottom:1px solid var(--line)}.history-item b{display:inline-block;min-width:70px}
 @media(max-width:760px){.stats{grid-template-columns:1fr 1fr}.tools,.grid{grid-template-columns:1fr}.span{grid-column:auto}.toptext{display:none}}
+
+.nav .active{background:var(--accent);border-color:transparent}
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.kpi{padding:16px}.section{margin-top:12px}
+.detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.detail-card{padding:14px;border:1px solid var(--line);border-radius:14px;background:#0b1626}
+@media(max-width:760px){.kpi-grid,.detail-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
 <div id="auth" class="auth">
  <div class="authbox card">
-  <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">V3 · Catálogo inteligente</div></div></div>
+  <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 1.0 · ERP para cerrajería automotriz</div></div></div>
   <div class="tabs"><button id="tl" class="btn primary">Iniciar sesión</button><button id="ts" class="btn">Crear cuenta</button></div>
   <form id="af" class="stack">
    <div id="namebox"><label>Nombre</label><input id="fullname" class="field"></div>
@@ -41,14 +49,23 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 
 <div id="app" class="app hidden">
 <header>
- <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Vehículos · Equivalencias · Documentos · Multiimagen</div></div></div>
+ <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Dashboard · Catálogo · Vehículos · Reportes · Sucursales</div></div></div>
  <div class="row">
   <span class="status"><span id="dot" class="dot"></span><span id="cloud">Conectando…</span></span>
   <span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
   <button id="csv" class="btn">CSV</button><button id="logout" class="btn">Salir</button><button id="add" class="btn primary">+ Nuevo</button>
  </div>
 </header>
+<div class="nav" style="display:flex;gap:8px;overflow:auto;margin-bottom:14px">
+  <button class="btn active" data-view="inventory">Inventario</button>
+  <button class="btn" data-view="dashboard">Dashboard</button>
+  <button class="btn" data-view="detail">Ficha de producto</button>
+  <button class="btn" data-view="movements">Movimientos</button>
+  <button class="btn" data-view="branches">Sucursales</button>
+</div>
 
+
+<section id="inventoryView">
 <section class="stats">
  <div class="card"><div class="muted">Artículos</div><div id="si" class="num">0</div></div>
  <div class="card"><div class="muted">Unidades</div><div id="su" class="num">0</div></div>
@@ -78,6 +95,36 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 <section class="panel">
  <div class="panelhead row"><h3>Inventario sincronizado</h3><span id="count" class="muted"></span></div>
  <div class="table"><table><thead><tr><th>Foto</th><th>Artículo</th><th>Marca / FCC</th><th>SKU / OEM</th><th>Vehículo</th><th>Ubicación</th><th>Cantidad</th><th>Acciones</th></tr></thead><tbody id="body"></tbody></table></div>
+</section>
+</section>
+
+<section id="dashboardView" class="hidden">
+  <section class="stats">
+    <div class="card"><div class="muted">Valor costo</div><div id="dashCost" class="num">$0</div></div>
+    <div class="card"><div class="muted">Valor venta</div><div id="dashRetail" class="num">$0</div></div>
+    <div class="card"><div class="muted">Margen potencial</div><div id="dashMargin" class="num">$0</div></div>
+    <div class="card"><div class="muted">Movimientos hoy</div><div id="dashMoves" class="num">0</div></div>
+  </section>
+  <div class="kpi-grid">
+    <div class="card kpi"><h3>Inventario crítico</h3><div id="criticalList" class="section muted"></div></div>
+    <div class="card kpi"><h3>Productos más valiosos</h3><div id="valueList" class="section muted"></div></div>
+    <div class="card kpi"><h3>Actividad reciente</h3><div id="recentList" class="section muted"></div></div>
+  </div>
+</section>
+
+<section id="detailView" class="hidden panel">
+  <div class="panelhead row"><div><h3>Ficha completa del producto</h3><div class="muted">Selecciona un producto desde el inventario.</div></div></div>
+  <div id="detailBody" style="padding:18px" class="muted">Sin producto seleccionado.</div>
+</section>
+
+<section id="movementsView" class="hidden panel">
+  <div class="panelhead"><h3>Movimientos recientes</h3></div>
+  <div id="movementsBody" class="history"></div>
+</section>
+
+<section id="branchesView" class="hidden panel">
+  <div class="panelhead row"><h3>Sucursales y ubicaciones</h3><button id="newBranch" class="btn primary">+ Nueva ubicación</button></div>
+  <div id="branchesBody" class="history"></div>
 </section>
 </div>
 
@@ -134,12 +181,21 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
  <div id="hbody" class="history"></div>
 </dialog>
 
+
+<dialog id="branchDialog">
+ <div class="dh row"><h3>Nueva ubicación</h3><button id="branchX" class="btn">×</button></div>
+ <form id="branchForm"><div class="grid">
+  <div><label>Nombre *</label><input id="branchName" class="field" required></div>
+  <div><label>Dirección</label><input id="branchAddress" class="field"></div>
+ </div><div class="row fa"><button id="branchCancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div></form>
+</dialog>
+
 <div id="toast" class="toast"></div>
 
 <script type="module">
 import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 const sb=createClient('https://ngzoyfxnbonjqeprkpxp.supabase.co','sb_publishable_IZfg7e_-acYq6QHpceVTxQ_GIiXLI-G');
-const $=s=>document.querySelector(s);let mode='login',session=null,profile=null,items=[],locs=[],stream=null,scanTarget='search';
+const $=s=>document.querySelector(s);let mode='login',session=null,profile=null,items=[],locs=[],movements=[],stream=null,scanTarget='search';
 const toast=m=>{let t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)};
 const val=id=>$(id).value.trim(),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function authMode(m){mode=m;$('#namebox').classList.toggle('hidden',m==='login');$('#tl').classList.toggle('primary',m==='login');$('#ts').classList.toggle('primary',m==='signup');$('#as').textContent=m==='login'?'Iniciar sesión':'Crear cuenta';$('#err').textContent=''}
@@ -148,9 +204,9 @@ $('#af').onsubmit=async e=>{e.preventDefault();$('#err').textContent='';let r=mo
 $('#logout').onclick=()=>sb.auth.signOut();
 
 async function loadProfile(){let r=await sb.from('profiles').select('full_name,role').eq('id',session.user.id).single();profile=r.data||{role:'employee'};$('#role').textContent=profile.role}
-async function load(){$('#cloud').textContent='Sincronizando…';$('#dot').classList.remove('ok');let a=await sb.from('locations').select('id,name').order('name');if(a.error)return toast(a.error.message);locs=a.data||[];$('#iloc').innerHTML='<option value="">Sin ubicación</option>'+locs.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');let r=await sb.from('products').select('*,locations(name)').order('created_at',{ascending:false});if(r.error)return toast(r.error.message);items=r.data||[];$('#cloud').textContent='Sincronizado';$('#dot').classList.add('ok');render()}
+async function load(){$('#cloud').textContent='Sincronizando…';$('#dot').classList.remove('ok');let a=await sb.from('locations').select('id,name').order('name');if(a.error)return toast(a.error.message);locs=a.data||[];$('#iloc').innerHTML='<option value="">Sin ubicación</option>'+locs.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');let r=await sb.from('products').select('*,locations(name)').order('created_at',{ascending:false});if(r.error)return toast(r.error.message);items=r.data||[];let mm=await sb.from('inventory_movements').select('*,products(name)').order('created_at',{ascending:false}).limit(100);movements=mm.data||[];$('#cloud').textContent='Sincronizado';$('#dot').classList.add('ok');render()}
 function list(){let q=val('#search').toLowerCase(),c=$('#filter').value;return items.filter(x=>(!c||x.category===c)&&(!q||[x.name,x.sku,x.serial_number,x.barcode,x.fcc_id,x.ic_number,x.brand,x.oem_number,x.frequency,x.chip_type,x.vehicle_compatibility,x.supplier,x.equivalences,x.locations?.name,x.notes].join(' ').toLowerCase().includes(q)))}
-function render(){let a=list();$('#body').innerHTML=a.map(x=>`<tr><td>${x.image_url?`<img class="thumb" src="${esc(x.image_url)}" alt="">`:'—'}</td><td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td><td>${esc(x.brand||'—')}<div class="muted">${esc(x.fcc_id||'Sin FCC')}</div></td><td>${esc(x.sku||'—')}<div class="muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</div></td><td>${esc(x.vehicle_compatibility||'—')}</td><td>${esc(x.locations?.name||'—')}</td><td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td><td><div class="acts"><button class="btn small" data-a="m" data-id="${x.id}">±</button><button class="btn small" data-a="h" data-id="${x.id}">Historial</button><button class="btn small" data-a="e" data-id="${x.id}">Editar</button>${profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}</div></td></tr>`).join('');$('#count').textContent=a.length+' resultados';$('#si').textContent=items.length;$('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);$('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;$('#sz').textContent=items.filter(x=>x.quantity===0).length}
+function render(){let a=list();$('#body').innerHTML=a.map(x=>`<tr><td>${x.image_url?`<img class="thumb" src="${esc(x.image_url)}" alt="">`:'—'}</td><td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td><td>${esc(x.brand||'—')}<div class="muted">${esc(x.fcc_id||'Sin FCC')}</div></td><td>${esc(x.sku||'—')}<div class="muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</div></td><td>${esc(x.vehicle_compatibility||'—')}</td><td>${esc(x.locations?.name||'—')}</td><td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td><td><div class="acts"><button class="btn small" data-a="m" data-id="${x.id}">±</button><button class="btn small" data-a="v" data-id="${x.id}">Ver ficha</button><button class="btn small" data-a="h" data-id="${x.id}">Historial</button><button class="btn small" data-a="e" data-id="${x.id}">Editar</button>${profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}</div></td></tr>`).join('');$('#count').textContent=a.length+' resultados';$('#si').textContent=items.length;$('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);$('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;$('#sz').textContent=items.filter(x=>x.quantity===0).length}
 
 function openItem(x){$('#ititle').textContent=x?'Editar artículo':'Nuevo artículo';$('#iid').value=x?.id||'';$('#oldimg').value=x?.image_url||'';$('#iname').value=x?.name||'';$('#icat').value=x?.category||'Llave';$('#iq').value=x?.quantity??1;$('#ibrand').value=x?.brand||'';$('#isku').value=x?.sku||'';$('#ioem').value=x?.oem_number||'';$('#iser').value=x?.serial_number||'';$('#iloc').value=x?.location_id||'';$('#imin').value=x?.minimum_quantity??2;$('#ibar').value=x?.barcode||'';$('#ifcc').value=x?.fcc_id||'';$('#iic').value=x?.ic_number||'';$('#ifreq').value=x?.frequency||'';$('#ichip').value=x?.chip_type||'';$('#ibuttons').value=x?.button_count??'';$('#ibattery').value=x?.battery_type||'';$('#icondition').value=x?.condition_status||'Nuevo';$('#isupplier').value=x?.supplier||'';$('#icost').value=x?.cost??'';$('#iprice').value=x?.sale_price??'';$('#ivehicle').value=x?.vehicle_compatibility||'';$('#iequiv').value=x?.equivalences||'';$('#inotes').value=x?.notes||'';$('#iphoto').value='';$('#item').showModal()}
 $('#add').onclick=()=>openItem();$('#ix').onclick=$('#icancel').onclick=()=>$('#item').close();
@@ -166,11 +222,58 @@ if(extraImages.length){
 }
 $('#item').close();toast('Guardado');load()}catch(err){toast(err.message)}};
 
-$('#body').onclick=async e=>{let b=e.target.closest('button');if(!b)return;let x=items.find(i=>i.id===b.dataset.id);if(b.dataset.a==='e')openItem(x);if(b.dataset.a==='d'&&confirm('¿Borrar '+x.name+'?')){let r=await sb.from('products').delete().eq('id',x.id);r.error?toast(r.error.message):load()}if(b.dataset.a==='m'){$('#mid').value=x.id;$('#mtitle').textContent='Movimiento: '+x.name;$('#move').showModal()}if(b.dataset.a==='h')showHistory(x)};
+$('#body').onclick=async e=>{let b=e.target.closest('button');if(!b)return;let x=items.find(i=>i.id===b.dataset.id);if(b.dataset.a==='v'){showDetail(x);switchView('detail')}if(b.dataset.a==='e')openItem(x);if(b.dataset.a==='d'&&confirm('¿Borrar '+x.name+'?')){let r=await sb.from('products').delete().eq('id',x.id);r.error?toast(r.error.message):load()}if(b.dataset.a==='m'){$('#mid').value=x.id;$('#mtitle').textContent='Movimiento: '+x.name;$('#move').showModal()}if(b.dataset.a==='h')showHistory(x)};
 $('#mx').onclick=$('#mcancel').onclick=()=>$('#move').close();
 $('#mf').onsubmit=async e=>{e.preventDefault();let x=items.find(i=>i.id===val('#mid')),q=+$('#mq').value,t=$('#mtype').value;if(t==='out'&&q>x.quantity)return toast('No hay suficiente existencia');let n=x.quantity+(t==='in'?q:-q),u=await sb.from('products').update({quantity:n}).eq('id',x.id);if(u.error)return toast(u.error.message);let m=await sb.from('inventory_movements').insert({product_id:x.id,movement_type:t,quantity:q,previous_quantity:x.quantity,new_quantity:n,note:val('#mnote')||null,created_by:session.user.id});if(m.error)toast('Cantidad actualizada; historial no guardado');$('#move').close();load()};
 async function showHistory(x){$('#htitle').textContent='Historial: '+x.name;$('#hbody').innerHTML='<div class="history-item muted">Cargando…</div>';$('#history').showModal();let r=await sb.from('inventory_movements').select('movement_type,quantity,previous_quantity,new_quantity,note,created_at').eq('product_id',x.id).order('created_at',{ascending:false});$('#hbody').innerHTML=r.error?`<div class="history-item">${esc(r.error.message)}</div>`:(r.data.length?r.data.map(m=>`<div class="history-item"><b>${m.movement_type==='in'?'Entrada':'Salida'}</b> ${m.quantity} unidades · ${m.previous_quantity} → ${m.new_quantity}<div class="muted">${new Date(m.created_at).toLocaleString()} · ${esc(m.note||'Sin nota')}</div></div>`).join(''):'<div class="history-item muted">Sin movimientos registrados.</div>')}
 $('#hx').onclick=()=>$('#history').close();
+
+
+function switchView(name){
+  ['inventory','dashboard','detail','movements','branches'].forEach(v=>{
+    const el=$('#'+v+'View'); if(el) el.classList.toggle('hidden',v!==name);
+  });
+  document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===name));
+  if(name==='dashboard')renderDashboard();
+  if(name==='movements')renderMovements();
+  if(name==='branches')renderBranches();
+}
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
+
+function showDetail(x){
+  $('#detailBody').innerHTML=`
+    <div class="detail-grid">
+      <div class="detail-card"><h3>${esc(x.name)}</h3><div class="muted">${esc(x.category||'')}</div>${x.image_url?`<img src="${esc(x.image_url)}" style="width:100%;max-width:260px;margin-top:12px;border-radius:14px">`:''}</div>
+      <div class="detail-card"><b>Marca:</b> ${esc(x.brand||'—')}<br><b>SKU:</b> ${esc(x.sku||'—')}<br><b>OEM:</b> ${esc(x.oem_number||'—')}<br><b>FCC ID:</b> ${esc(x.fcc_id||'—')}<br><b>IC:</b> ${esc(x.ic_number||'—')}</div>
+      <div class="detail-card"><b>Frecuencia:</b> ${esc(x.frequency||'—')}<br><b>Chip:</b> ${esc(x.chip_type||'—')}<br><b>Botones:</b> ${esc(x.button_count??'—')}<br><b>Batería:</b> ${esc(x.battery_type||'—')}<br><b>Estado:</b> ${esc(x.condition_status||'—')}</div>
+      <div class="detail-card"><b>Compatibilidad:</b><br>${esc(x.vehicle_compatibility||'—')}<br><br><b>Equivalencias:</b><br>${esc(x.equivalences||'—')}</div>
+      <div class="detail-card"><b>Cantidad:</b> ${x.quantity}<br><b>Mínimo:</b> ${x.minimum_quantity}<br><b>Ubicación:</b> ${esc(x.locations?.name||'—')}</div>
+      <div class="detail-card"><b>Costo:</b> $${Number(x.cost||0).toFixed(2)}<br><b>Precio:</b> $${Number(x.sale_price||0).toFixed(2)}<br><b>Margen unitario:</b> $${(Number(x.sale_price||0)-Number(x.cost||0)).toFixed(2)}<br>${x.document_url?`<br><a href="${esc(x.document_url)}" target="_blank" style="color:#8ab4ff">Abrir documento PDF</a>`:''}</div>
+    </div>`;
+}
+
+function renderDashboard(){
+  const cost=items.reduce((n,x)=>n+Number(x.cost||0)*x.quantity,0);
+  const retail=items.reduce((n,x)=>n+Number(x.sale_price||0)*x.quantity,0);
+  $('#dashCost').textContent='$'+cost.toFixed(2);
+  $('#dashRetail').textContent='$'+retail.toFixed(2);
+  $('#dashMargin').textContent='$'+(retail-cost).toFixed(2);
+  const today=new Date().toDateString();
+  const todayMoves=movements.filter(m=>new Date(m.created_at).toDateString()===today);
+  $('#dashMoves').textContent=todayMoves.length;
+  const critical=items.filter(x=>x.quantity<=x.minimum_quantity).slice(0,8);
+  $('#criticalList').innerHTML=critical.length?critical.map(x=>`<div>${esc(x.name)} — <b>${x.quantity}</b></div>`).join(''):'Sin productos críticos';
+  $('#valueList').innerHTML=[...items].sort((a,b)=>(Number(b.cost||0)*b.quantity)-(Number(a.cost||0)*a.quantity)).slice(0,8).map(x=>`<div>${esc(x.name)} — $${(Number(x.cost||0)*x.quantity).toFixed(2)}</div>`).join('');
+  $('#recentList').innerHTML=movements.slice(0,8).map(m=>`<div>${m.movement_type==='in'?'Entrada':'Salida'} ${m.quantity} · ${esc(m.products?.name||'Producto')}</div>`).join('')||'Sin actividad';
+}
+
+function renderMovements(){
+  $('#movementsBody').innerHTML=movements.length?movements.map(m=>`<div class="history-item"><b>${m.movement_type==='in'?'Entrada':'Salida'}</b> ${m.quantity} · ${esc(m.products?.name||'Producto')}<div class="muted">${new Date(m.created_at).toLocaleString()} · ${esc(m.note||'Sin nota')}</div></div>`).join(''):'<div class="history-item muted">Sin movimientos.</div>';
+}
+
+function renderBranches(){
+  $('#branchesBody').innerHTML=locs.length?locs.map(l=>`<div class="history-item"><b>${esc(l.name)}</b><div class="muted">${esc(l.address||'Sin dirección')}</div></div>`).join(''):'<div class="history-item muted">Sin ubicaciones.</div>';
+}
 
 async function startScanner(target){scanTarget=target;$('#scanner').showModal();$('#scanmsg').textContent='Solicitando cámara…';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});$('#video').srcObject=stream;await $('#video').play();if(!('BarcodeDetector'in window)){$('#scanmsg').textContent='Este navegador no permite detección automática. Usa “Ingresar manualmente”.';return}let detector=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','itf']});let active=true;const loop=async()=>{if(!active||!stream)return;try{let codes=await detector.detect($('#video'));if(codes[0]){applyScan(codes[0].rawValue);active=false;stopScanner();return}}catch{}requestAnimationFrame(loop)};loop()}catch(err){$('#scanmsg').textContent='No se pudo abrir la cámara: '+err.message}}
 function applyScan(code){if(scanTarget==='field')$('#ibar').value=code;else{$('#search').value=code;render()}toast('Código detectado: '+code)}
@@ -183,6 +286,16 @@ $('#vehicleSearch').onclick=()=>{const make=val('#vehicleMake').toLowerCase(),mo
 $('#vehicleClear').onclick=()=>{$('#vehicleMake').value='';$('#vehicleModel').value='';$('#vehicleYear').value='';$('#search').value='';render()};
 
 $('#csv').onclick=()=>{let r=[['Nombre','Categoría','Marca','SKU','OEM','Serie','Ubicación','Cantidad','Mínimo','Código','FCC ID','IC','Frecuencia','Chip','Botones','Batería','Estado','Proveedor','Costo','Precio','Vehículo','Foto','Notas'],...items.map(x=>[x.name,x.category,x.brand,x.sku,x.oem_number,x.serial_number,x.locations?.name,x.quantity,x.minimum_quantity,x.barcode,x.fcc_id,x.ic_number,x.frequency,x.chip_type,x.button_count,x.battery_type,x.condition_status,x.supplier,x.cost,x.sale_price,x.vehicle_compatibility,x.image_url,x.notes])],csv=r.map(a=>a.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n'),b=new Blob(['\ufeff'+csv],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='keytrack-fase1.csv';a.click()};
+
+
+$('#newBranch').onclick=()=>$('#branchDialog').showModal();
+$('#branchX').onclick=$('#branchCancel').onclick=()=>$('#branchDialog').close();
+$('#branchForm').onsubmit=async e=>{
+  e.preventDefault();
+  let r=await sb.from('locations').insert({name:val('#branchName'),address:val('#branchAddress')||null,created_by:session.user.id});
+  if(r.error)return toast(r.error.message);
+  $('#branchDialog').close();$('#branchName').value='';$('#branchAddress').value='';load();
+};
 
 sb.auth.onAuthStateChange(async(_,s)=>{session=s;$('#auth').classList.toggle('hidden',!!s);$('#app').classList.toggle('hidden',!s);if(s){$('#user').textContent=s.user.email;await loadProfile();load()}});
 let g=await sb.auth.getSession();session=g.data.session;if(session){$('#auth').classList.add('hidden');$('#app').classList.remove('hidden');$('#user').textContent=session.user.email;await loadProfile();load()}

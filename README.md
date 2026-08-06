@@ -1,17 +1,25 @@
-# KeyTrack Pro · Corrección de inicio de sesión y guardado
+# KeyTrack Pro · Corrección del menú lateral
 
-Esta versión corrige dos problemas:
+Esta versión repara los botones laterales:
 
-- El inicio de sesión no avanzaba porque faltaban funciones de `Super Admin` y el JavaScript se detenía.
-- El guardado de productos ahora crea primero el producto y después intenta subir fotos y PDF.
+- Inventario
+- Dashboard
+- Ficha de producto
+- Movimientos
+- Sucursales
+- Clientes
+- Proveedores
+- Compras
+- Ventas
+- Super Admin
 
 ## Instalación
 
 1. Reemplaza en GitHub solamente:
    - `index.html`
    - `README.md`
-2. No ejecutes ningún archivo SQL adicional.
+2. No ejecutes ningún archivo SQL.
 3. Espera el despliegue de Vercel.
-4. Abre la aplicación en incógnito o recarga con `Ctrl + F5`.
+4. Recarga con `Ctrl + F5` o abre la aplicación en incógnito.
 
-El archivo `guardar-producto-fix.sql` solo debe ejecutarse si todavía no se ejecutó anteriormente.
+La corrección conserva los arreglos anteriores del inicio de sesión y del guardado de productos.

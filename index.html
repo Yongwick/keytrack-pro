@@ -353,6 +353,45 @@ async function load(){
   renderOperationalSelects();
   $('#cloud').textContent='Sincronizado';$('#dot').classList.add('ok');render();
 }
+
+// Navegación principal
+function switchView(name){
+  const views = [
+    'inventory','dashboard','detail','movements','branches',
+    'customers','suppliers','purchases','sales','superadmin'
+  ];
+
+  views.forEach(viewName=>{
+    const section = document.querySelector(`#${viewName}View`);
+    if(section) section.classList.toggle('hidden', viewName !== name);
+  });
+
+  document.querySelectorAll('[data-view]').forEach(button=>{
+    button.classList.toggle('active', button.dataset.view === name);
+  });
+
+  if(name === 'dashboard') renderDashboard();
+  if(name === 'movements') renderMovements();
+  if(name === 'branches') renderBranches();
+  if(name === 'customers') renderCustomers();
+  if(name === 'suppliers') renderSuppliers();
+  if(name === 'purchases') renderPurchases();
+  if(name === 'sales') renderSales();
+  if(name === 'superadmin' && typeof loadSuperAdmin === 'function') loadSuperAdmin();
+}
+
+document.querySelectorAll('[data-view]').forEach(button=>{
+  button.addEventListener('click', event=>{
+    event.preventDefault();
+    const viewName = button.dataset.view;
+    if(viewName === 'superadmin' && !isPlatformAdmin){
+      toast('Acceso restringido');
+      return;
+    }
+    switchView(viewName);
+  });
+});
+
 function render(){let a=list();$('#body').innerHTML=a.map(x=>`<tr><td>${x.image_url?`<img class="thumb" src="${esc(x.image_url)}" alt="">`:'—'}</td><td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td><td>${esc(x.brand||'—')}<div class="muted">${esc(x.fcc_id||'Sin FCC')}</div></td><td>${esc(x.sku||'—')}<div class="muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</div></td><td>${esc(x.vehicle_compatibility||'—')}</td><td>${esc(x.locations?.name||'—')}</td><td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td><td><div class="acts"><button class="btn small" data-a="m" data-id="${x.id}">±</button><button class="btn small" data-a="v" data-id="${x.id}">Ver ficha</button><button class="btn small" data-a="h" data-id="${x.id}">Historial</button><button class="btn small" data-a="e" data-id="${x.id}">Editar</button>${profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}</div></td></tr>`).join('');$('#count').textContent=a.length+' resultados';$('#si').textContent=items.length;$('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);$('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;$('#sz').textContent=items.filter(x=>x.quantity===0).length}
 
 function openItem(x){$('#ititle').textContent=x?'Editar artículo':'Nuevo artículo';$('#iid').value=x?.id||'';$('#oldimg').value=x?.image_url||'';$('#iname').value=x?.name||'';$('#icat').value=x?.category||'Llave';$('#iq').value=x?.quantity??1;$('#ibrand').value=x?.brand||'';$('#isku').value=x?.sku||'';$('#ioem').value=x?.oem_number||'';$('#iser').value=x?.serial_number||'';$('#iloc').value=x?.location_id||'';$('#imin').value=x?.minimum_quantity??2;$('#ibar').value=x?.barcode||'';$('#ifcc').value=x?.fcc_id||'';$('#iic').value=x?.ic_number||'';$('#ifreq').value=x?.frequency||'';$('#ichip').value=x?.chip_type||'';$('#ibuttons').value=x?.button_count??'';$('#ibattery').value=x?.battery_type||'';$('#icondition').value=x?.condition_status||'Nuevo';$('#isupplier').value=x?.supplier||'';$('#icost').value=x?.cost??'';$('#iprice').value=x?.sale_price??'';$('#ivehicle').value=x?.vehicle_compatibility||'';$('#iequiv').value=x?.equivalences||'';$('#inotes').value=x?.notes||'';if($('#iphoto')) $('#iphoto').value=''; if($('#iphotos')) $('#iphotos').value=''; if($('#idoc')) $('#idoc').value=''; if($('#itemError'))$('#itemError').textContent='';$('#item').showModal()}
@@ -584,7 +623,7 @@ async function deleteLocation(id){
   toast('Ubicación eliminada');load();
 }
 
-sb.auth.onAuthStateChange(async(_,s)=>{session=s;$('#auth').classList.toggle('hidden',!!s);$('#app').classList.toggle('hidden',!s);if(s){$('#user').textContent=s.user.email;if(await loadProfile())load()}});
+sb.auth.onAuthStateChange(async(_,s)=>{session=s;$('#auth').classList.toggle('hidden',!!s);$('#app').classList.toggle('hidden',!s);if(s){$('#user').textContent=s.user.email;if(await loadProfile()){switchView('inventory');load()}}});
 let g=await sb.auth.getSession();session=g.data.session;if(session){$('#auth').classList.add('hidden');$('#app').classList.remove('hidden');$('#user').textContent=session.user.email;if(await loadProfile())load()}
 sb.channel('products-live').on('postgres_changes',{event:'*',schema:'public',table:'products'},load).subscribe();
 if('serviceWorker'in navigator){for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister()}

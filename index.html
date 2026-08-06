@@ -1,58 +1,154 @@
-<!doctype html><html lang="es"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#08111f"><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icon.svg">
-<title>KeyTrack Pro 2.0</title>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08111f">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon.svg">
+<title>KeyTrack Pro · Fase 1</title>
 <style>
-:root{--b:#07101f;--p:#101b2d;--p2:#152238;--t:#f5f7fb;--m:#93a4ba;--a:#4f8cff;--l:#25344b;--d:#ef4444}
-*{box-sizing:border-box}body{margin:0;background:var(--b);color:var(--t);font-family:system-ui,Arial}.hidden{display:none!important}
-.app{max-width:1150px;margin:auto;padding:16px}header,.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px}.logo{width:45px;height:45px;border-radius:14px;background:linear-gradient(135deg,var(--a),#7c3aed);display:grid;place-items:center;font-size:24px}
-h1,h2,h3{margin:0}.muted{color:var(--m)}button,input,select,textarea{font:inherit}.btn{border:1px solid var(--l);background:var(--p2);color:var(--t);padding:10px 13px;border-radius:12px;font-weight:700;cursor:pointer}.primary{background:var(--a);border:0}.danger{background:#431722;color:#fecdd3}.field{width:100%;padding:11px;border-radius:11px;border:1px solid var(--l);background:#091525;color:var(--t)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.card,.panel{background:var(--p);border:1px solid var(--l);border-radius:17px}.card{padding:16px}.num{font-size:28px;font-weight:900;margin-top:5px}
-.tools{display:grid;grid-template-columns:1fr 190px auto;gap:10px;padding:12px;margin-bottom:14px}.panel{overflow:hidden}.panelhead{padding:15px;border-bottom:1px solid var(--l)}
-.table{overflow:auto}table{width:100%;border-collapse:collapse;min-width:860px}th,td{padding:12px;border-bottom:1px solid var(--l);text-align:left}th{font-size:12px;color:#b7c4d7}.badge{background:#1b2c48;padding:5px 8px;border-radius:20px}.acts{display:flex;gap:6px}.low{color:#fbbf24}.zero{color:#fb7185}
-dialog{width:min(650px,calc(100% - 20px));padding:0;border:1px solid var(--l);border-radius:18px;background:var(--p);color:var(--t)}dialog::backdrop{background:#000a}.dh{padding:15px;border-bottom:1px solid var(--l)}form{padding:16px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.span{grid-column:1/-1}label{display:block;color:#bdc8d8;font-size:13px;margin-bottom:5px}.fa{justify-content:flex-end;margin-top:15px}
-.auth{min-height:100vh;display:grid;place-items:center;padding:18px}.authbox{width:min(450px,100%);padding:22px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:17px 0}.stack{display:grid;gap:11px}.err{color:#fda4af;min-height:20px}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--p2);padding:11px 15px;border-radius:12px;display:none}.toast.on{display:block}
-@media(max-width:720px){.stats{grid-template-columns:1fr 1fr}.tools,.grid{grid-template-columns:1fr}.span{grid-column:auto}}
-</style></head><body>
-<div id="auth" class="auth"><div class="authbox card">
-<div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Inventario en la nube</div></div></div>
-<div class="tabs"><button id="tl" class="btn primary">Iniciar sesión</button><button id="ts" class="btn">Crear cuenta</button></div>
-<form id="af" class="stack"><div id="namebox"><label>Nombre</label><input id="fullname" class="field"></div><div><label>Correo</label><input id="email" class="field" type="email" required></div><div><label>Contraseña</label><input id="pass" class="field" type="password" minlength="6" required></div><div id="err" class="err"></div><button id="as" class="btn primary">Iniciar sesión</button></form>
-</div></div>
-<div id="app" class="app hidden">
-<header><div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro 2.0</h1><div class="muted">Sincronizado con Supabase</div></div></div>
-<div class="row"><span id="cloud" class="muted">Conectando…</span><span id="user" class="muted"></span><button id="csv" class="btn">Exportar CSV</button><button id="logout" class="btn">Salir</button><button id="add" class="btn primary">+ Nuevo artículo</button></div></header>
-<section class="stats"><div class="card"><div class="muted">Artículos</div><div id="si" class="num">0</div></div><div class="card"><div class="muted">Unidades</div><div id="su" class="num">0</div></div><div class="card"><div class="muted">Inventario bajo</div><div id="sl" class="num">0</div></div><div class="card"><div class="muted">Sin existencia</div><div id="sz" class="num">0</div></div></section>
-<section class="tools card"><input id="search" class="field" placeholder="Buscar nombre, SKU, serie, FCC ID…"><select id="filter" class="field"><option value="">Todas las categorías</option><option>Llave</option><option>Control</option><option>Máquina</option><option>Herramienta</option><option>Accesorio</option><option>Otro</option></select><button id="clear" class="btn">Limpiar</button></section>
-<section class="panel"><div class="panelhead row"><h3>Inventario</h3><span id="count" class="muted"></span></div><div class="table"><table><thead><tr><th>Artículo</th><th>Categoría</th><th>SKU / Serie</th><th>Ubicación</th><th>Cantidad</th><th>Acciones</th></tr></thead><tbody id="body"></tbody></table></div></section>
+:root{--bg:#07101f;--panel:#101b2d;--panel2:#152238;--text:#f5f7fb;--muted:#93a4ba;--accent:#4f8cff;--line:#25344b;--danger:#ef4444;--ok:#22c55e;--warn:#f59e0b}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#07101f,#0a1424 45%,#07101f);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;min-height:100vh}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}.app{max-width:1180px;margin:auto;padding:14px}
+header,.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}header{padding:8px 0 18px}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#4f8cff,#7c3aed);display:grid;place-items:center;font-size:26px}
+h1,h2,h3{margin:0}.muted{color:var(--muted)}.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 13px;border-radius:12px;font-weight:750}.primary{background:var(--accent);border:0}.danger{background:#421621;color:#fecdd3}.small{padding:7px 9px;font-size:.84rem}
+.status{padding:8px 10px;border:1px solid var(--line);border-radius:999px;font-size:.82rem}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--warn);margin-right:6px}.dot.ok{background:var(--ok)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:15px}.card,.panel{background:rgba(16,27,45,.95);border:1px solid var(--line);border-radius:17px}.card{padding:15px}.num{font-size:27px;font-weight:900;margin-top:5px}
+.tools{display:grid;grid-template-columns:1fr 180px auto auto;gap:9px;padding:12px;margin-bottom:14px}.field{width:100%;padding:11px;border-radius:11px;border:1px solid var(--line);background:#091525;color:var(--text);outline:none}.field:focus{border-color:var(--accent)}
+.panel{overflow:hidden}.panelhead{padding:15px;border-bottom:1px solid var(--line)}.table{overflow:auto}table{width:100%;border-collapse:collapse;min-width:980px}th,td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}th{font-size:12px;color:#b7c4d7;text-transform:uppercase}.badge{background:#1b2c48;padding:5px 8px;border-radius:20px}.acts{display:flex;gap:6px;white-space:nowrap}.low{color:#fbbf24}.zero{color:#fb7185}.thumb{width:46px;height:46px;border-radius:10px;object-fit:cover;background:#0a1424;border:1px solid var(--line)}
+dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text)}dialog::backdrop{background:#000b}.dh{padding:15px;border-bottom:1px solid var(--line)}form{padding:16px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.span{grid-column:1/-1}label{display:block;color:#bdc8d8;font-size:13px;margin-bottom:5px}textarea{min-height:76px}.fa{justify-content:flex-end;margin-top:15px}
+.auth{min-height:100vh;display:grid;place-items:center;padding:18px}.authbox{width:min(450px,100%);padding:22px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:17px 0}.stack{display:grid;gap:11px}.err{color:#fda4af;min-height:20px}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--panel2);padding:11px 15px;border-radius:12px;display:none;z-index:100}.toast.on{display:block}
+.scanbox{display:grid;gap:10px}video{width:100%;max-height:55vh;background:#000;border-radius:14px}.history{max-height:52vh;overflow:auto}.history-item{padding:11px;border-bottom:1px solid var(--line)}.history-item b{display:inline-block;min-width:70px}
+@media(max-width:760px){.stats{grid-template-columns:1fr 1fr}.tools,.grid{grid-template-columns:1fr}.span{grid-column:auto}.toptext{display:none}}
+</style>
+</head>
+<body>
+<div id="auth" class="auth">
+ <div class="authbox card">
+  <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Fase 1 profesional</div></div></div>
+  <div class="tabs"><button id="tl" class="btn primary">Iniciar sesión</button><button id="ts" class="btn">Crear cuenta</button></div>
+  <form id="af" class="stack">
+   <div id="namebox"><label>Nombre</label><input id="fullname" class="field"></div>
+   <div><label>Correo</label><input id="email" class="field" type="email" required></div>
+   <div><label>Contraseña</label><input id="pass" class="field" type="password" minlength="6" required></div>
+   <div id="err" class="err"></div>
+   <button id="as" class="btn primary">Iniciar sesión</button>
+  </form>
+ </div>
 </div>
-<dialog id="item"><div class="dh row"><h3 id="ititle">Nuevo artículo</h3><button id="ix" class="btn">×</button></div><form id="if"><input id="iid" type="hidden"><div class="grid">
-<div class="span"><label>Nombre *</label><input id="iname" class="field" required></div><div><label>Categoría</label><select id="icat" class="field"><option>Llave</option><option>Control</option><option>Máquina</option><option>Herramienta</option><option>Accesorio</option><option>Otro</option></select></div><div><label>Cantidad</label><input id="iq" class="field" type="number" min="0" value="1"></div>
-<div><label>SKU</label><input id="isku" class="field"></div><div><label>Serie</label><input id="iser" class="field"></div><div><label>Ubicación</label><select id="iloc" class="field"></select></div><div><label>Mínimo</label><input id="imin" class="field" type="number" min="0" value="2"></div><div><label>Código de barras</label><input id="ibar" class="field"></div><div><label>FCC ID</label><input id="ifcc" class="field"></div><div><label>IC</label><input id="iic" class="field"></div><div class="span"><label>Notas</label><textarea id="inotes" class="field"></textarea></div></div><div class="row fa"><button id="icancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div></form></dialog>
-<dialog id="move"><div class="dh row"><h3 id="mtitle">Movimiento</h3><button id="mx" class="btn">×</button></div><form id="mf"><input id="mid" type="hidden"><div class="grid"><div><label>Tipo</label><select id="mtype" class="field"><option value="in">Entrada</option><option value="out">Salida</option></select></div><div><label>Cantidad</label><input id="mq" class="field" type="number" min="1" value="1"></div><div class="span"><label>Nota</label><input id="mnote" class="field"></div></div><div class="row fa"><button id="mcancel" type="button" class="btn">Cancelar</button><button class="btn primary">Aplicar</button></div></form></dialog>
+
+<div id="app" class="app hidden">
+<header>
+ <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Escáner · Fotos · Historial · Usuarios</div></div></div>
+ <div class="row">
+  <span class="status"><span id="dot" class="dot"></span><span id="cloud">Conectando…</span></span>
+  <span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
+  <button id="csv" class="btn">CSV</button><button id="logout" class="btn">Salir</button><button id="add" class="btn primary">+ Nuevo</button>
+ </div>
+</header>
+
+<section class="stats">
+ <div class="card"><div class="muted">Artículos</div><div id="si" class="num">0</div></div>
+ <div class="card"><div class="muted">Unidades</div><div id="su" class="num">0</div></div>
+ <div class="card"><div class="muted">Inventario bajo</div><div id="sl" class="num">0</div></div>
+ <div class="card"><div class="muted">Sin existencia</div><div id="sz" class="num">0</div></div>
+</section>
+
+<section class="tools card">
+ <input id="search" class="field" placeholder="Buscar nombre, SKU, serie, código, FCC ID…">
+ <select id="filter" class="field"><option value="">Todas las categorías</option><option>Llave</option><option>Control</option><option>Máquina</option><option>Herramienta</option><option>Accesorio</option><option>Otro</option></select>
+ <button id="scan" class="btn">📷 Escanear</button><button id="clear" class="btn">Limpiar</button>
+</section>
+
+<section class="panel">
+ <div class="panelhead row"><h3>Inventario sincronizado</h3><span id="count" class="muted"></span></div>
+ <div class="table"><table><thead><tr><th>Foto</th><th>Artículo</th><th>Categoría</th><th>SKU / Código</th><th>Ubicación</th><th>Cantidad</th><th>Acciones</th></tr></thead><tbody id="body"></tbody></table></div>
+</section>
+</div>
+
+<dialog id="item">
+ <div class="dh row"><h3 id="ititle">Nuevo artículo</h3><button id="ix" class="btn">×</button></div>
+ <form id="if"><input id="iid" type="hidden"><input id="oldimg" type="hidden">
+  <div class="grid">
+   <div class="span"><label>Nombre *</label><input id="iname" class="field" required></div>
+   <div><label>Categoría</label><select id="icat" class="field"><option>Llave</option><option>Control</option><option>Máquina</option><option>Herramienta</option><option>Accesorio</option><option>Otro</option></select></div>
+   <div><label>Cantidad</label><input id="iq" class="field" type="number" min="0" value="1"></div>
+   <div><label>SKU</label><input id="isku" class="field"></div>
+   <div><label>Serie</label><input id="iser" class="field"></div>
+   <div><label>Ubicación</label><select id="iloc" class="field"></select></div>
+   <div><label>Mínimo</label><input id="imin" class="field" type="number" min="0" value="2"></div>
+   <div><label>Código de barras / QR</label><div class="row"><input id="ibar" class="field" style="flex:1"><button id="scanField" type="button" class="btn">📷</button></div></div>
+   <div><label>FCC ID</label><input id="ifcc" class="field"></div>
+   <div><label>IC</label><input id="iic" class="field"></div>
+   <div><label>Fotografía</label><input id="iphoto" class="field" type="file" accept="image/*" capture="environment"></div>
+   <div class="span"><label>Notas</label><textarea id="inotes" class="field"></textarea></div>
+  </div>
+  <div class="row fa"><button id="icancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div>
+ </form>
+</dialog>
+
+<dialog id="move">
+ <div class="dh row"><h3 id="mtitle">Movimiento</h3><button id="mx" class="btn">×</button></div>
+ <form id="mf"><input id="mid" type="hidden"><div class="grid">
+  <div><label>Tipo</label><select id="mtype" class="field"><option value="in">Entrada</option><option value="out">Salida</option></select></div>
+  <div><label>Cantidad</label><input id="mq" class="field" type="number" min="1" value="1"></div>
+  <div class="span"><label>Nota</label><input id="mnote" class="field"></div>
+ </div><div class="row fa"><button id="mcancel" type="button" class="btn">Cancelar</button><button class="btn primary">Aplicar</button></div></form>
+</dialog>
+
+<dialog id="scanner">
+ <div class="dh row"><h3>Escanear código</h3><button id="sx" class="btn">×</button></div>
+ <div class="scanbox" style="padding:16px"><video id="video" playsinline></video><div class="muted" id="scanmsg">Apunta la cámara al código de barras o QR.</div><button id="manual" class="btn">Ingresar manualmente</button></div>
+</dialog>
+
+<dialog id="history">
+ <div class="dh row"><h3 id="htitle">Historial</h3><button id="hx" class="btn">×</button></div>
+ <div id="hbody" class="history"></div>
+</dialog>
+
 <div id="toast" class="toast"></div>
+
 <script type="module">
 import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-const sb=createClient('https://ngzoyfxnbonjqeprkpxp.supabase.co','sb_publishable_IZfg7e_-acYq6QHpceVTxQ_GIiXLI-G'),$=s=>document.querySelector(s);let mode='login',session=null,items=[],locs=[];
+const sb=createClient('https://ngzoyfxnbonjqeprkpxp.supabase.co','sb_publishable_IZfg7e_-acYq6QHpceVTxQ_GIiXLI-G');
+const $=s=>document.querySelector(s);let mode='login',session=null,profile=null,items=[],locs=[],stream=null,scanTarget='search';
 const toast=m=>{let t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)};
 const val=id=>$(id).value.trim(),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function authMode(m){mode=m;$('#namebox').classList.toggle('hidden',m==='login');$('#tl').classList.toggle('primary',m==='login');$('#ts').classList.toggle('primary',m==='signup');$('#as').textContent=m==='login'?'Iniciar sesión':'Crear cuenta';$('#err').textContent=''}
 $('#tl').onclick=()=>authMode('login');$('#ts').onclick=()=>authMode('signup');authMode('login');
 $('#af').onsubmit=async e=>{e.preventDefault();$('#err').textContent='';let r=mode==='login'?await sb.auth.signInWithPassword({email:val('#email'),password:val('#pass')}):await sb.auth.signUp({email:val('#email'),password:val('#pass'),options:{data:{full_name:val('#fullname')}}});if(r.error)$('#err').textContent=r.error.message;else if(mode==='signup'&&!r.data.session)toast('Revisa tu correo para confirmar la cuenta')};
 $('#logout').onclick=()=>sb.auth.signOut();
-async function load(){ $('#cloud').textContent='Sincronizando…';let a=await sb.from('locations').select('id,name').order('name');if(a.error)return toast(a.error.message);locs=a.data||[];$('#iloc').innerHTML='<option value="">Sin ubicación</option>'+locs.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');let r=await sb.from('products').select('*,locations(name)').order('created_at',{ascending:false});if(r.error)return toast(r.error.message);items=r.data||[];$('#cloud').textContent='● Sincronizado';render()}
+
+async function loadProfile(){let r=await sb.from('profiles').select('full_name,role').eq('id',session.user.id).single();profile=r.data||{role:'employee'};$('#role').textContent=profile.role}
+async function load(){$('#cloud').textContent='Sincronizando…';$('#dot').classList.remove('ok');let a=await sb.from('locations').select('id,name').order('name');if(a.error)return toast(a.error.message);locs=a.data||[];$('#iloc').innerHTML='<option value="">Sin ubicación</option>'+locs.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');let r=await sb.from('products').select('*,locations(name)').order('created_at',{ascending:false});if(r.error)return toast(r.error.message);items=r.data||[];$('#cloud').textContent='Sincronizado';$('#dot').classList.add('ok');render()}
 function list(){let q=val('#search').toLowerCase(),c=$('#filter').value;return items.filter(x=>(!c||x.category===c)&&(!q||[x.name,x.sku,x.serial_number,x.barcode,x.fcc_id,x.ic_number,x.locations?.name,x.notes].join(' ').toLowerCase().includes(q)))}
-function render(){let a=list();$('#body').innerHTML=a.map(x=>`<tr><td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td><td><span class="badge">${esc(x.category)}</span></td><td>${esc(x.sku||'—')}<div class="muted">${esc(x.serial_number||'Sin serie')}</div></td><td>${esc(x.locations?.name||'—')}</td><td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td><td><div class="acts"><button class="btn" data-a="m" data-id="${x.id}">±</button><button class="btn" data-a="e" data-id="${x.id}">Editar</button><button class="btn danger" data-a="d" data-id="${x.id}">Borrar</button></div></td></tr>`).join('');$('#count').textContent=a.length+' resultados';$('#si').textContent=items.length;$('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);$('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;$('#sz').textContent=items.filter(x=>x.quantity===0).length}
-function openItem(x){$('#ititle').textContent=x?'Editar artículo':'Nuevo artículo';$('#iid').value=x?.id||'';$('#iname').value=x?.name||'';$('#icat').value=x?.category||'Llave';$('#iq').value=x?.quantity??1;$('#isku').value=x?.sku||'';$('#iser').value=x?.serial_number||'';$('#iloc').value=x?.location_id||'';$('#imin').value=x?.minimum_quantity??2;$('#ibar').value=x?.barcode||'';$('#ifcc').value=x?.fcc_id||'';$('#iic').value=x?.ic_number||'';$('#inotes').value=x?.notes||'';$('#item').showModal()}
+function render(){let a=list();$('#body').innerHTML=a.map(x=>`<tr><td>${x.image_url?`<img class="thumb" src="${esc(x.image_url)}" alt="">`:'—'}</td><td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td><td><span class="badge">${esc(x.category)}</span></td><td>${esc(x.sku||'—')}<div class="muted">${esc(x.barcode||x.serial_number||'Sin código')}</div></td><td>${esc(x.locations?.name||'—')}</td><td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td><td><div class="acts"><button class="btn small" data-a="m" data-id="${x.id}">±</button><button class="btn small" data-a="h" data-id="${x.id}">Historial</button><button class="btn small" data-a="e" data-id="${x.id}">Editar</button>${profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}</div></td></tr>`).join('');$('#count').textContent=a.length+' resultados';$('#si').textContent=items.length;$('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);$('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;$('#sz').textContent=items.filter(x=>x.quantity===0).length}
+
+function openItem(x){$('#ititle').textContent=x?'Editar artículo':'Nuevo artículo';$('#iid').value=x?.id||'';$('#oldimg').value=x?.image_url||'';$('#iname').value=x?.name||'';$('#icat').value=x?.category||'Llave';$('#iq').value=x?.quantity??1;$('#isku').value=x?.sku||'';$('#iser').value=x?.serial_number||'';$('#iloc').value=x?.location_id||'';$('#imin').value=x?.minimum_quantity??2;$('#ibar').value=x?.barcode||'';$('#ifcc').value=x?.fcc_id||'';$('#iic').value=x?.ic_number||'';$('#inotes').value=x?.notes||'';$('#iphoto').value='';$('#item').showModal()}
 $('#add').onclick=()=>openItem();$('#ix').onclick=$('#icancel').onclick=()=>$('#item').close();
-$('#if').onsubmit=async e=>{e.preventDefault();let id=val('#iid'),p={name:val('#iname'),category:$('#icat').value,quantity:+$('#iq').value,sku:val('#isku')||null,serial_number:val('#iser')||null,location_id:$('#iloc').value||null,minimum_quantity:+$('#imin').value,barcode:val('#ibar')||null,fcc_id:val('#ifcc')||null,ic_number:val('#iic')||null,notes:val('#inotes')||null};let r=id?await sb.from('products').update(p).eq('id',id):await sb.from('products').insert({...p,created_by:session.user.id});if(r.error)return toast(r.error.message);$('#item').close();toast('Guardado');load()};
-$('#body').onclick=async e=>{let b=e.target.closest('button');if(!b)return;let x=items.find(i=>i.id===b.dataset.id);if(b.dataset.a==='e')openItem(x);if(b.dataset.a==='d'&&confirm('¿Borrar '+x.name+'?')){let r=await sb.from('products').delete().eq('id',x.id);r.error?toast(r.error.message):load()}if(b.dataset.a==='m'){$('#mid').value=x.id;$('#mtitle').textContent='Movimiento: '+x.name;$('#move').showModal()}};
+
+async function uploadPhoto(file){if(!file)return null;let ext=(file.name.split('.').pop()||'jpg').toLowerCase(),path=`${session.user.id}/${crypto.randomUUID()}.${ext}`;let u=await sb.storage.from('product-images').upload(path,file,{upsert:false});if(u.error)throw u.error;return sb.storage.from('product-images').getPublicUrl(path).data.publicUrl}
+$('#if').onsubmit=async e=>{e.preventDefault();let id=val('#iid');try{let image=val('#oldimg')||null,file=$('#iphoto').files[0];if(file)image=await uploadPhoto(file);let p={name:val('#iname'),category:$('#icat').value,quantity:+$('#iq').value,sku:val('#isku')||null,serial_number:val('#iser')||null,location_id:$('#iloc').value||null,minimum_quantity:+$('#imin').value,barcode:val('#ibar')||null,fcc_id:val('#ifcc')||null,ic_number:val('#iic')||null,notes:val('#inotes')||null,image_url:image};let r=id?await sb.from('products').update(p).eq('id',id):await sb.from('products').insert({...p,created_by:session.user.id});if(r.error)throw r.error;$('#item').close();toast('Guardado');load()}catch(err){toast(err.message)}};
+
+$('#body').onclick=async e=>{let b=e.target.closest('button');if(!b)return;let x=items.find(i=>i.id===b.dataset.id);if(b.dataset.a==='e')openItem(x);if(b.dataset.a==='d'&&confirm('¿Borrar '+x.name+'?')){let r=await sb.from('products').delete().eq('id',x.id);r.error?toast(r.error.message):load()}if(b.dataset.a==='m'){$('#mid').value=x.id;$('#mtitle').textContent='Movimiento: '+x.name;$('#move').showModal()}if(b.dataset.a==='h')showHistory(x)};
 $('#mx').onclick=$('#mcancel').onclick=()=>$('#move').close();
-$('#mf').onsubmit=async e=>{e.preventDefault();let x=items.find(i=>i.id===val('#mid')),q=+$('#mq').value,t=$('#mtype').value;if(t==='out'&&q>x.quantity)return toast('No hay suficiente existencia');let n=x.quantity+(t==='in'?q:-q),u=await sb.from('products').update({quantity:n}).eq('id',x.id);if(u.error)return toast(u.error.message);await sb.from('inventory_movements').insert({product_id:x.id,movement_type:t,quantity:q,previous_quantity:x.quantity,new_quantity:n,note:val('#mnote')||null,created_by:session.user.id});$('#move').close();load()};
+$('#mf').onsubmit=async e=>{e.preventDefault();let x=items.find(i=>i.id===val('#mid')),q=+$('#mq').value,t=$('#mtype').value;if(t==='out'&&q>x.quantity)return toast('No hay suficiente existencia');let n=x.quantity+(t==='in'?q:-q),u=await sb.from('products').update({quantity:n}).eq('id',x.id);if(u.error)return toast(u.error.message);let m=await sb.from('inventory_movements').insert({product_id:x.id,movement_type:t,quantity:q,previous_quantity:x.quantity,new_quantity:n,note:val('#mnote')||null,created_by:session.user.id});if(m.error)toast('Cantidad actualizada; historial no guardado');$('#move').close();load()};
+async function showHistory(x){$('#htitle').textContent='Historial: '+x.name;$('#hbody').innerHTML='<div class="history-item muted">Cargando…</div>';$('#history').showModal();let r=await sb.from('inventory_movements').select('movement_type,quantity,previous_quantity,new_quantity,note,created_at').eq('product_id',x.id).order('created_at',{ascending:false});$('#hbody').innerHTML=r.error?`<div class="history-item">${esc(r.error.message)}</div>`:(r.data.length?r.data.map(m=>`<div class="history-item"><b>${m.movement_type==='in'?'Entrada':'Salida'}</b> ${m.quantity} unidades · ${m.previous_quantity} → ${m.new_quantity}<div class="muted">${new Date(m.created_at).toLocaleString()} · ${esc(m.note||'Sin nota')}</div></div>`).join(''):'<div class="history-item muted">Sin movimientos registrados.</div>')}
+$('#hx').onclick=()=>$('#history').close();
+
+async function startScanner(target){scanTarget=target;$('#scanner').showModal();$('#scanmsg').textContent='Solicitando cámara…';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});$('#video').srcObject=stream;await $('#video').play();if(!('BarcodeDetector'in window)){$('#scanmsg').textContent='Este navegador no permite detección automática. Usa “Ingresar manualmente”.';return}let detector=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','itf']});let active=true;const loop=async()=>{if(!active||!stream)return;try{let codes=await detector.detect($('#video'));if(codes[0]){applyScan(codes[0].rawValue);active=false;stopScanner();return}}catch{}requestAnimationFrame(loop)};loop()}catch(err){$('#scanmsg').textContent='No se pudo abrir la cámara: '+err.message}}
+function applyScan(code){if(scanTarget==='field')$('#ibar').value=code;else{$('#search').value=code;render()}toast('Código detectado: '+code)}
+function stopScanner(){if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;$('#scanner').close()}
+$('#scan').onclick=()=>startScanner('search');$('#scanField').onclick=()=>startScanner('field');$('#sx').onclick=stopScanner;$('#manual').onclick=()=>{let c=prompt('Escribe o pega el código:');if(c)applyScan(c);stopScanner()};
+
 $('#search').oninput=$('#filter').onchange=render;$('#clear').onclick=()=>{$('#search').value='';$('#filter').value='';render()};
-$('#csv').onclick=()=>{let r=[['Nombre','Categoría','SKU','Serie','Ubicación','Cantidad','Mínimo','Código','FCC ID','IC','Notas'],...items.map(x=>[x.name,x.category,x.sku,x.serial_number,x.locations?.name,x.quantity,x.minimum_quantity,x.barcode,x.fcc_id,x.ic_number,x.notes])],csv=r.map(a=>a.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n'),b=new Blob(['\ufeff'+csv],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='keytrack-cloud.csv';a.click()};
-sb.auth.onAuthStateChange(async(_,s)=>{session=s;$('#auth').classList.toggle('hidden',!!s);$('#app').classList.toggle('hidden',!s);if(s){$('#user').textContent=s.user.email;load()}});
-let g=await sb.auth.getSession();session=g.data.session;if(session){$('#auth').classList.add('hidden');$('#app').classList.remove('hidden');$('#user').textContent=session.user.email;load()}
+$('#csv').onclick=()=>{let r=[['Nombre','Categoría','SKU','Serie','Ubicación','Cantidad','Mínimo','Código','FCC ID','IC','Foto','Notas'],...items.map(x=>[x.name,x.category,x.sku,x.serial_number,x.locations?.name,x.quantity,x.minimum_quantity,x.barcode,x.fcc_id,x.ic_number,x.image_url,x.notes])],csv=r.map(a=>a.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n'),b=new Blob(['\ufeff'+csv],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='keytrack-fase1.csv';a.click()};
+
+sb.auth.onAuthStateChange(async(_,s)=>{session=s;$('#auth').classList.toggle('hidden',!!s);$('#app').classList.toggle('hidden',!s);if(s){$('#user').textContent=s.user.email;await loadProfile();load()}});
+let g=await sb.auth.getSession();session=g.data.session;if(session){$('#auth').classList.add('hidden');$('#app').classList.remove('hidden');$('#user').textContent=session.user.email;await loadProfile();load()}
 sb.channel('products-live').on('postgres_changes',{event:'*',schema:'public',table:'products'},load).subscribe();
-</script></body></html>
+if('serviceWorker'in navigator){for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister()}
+</script>
+</body></html>

@@ -1,22 +1,28 @@
-# KeyTrack Pro SaaS — Panel Super Admin
+# KeyTrack Pro · Sucursales Pro
 
-Incluye:
+Esta actualización incluye:
 
-- Vista global de empresas
-- Estadísticas de usuarios, productos y unidades
-- Planes Gratis, Pro, Business y Enterprise
-- Estados: prueba, activa, suspendida y cancelada
-- Límites personalizados por empresa
-- Fechas de prueba y renovación
-- Notas administrativas
+- Menú lateral profesional
+- Sucursales en tarjetas
+- Ubicaciones jerárquicas por sucursal
+- Tipos: bodega, mostrador, estante, caja fuerte, vehículo y otros
+- Información completa de sucursal
+- Editar y eliminar sucursales
+- Editar y eliminar ubicaciones
+- Al eliminar una ubicación, los productos se conservan y quedan sin ubicación
+- Resumen de productos, unidades y valor por sucursal
 
 ## Instalación
 
-1. Ejecuta `superadmin.sql` en Supabase SQL Editor.
-2. Reemplaza en GitHub: `index.html`, `manifest.webmanifest`, `icon.svg`, `vercel.json` y `README.md`.
-3. Entra con la primera cuenta creada. Aparecerá el botón `Super Admin`.
+1. Ejecuta `sucursales-pro.sql` en Supabase SQL Editor.
+2. Reemplaza en GitHub:
+   - index.html
+   - manifest.webmanifest
+   - icon.svg
+   - vercel.json
+   - README.md
+3. Espera el despliegue de Vercel y recarga con Ctrl + F5.
 
-Esta versión administra planes y estados, pero todavía no procesa pagos reales.
+## Limpieza de ubicaciones
 
-
-Corrección: reparado el inicio de sesión y añadida la vista faltante de Super Admin.
+Ahora puedes eliminar ubicaciones directamente desde el módulo **Sucursales**. Ya no necesitas entrar a Supabase para limpiarlas.

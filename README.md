@@ -1,44 +1,58 @@
-# KeyTrack Pro Enterprise 4.0 — Modular
+# KeyTrack Pro Enterprise 4.1 — Stable
 
-Esta versión reemplaza el frontend monolítico por módulos separados.
+Esta versión estabiliza Enterprise 4.0 y elimina la dependencia de
+`public.admin_company_overview`.
 
-## Estructura
+## Cambio principal
+
+**Super Admin ya NO usa vistas (`VIEW`) de Supabase.**
+
+Los datos se calculan directamente desde estas tablas:
+
+- `companies`
+- `company_members`
+- `products`
+- `profiles`
+- `company_subscriptions`
+- `subscription_plans`
+
+Las tablas opcionales de planes y suscripciones no bloquean el panel si están vacías.
+
+## Estructura simplificada
+
+Todos los archivos están en la raíz del repositorio:
 
 - `index.html`
-- `css/app.css`
-- `js/core.js`
-- `js/auth.js`
-- `js/inventory.js`
-- `js/dashboard.js`
-- `js/products.js`
-- `js/operations.js`
-- `js/branches.js`
-- `js/superadmin.js`
-- `js/scanner.js`
-- `js/app.js`
+- `app.css`
+- `app.js`
+- `core.js`
+- `auth.js`
+- `inventory.js`
+- `dashboard.js`
+- `products.js`
+- `operations.js`
+- `branches.js`
+- `scanner.js`
+- `superadmin.js`
 - `sw.js`
+- `manifest.webmanifest`
 
-## Incluye
-
-- Login y multiempresa
-- Inventario, búsqueda, CSV y filtros
-- Nuevo / Editar / Ficha / Historial / Movimientos
-- Dashboard
-- Sucursales y ubicaciones
-- Clientes y proveedores
-- Compras y ventas
-- Super Admin
-- Escáner de cámara cuando el navegador soporta `BarcodeDetector`
-- PWA con service worker
+Esto coincide con la forma en que actualmente estás subiendo los archivos a GitHub
+y evita errores 404 de `/js/app.js` y `/css/app.css`.
 
 ## Instalación
 
-1. **No ejecutes SQL nuevo.** Usa la misma base de datos que ya tienes.
-2. En GitHub, elimina/reemplaza el frontend anterior y sube **toda la estructura de este ZIP**, incluidas las carpetas `css` y `js`.
-3. Conserva `fase1.sql` u otros SQL solo como respaldo; Vercel no los necesita.
-4. Espera el deployment de Vercel.
-5. Abre en incógnito primero. Después puedes instalar la PWA.
+1. **No ejecutes SQL nuevo.**
+2. Descomprime este ZIP.
+3. En GitHub reemplaza/sube todos los archivos del paquete.
+4. Verifica que `app.js`, `app.css`, `superadmin.js`, etc. estén en la raíz.
+5. Espera el nuevo deployment de Vercel.
+6. Abre primero en incógnito o haz `Ctrl + Shift + R`.
 
 ## Importante
 
-En esta versión no debes subir solo `index.html`: los archivos dentro de `js/` y `css/` son parte obligatoria de la aplicación.
+La versión 4.1 ya no consulta:
+
+`admin_company_overview`
+
+Por lo tanto no debes crear esa vista para que Super Admin funcione.

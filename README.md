@@ -1,21 +1,18 @@
-# KeyTrack Pro · Corrección de operaciones comerciales
+# KeyTrack Pro · Corrección visual del inventario
 
-Esta actualización activa y refuerza los botones:
+Esta versión corrige la tabla de Inventario para que:
 
-- + Nuevo cliente
-- + Nuevo proveedor
-- + Nueva compra
-- + Nueva venta
-
-También activa el guardado de cada formulario y muestra mensajes claros cuando falta información.
+- El nombre del artículo no quede cortado detrás del menú lateral.
+- Las columnas aprovechen mejor el ancho disponible.
+- Los nombres largos y compatibilidades se ajusten en varias líneas.
+- Los botones de acciones permanezcan visibles y ordenados.
+- El desplazamiento horizontal solo aparezca cuando realmente sea necesario.
 
 ## Instalación
 
 1. Reemplaza en GitHub solamente:
    - `index.html`
    - `README.md`
-2. No ejecutes ningún SQL.
+2. No ejecutes SQL.
 3. Espera el despliegue de Vercel.
-4. Recarga con `Ctrl + F5` o abre la aplicación en incógnito.
-
-Nota: para crear una compra primero debe existir al menos un proveedor.
+4. Recarga con `Ctrl + F5`.

@@ -190,7 +190,7 @@ button,.btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 <body>
 <div id="auth" class="auth">
  <div class="authbox card">
-  <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Multiempresa · Datos independientes por negocio</div></div></div>
+  <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Multiempresa · Datos independientes por negocio · FIX 2026-08-06</div></div></div>
   <div class="tabs"><button id="tl" class="btn primary">Iniciar sesión</button><button id="ts" class="btn">Crear cuenta</button></div>
   <form id="af" class="stack">
    <div id="namebox"><label>Tu nombre</label><input id="fullname" class="field"></div>
@@ -449,6 +449,7 @@ button,.btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 <script type="module">
 import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 const sb=createClient('https://ngzoyfxnbonjqeprkpxp.supabase.co','sb_publishable_IZfg7e_-acYq6QHpceVTxQ_GIiXLI-G');
+console.log('KEYTRACK_FIX_2026_08_06_LOADED');
 const $=s=>document.querySelector(s);let mode='login',session=null,profile=null,companyId=null,companyName='',items=[],locs=[],movements=[],customers=[],suppliers=[],purchases=[],sales=[],saCompanies=[],saPlans=[],isPlatformAdmin=false,stream=null,scanTarget='search';
 const toast=m=>{let t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)};
 // Función segura disponible desde el inicio; se reemplaza más abajo con la implementación completa.

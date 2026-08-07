@@ -50,6 +50,38 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 
 .detail-grid{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(320px,1.2fr);gap:16px}
 @media(max-width:760px){.detail-grid{grid-template-columns:1fr}}
+
+.mobile-inventory{display:none}
+.product-card-mobile{background:#0d192b;border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}
+.product-card-head{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:12px;align-items:start}
+.product-card-head img{width:72px;height:72px;object-fit:contain;border-radius:12px;background:#fff}
+.product-card-info{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}
+.product-card-info div{background:#0a1424;border:1px solid rgba(148,163,184,.14);border-radius:10px;padding:9px}
+.product-card-info small{display:block;color:var(--muted);margin-bottom:3px}
+.product-card-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.product-card-actions .btn{width:100%;justify-content:center}
+.qty-mobile{font-size:24px;font-weight:800;text-align:center;min-width:42px}
+@media(max-width:980px){
+  .layout-shell{grid-template-columns:1fr}
+  .sidebar{position:static;max-height:none;padding:10px}
+  .sidebar .nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px!important;overflow:visible!important}
+  .sidebar .nav .btn{width:100%;white-space:normal;text-align:center;justify-content:center;min-height:48px}
+  .sales-nav{order:9}
+}
+@media(max-width:720px){
+  .desktop-inventory{display:none}
+  .mobile-inventory{display:block}
+  .product-card-info{grid-template-columns:1fr}
+  .tools{grid-template-columns:1fr!important}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:430px){
+  .sidebar .nav{grid-template-columns:1fr 1fr!important}
+  .product-card-head{grid-template-columns:62px minmax(0,1fr)}
+  .product-card-head img{width:62px;height:62px}
+  .qty-mobile{grid-column:1/-1;text-align:left;font-size:18px}
+}
+
 </style>
 </head>
 <body>
@@ -82,7 +114,7 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
   <button class="btn" data-view="dashboard">Dashboard</button>
   <button class="btn" data-view="detail">Ficha de producto</button>
   <button class="btn" data-view="movements">Movimientos</button>
-  <button class="btn" data-view="branches">Sucursales</button><button class="btn" data-view="customers">Clientes</button><button class="btn" data-view="suppliers">Proveedores</button><button class="btn" data-view="purchases">Compras</button><button class="btn" data-view="sales">Ventas</button><button id="superAdminNav" class="btn hidden" data-view="superadmin">Super Admin</button>
+  <button class="btn" data-view="branches">Sucursales</button><button class="btn" data-view="customers">Clientes</button><button class="btn" data-view="suppliers">Proveedores</button><button class="btn" data-view="purchases">Compras</button><button class="btn sales-nav" data-view="sales">💰 Ventas</button><button id="superAdminNav" class="btn hidden" data-view="superadmin">Super Admin</button>
 </div>
 
 
@@ -115,7 +147,7 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 
 <section class="panel">
  <div class="panelhead row"><h3>Inventario sincronizado</h3><span id="count" class="muted"></span></div>
- <div class="table"><table><thead><tr><th>Foto</th><th>Artículo</th><th>Marca / FCC</th><th>SKU / OEM</th><th>Vehículo</th><th>Ubicación</th><th>Cantidad</th><th>Acciones</th></tr></thead><tbody id="body"></tbody></table></div>
+ <div class="table desktop-inventory"><table><thead><tr><th>Foto</th><th>Artículo</th><th>Marca / FCC</th><th>SKU / OEM</th><th>Vehículo</th><th>Ubicación</th><th>Cantidad</th><th>Acciones</th></tr></thead><tbody id="body"></tbody></table></div><div id="mobileBody" class="mobile-inventory"></div>
 </section>
 </section>
 
@@ -157,7 +189,18 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 <section id="customersView" class="hidden panel"><div class="panelhead row"><h3>Clientes</h3><button id="newCustomer" class="btn primary">+ Nuevo cliente</button></div><div id="customersBody" class="history"></div></section>
 <section id="suppliersView" class="hidden panel"><div class="panelhead row"><h3>Proveedores</h3><button id="newSupplier" class="btn primary">+ Nuevo proveedor</button></div><div id="suppliersBody" class="history"></div></section>
 <section id="purchasesView" class="hidden panel"><div class="panelhead row"><h3>Órdenes de compra</h3><button id="newPurchase" class="btn primary">+ Nueva compra</button></div><div id="purchasesBody" class="history"></div></section>
-<section id="salesView" class="hidden panel"><div class="panelhead row"><h3>Ventas</h3><button id="newSale" class="btn primary">+ Nueva venta</button></div><div id="salesBody" class="history"></div></section>
+<section id="salesView" class="hidden">
+  <section class="stats sales-stats">
+    <div class="card"><div class="muted">Ventas registradas</div><div id="salesCount" class="num">0</div></div>
+    <div class="card"><div class="muted">Total vendido</div><div id="salesTotal" class="num">$0.00</div></div>
+    <div class="card"><div class="muted">Ventas de hoy</div><div id="salesToday" class="num">0</div></div>
+    <div class="card"><div class="muted">Ingresos de hoy</div><div id="salesTodayTotal" class="num">$0.00</div></div>
+  </section>
+  <section class="panel">
+    <div class="panelhead row"><div><h3>Ventas</h3><div class="muted">Historial de ventas de esta empresa.</div></div><button id="newSale" class="btn primary">+ Nueva venta</button></div>
+    <div id="salesBody" class="history"></div>
+  </section>
+</section>
 
 <section id="superadminView" class="hidden">
   <section class="stats">
@@ -518,7 +561,7 @@ function renderDashboard(){
 
   const today=new Date().toISOString().slice(0,10);
   const todayMovements=movements.filter(m=>String(m.created_at||'').slice(0,10)===today);
-  $('#dashToday').textContent=todayMovements.length;
+  if($('#dashMoves'))$('#dashMoves').textContent=todayMovements.length;
 
   const critical=items
     .filter(p=>Number(p.quantity||0)<=Number(p.minimum_quantity||0))
@@ -555,110 +598,55 @@ function renderDashboard(){
     : '<div class="muted">No hay actividad reciente.</div>';
 }
 
-function render(){let a=list();$('#body').innerHTML=a.map(x=>`<tr><td>${x.image_url?`<img class="thumb" src="${esc(x.image_url)}" alt="">`:'—'}</td><td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td><td>${esc(x.brand||'—')}<div class="muted">${esc(x.fcc_id||'Sin FCC')}</div></td><td>${esc(x.sku||'—')}<div class="muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</div></td><td>${esc(x.vehicle_compatibility||'—')}</td><td>${esc(x.locations?.name||'—')}</td><td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td><td><div class="acts"><button class="btn small" data-a="m" data-id="${x.id}">±</button><button class="btn small" data-a="v" data-id="${x.id}">Ver ficha</button><button class="btn small" data-a="h" data-id="${x.id}">Historial</button><button class="btn small" data-a="e" data-id="${x.id}">Editar</button>${profile?.role==='owner'||profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}</div></td></tr>`).join('');$('#count').textContent=a.length+' resultados';$('#si').textContent=items.length;$('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);$('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;$('#sz').textContent=items.filter(x=>x.quantity===0).length}
+function render(){
+  const a=list();
 
-function openItem(x){$('#ititle').textContent=x?'Editar artículo':'Nuevo artículo';$('#iid').value=x?.id||'';$('#oldimg').value=x?.image_url||'';$('#iname').value=x?.name||'';$('#icat').value=x?.category||'Llave';$('#iq').value=x?.quantity??1;$('#ibrand').value=x?.brand||'';$('#isku').value=x?.sku||'';$('#ioem').value=x?.oem_number||'';$('#iser').value=x?.serial_number||'';$('#iloc').value=x?.location_id||'';$('#imin').value=x?.minimum_quantity??2;$('#ibar').value=x?.barcode||'';$('#ifcc').value=x?.fcc_id||'';$('#iic').value=x?.ic_number||'';$('#ifreq').value=x?.frequency||'';$('#ichip').value=x?.chip_type||'';$('#ibuttons').value=x?.button_count??'';$('#ibattery').value=x?.battery_type||'';$('#icondition').value=x?.condition_status||'Nuevo';$('#isupplier').value=x?.supplier||'';$('#icost').value=x?.cost??'';$('#iprice').value=x?.sale_price??'';$('#ivehicle').value=x?.vehicle_compatibility||'';$('#iequiv').value=x?.equivalences||'';$('#inotes').value=x?.notes||'';if($('#iphoto')) $('#iphoto').value=''; if($('#iphotos')) $('#iphotos').value=''; if($('#idoc')) $('#idoc').value=''; if($('#itemError'))$('#itemError').textContent='';$('#item').showModal()}
-$('#add').onclick=()=>openItem();$('#ix').onclick=$('#icancel').onclick=()=>$('#item').close();
+  $('#body').innerHTML=a.map(x=>`<tr>
+    <td>${x.image_url?`<img class="thumb" src="${esc(x.image_url)}" alt="">`:'—'}</td>
+    <td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td>
+    <td>${esc(x.brand||'—')}<div class="muted">${esc(x.fcc_id||'Sin FCC')}</div></td>
+    <td>${esc(x.sku||'—')}<div class="muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</div></td>
+    <td>${esc(x.vehicle_compatibility||'—')}</td>
+    <td>${esc(x.locations?.name||'—')}</td>
+    <td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td>
+    <td><div class="acts">
+      <button class="btn small" data-a="m" data-id="${x.id}">±</button>
+      <button class="btn small" data-a="v" data-id="${x.id}">Ver ficha</button>
+      <button class="btn small" data-a="h" data-id="${x.id}">Historial</button>
+      <button class="btn small" data-a="e" data-id="${x.id}">Editar</button>
+      ${profile?.role==='owner'||profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}
+    </div></td>
+  </tr>`).join('');
 
-async function uploadFile(bucket,file){if(!file)return null;let ext=(file.name.split('.').pop()||'bin').toLowerCase(),path=`${companyId}/${session.user.id}/${crypto.randomUUID()}.${ext}`;let u=await sb.storage.from(bucket).upload(path,file,{upsert:false});if(u.error)throw u.error;return sb.storage.from(bucket).getPublicUrl(path).data.publicUrl}
-async function uploadPhoto(file){return uploadFile('product-images',file)}
-$('#if').onsubmit=async e=>{
-  e.preventDefault();
-  const saveBtn=$('#itemSave'),errorBox=$('#itemError');
-  errorBox.textContent='';
-  saveBtn.disabled=true;
-  saveBtn.textContent='Guardando…';
-  const id=val('#iid');
+  $('#mobileBody').innerHTML=a.map(x=>`
+    <article class="product-card-mobile">
+      <div class="product-card-head">
+        ${x.image_url?`<img src="${esc(x.image_url)}" alt="">`:'<div class="thumb" style="width:62px;height:62px;display:grid;place-items:center">Sin foto</div>'}
+        <div>
+          <b>${esc(x.name)}</b>
+          <div class="muted">${esc(x.brand||'Sin marca')} · ${esc(x.fcc_id||'Sin FCC')}</div>
+          <div class="muted">${esc(x.sku||'Sin SKU')} · ${esc(x.oem_number||'Sin OEM')}</div>
+        </div>
+        <div class="qty-mobile ${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}">${x.quantity}</div>
+      </div>
+      <div class="product-card-info">
+        <div><small>Vehículo</small>${esc(x.vehicle_compatibility||'Sin compatibilidad')}</div>
+        <div><small>Ubicación</small>${esc(x.locations?.name||'Sin ubicación')}</div>
+      </div>
+      <div class="product-card-actions">
+        <button class="btn small" data-a="v" data-id="${x.id}">Ver ficha</button>
+        <button class="btn small" data-a="e" data-id="${x.id}">Editar</button>
+        <button class="btn small" data-a="h" data-id="${x.id}">Historial</button>
+        <button class="btn small" data-a="m" data-id="${x.id}">Entrada / salida</button>
+        ${profile?.role==='owner'||profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}
+      </div>
+    </article>`).join('');
 
-  try{
-    if(!val('#iname'))throw new Error('Escribe el nombre del producto.');
-    if(!companyId)throw new Error('No se encontró la empresa activa. Cierra sesión y vuelve a entrar.');
-
-    const p={
-      name:val('#iname'),
-      category:$('#icat').value,
-      quantity:Number($('#iq').value||0),
-      brand:val('#ibrand')||null,
-      sku:val('#isku')||null,
-      oem_number:val('#ioem')||null,
-      serial_number:val('#iser')||null,
-      location_id:$('#iloc').value||null,
-      minimum_quantity:Number($('#imin').value||0),
-      barcode:val('#ibar')||null,
-      fcc_id:val('#ifcc')||null,
-      ic_number:val('#iic')||null,
-      frequency:val('#ifreq')||null,
-      chip_type:val('#ichip')||null,
-      button_count:$('#ibuttons').value?Number($('#ibuttons').value):null,
-      battery_type:val('#ibattery')||null,
-      condition_status:$('#icondition').value,
-      supplier:val('#isupplier')||null,
-      cost:Number($('#icost').value||0),
-      sale_price:Number($('#iprice').value||0),
-      vehicle_compatibility:val('#ivehicle')||null,
-      equivalences:val('#iequiv')||null,
-      notes:val('#inotes')||null
-    };
-
-    let result;
-    if(id){
-      result=await sb.from('products').update(p).eq('id',id).eq('company_id',companyId).select('id').single();
-    }else{
-      result=await sb.from('products').insert({...p,company_id:companyId,created_by:session.user.id}).select('id').single();
-    }
-    if(result.error)throw result.error;
-
-    const productId=id||result.data.id;
-    let fileWarnings=[];
-
-    const primaryFile=$('#iphoto')?.files?.[0];
-    if(primaryFile){
-      try{
-        const imageUrl=await uploadPhoto(primaryFile);
-        const u=await sb.from('products').update({image_url:imageUrl}).eq('id',productId).eq('company_id',companyId);
-        if(u.error)throw u.error;
-      }catch(fileErr){
-        fileWarnings.push('No se pudo subir la fotografía principal: '+fileErr.message);
-      }
-    }
-
-    const extraFiles=Array.from($('#iphotos')?.files||[]);
-    if(extraFiles.length){
-      try{
-        const rows=[];
-        for(let idx=0;idx<extraFiles.length;idx++){
-          const imageUrl=await uploadPhoto(extraFiles[idx]);
-          rows.push({company_id:companyId,product_id:productId,image_url:imageUrl,sort_order:idx});
-        }
-        const extraResult=await sb.from('product_images').insert(rows);
-        if(extraResult.error)throw extraResult.error;
-      }catch(fileErr){
-        fileWarnings.push('No se pudieron subir algunas fotografías adicionales: '+fileErr.message);
-      }
-    }
-
-    const docFile=$('#idoc')?.files?.[0];
-    if(docFile){
-      try{
-        const documentUrl=await uploadFile('product-documents',docFile);
-        const d=await sb.from('products').update({document_url:documentUrl}).eq('id',productId).eq('company_id',companyId);
-        if(d.error)throw d.error;
-      }catch(fileErr){
-        fileWarnings.push('No se pudo subir el PDF: '+fileErr.message);
-      }
-    }
-
-    $('#item').close();
-    toast(fileWarnings.length?'Producto guardado. '+fileWarnings.join(' '):'Producto guardado correctamente');
-    await load();
-  }catch(err){
-    console.error('Error guardando producto:',err);
-    errorBox.textContent=err.message||'No se pudo guardar el producto.';
-    toast(err.message||'No se pudo guardar el producto');
-  }finally{
-    saveBtn.disabled=false;
-    saveBtn.textContent='Guardar';
-  }
+  $('#count').textContent=a.length+' resultados';
+  $('#si').textContent=items.length;
+  $('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);
+  $('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;
+  $('#sz').textContent=items.filter(x=>x.quantity===0).length;
 };
 
 function renderProductDetail(product){
@@ -775,7 +763,7 @@ $('#mf').onsubmit=async event=>{
   await load();
 };
 
-$('#body').addEventListener('click',async event=>{
+document.querySelector('#inventoryView').addEventListener('click',async event=>{
   const button=event.target.closest('button[data-a]');
   if(!button)return;
 
@@ -825,23 +813,22 @@ function renderOperationalSelects(){if($('#purchaseSupplier'))$('#purchaseSuppli
 function renderCustomers(){$('#customersBody').innerHTML=customers.length?customers.map(x=>`<div class="history-item"><b>${esc(x.name)}</b>${x.company?` · ${esc(x.company)}`:''}<div class="muted">${esc(x.phone||'Sin teléfono')} · ${esc(x.email||'Sin correo')}</div></div>`).join(''):'<div class="history-item muted">Sin clientes.</div>'}
 function renderSuppliers(){$('#suppliersBody').innerHTML=suppliers.length?suppliers.map(x=>`<div class="history-item"><b>${esc(x.name)}</b><div class="muted">${esc(x.contact_name||'Sin contacto')} · ${esc(x.phone||'Sin teléfono')} · ${esc(x.email||'Sin correo')}</div></div>`).join(''):'<div class="history-item muted">Sin proveedores.</div>'}
 function renderPurchases(){$('#purchasesBody').innerHTML=purchases.length?purchases.map(x=>`<div class="history-item"><b>${esc(x.suppliers?.name||'Proveedor')}</b> · $${Number(x.total||0).toFixed(2)}<div class="muted">${esc(x.status)} · ${new Date(x.created_at).toLocaleString()}</div></div>`).join(''):'<div class="history-item muted">Sin órdenes de compra.</div>'}
-function renderSales(){$('#salesBody').innerHTML=sales.length?sales.map(x=>`<div class="history-item"><b>${esc(x.customers?.name||'Venta general')}</b> · $${Number(x.total||0).toFixed(2)}<div class="muted">${esc(x.status)} · ${esc(x.payment_method||'Sin método')} · ${new Date(x.created_at).toLocaleString()}</div></div>`).join(''):'<div class="history-item muted">Sin ventas.</div>'}
-$('#newCustomer').onclick=()=>$('#customerDialog').showModal();$('#customerX').onclick=$('#customerCancel').onclick=()=>$('#customerDialog').close();$('#customerForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('customers').insert({company_id:companyId,name:val('#customerName'),phone:val('#customerPhone')||null,email:val('#customerEmail')||null,company:val('#customerCompany')||null,notes:val('#customerNotes')||null,created_by:session.user.id});if(r.error)return toast(r.error.message);$('#customerDialog').close();e.target.reset();load()};
-$('#newSupplier').onclick=()=>$('#supplierDialog').showModal();$('#supplierX').onclick=$('#supplierCancel').onclick=()=>$('#supplierDialog').close();$('#supplierForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('suppliers').insert({company_id:companyId,name:val('#supplierName'),contact_name:val('#supplierContact')||null,phone:val('#supplierPhone')||null,email:val('#supplierEmail')||null,website:val('#supplierWebsite')||null,notes:val('#supplierNotes')||null});if(r.error)return toast(r.error.message);$('#supplierDialog').close();e.target.reset();load()};
-$('#newPurchase').onclick=()=>$('#purchaseDialog').showModal();$('#purchaseX').onclick=$('#purchaseCancel').onclick=()=>$('#purchaseDialog').close();$('#purchaseForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('purchase_orders').insert({company_id:companyId,supplier_id:$('#purchaseSupplier').value,status:$('#purchaseStatus').value,expected_date:$('#purchaseExpected').value||null,total:+$('#purchaseTotal').value||0,notes:val('#purchaseNotes')||null,created_by:session.user.id});if(r.error)return toast(r.error.message);$('#purchaseDialog').close();e.target.reset();load()};
-$('#newSale').onclick=()=>$('#saleDialog').showModal();$('#saleX').onclick=$('#saleCancel').onclick=()=>$('#saleDialog').close();$('#saleForm').onsubmit=async e=>{e.preventDefault();let r=await sb.from('sales').insert({company_id:companyId,customer_id:$('#saleCustomer').value||null,status:$('#saleStatus').value,total:+$('#saleTotal').value||0,payment_method:$('#salePayment').value,notes:val('#saleNotes')||null,created_by:session.user.id});if(r.error)return toast(r.error.message);$('#saleDialog').close();e.target.reset();load()};
+function renderSales(){
+  const today=new Date().toISOString().slice(0,10);
+  const todaySales=sales.filter(x=>String(x.created_at||'').slice(0,10)===today);
+  const total=sales.reduce((sum,x)=>sum+Number(x.total||0),0);
+  const todayTotal=todaySales.reduce((sum,x)=>sum+Number(x.total||0),0);
 
+  if($('#salesCount'))$('#salesCount').textContent=sales.length;
+  if($('#salesTotal'))$('#salesTotal').textContent='$'+total.toFixed(2);
+  if($('#salesToday'))$('#salesToday').textContent=todaySales.length;
+  if($('#salesTodayTotal'))$('#salesTodayTotal').textContent='$'+todayTotal.toFixed(2);
 
-
-async function loadSuperAdmin(){
-  if(!isPlatformAdmin)return toast('Acceso restringido');
-  $('#saBody').innerHTML='<tr><td colspan="8" class="muted">Cargando empresas…</td></tr>';
-  const [companiesResult,plansResult]=await Promise.all([sb.rpc('platform_list_companies'),sb.rpc('platform_list_plans')]);
-  if(companiesResult.error)return toast(companiesResult.error.message);
-  if(plansResult.error)return toast(plansResult.error.message);
-  saCompanies=companiesResult.data||[];saPlans=plansResult.data||[];
-  $('#cadPlan').innerHTML=saPlans.map(p=>`<option value="${p.code}">${esc(p.name)}</option>`).join('');
-  renderSuperAdmin();
+  $('#salesBody').innerHTML=sales.length?sales.map(x=>`
+    <div class="history-item">
+      <b>${esc(x.customers?.name||'Venta general')}</b> · $${Number(x.total||0).toFixed(2)}
+      <div class="muted">${esc(x.status||'registrada')} · ${esc(x.payment_method||'Sin método')} · ${new Date(x.created_at).toLocaleString()}</div>
+    </div>`).join(''):'<div class="history-item muted">Aún no hay ventas registradas.</div>';
 }
 function renderSuperAdmin(){
   const q=val('#saSearch').toLowerCase(),status=$('#saStatusFilter').value;

@@ -970,7 +970,37 @@ $('#companyAdminForm').onsubmit=async e=>{
   if(r.error)return toast(r.error.message);
   $('#companyAdminDialog').close();toast('Empresa actualizada');loadSuperAdmin();
 };
-if($('#saSearch')) $('#saSearch').oninput=renderSuperAdmin;if($('#saStatusFilter')) $('#saStatusFilter').onchange=renderSuperAdmin;if($('#saRefresh')) $('#saRefresh').onclick=loadSuperAdmin;
+async function loadSuperAdmin(){
+  if(!isPlatformAdmin){
+    saCompanies=[];
+    saPlans=[];
+    renderSuperAdmin();
+    return;
+  }
+  try{
+    const [companiesResult,plansResult]=await Promise.all([
+      sb.rpc('platform_company_overview'),
+      sb.from('subscription_plans').select('*').order('sort_order',{ascending:true})
+    ]);
+    if(companiesResult.error)throw companiesResult.error;
+    saCompanies=companiesResult.data||[];
+    saPlans=plansResult.error?[]:(plansResult.data||[]);
+    if($('#cadPlan')){
+      $('#cadPlan').innerHTML=saPlans.length
+        ? saPlans.map(p=>`<option value="${esc(p.code)}">${esc(p.name||p.code)}</option>`).join('')
+        : '<option value="free">Gratis</option><option value="pro">Pro</option><option value="business">Business</option><option value="enterprise">Enterprise</option>';
+    }
+    renderSuperAdmin();
+  }catch(error){
+    console.warn('Super Admin:',error);
+    saCompanies=[];
+    renderSuperAdmin();
+    toast('No se pudo cargar Super Admin');
+  }
+}
+if($('#saSearch')) $('#saSearch').oninput=renderSuperAdmin;
+if($('#saStatusFilter')) $('#saStatusFilter').onchange=renderSuperAdmin;
+if($('#saRefresh')) $('#saRefresh').onclick=()=>loadSuperAdmin();
 
 async function startScanner(target){scanTarget=target;$('#scanner').showModal();$('#scanmsg').textContent='Solicitando cámara…';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});$('#video').srcObject=stream;await $('#video').play();if(!('BarcodeDetector'in window)){$('#scanmsg').textContent='Este navegador no permite detección automática. Usa “Ingresar manualmente”.';return}let detector=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','itf']});let active=true;const loop=async()=>{if(!active||!stream)return;try{let codes=await detector.detect($('#video'));if(codes[0]){applyScan(codes[0].rawValue);active=false;stopScanner();return}}catch{}requestAnimationFrame(loop)};loop()}catch(err){$('#scanmsg').textContent='No se pudo abrir la cámara: '+err.message}}
 function applyScan(code){if(scanTarget==='field')$('#ibar').value=code;else{$('#search').value=code;render()}toast('Código detectado: '+code)}

@@ -24,7 +24,22 @@ function switchView(name){
 window.switchView=switchView;
 
 function renderMovements(){
-  $('#movementsBody').innerHTML=state.movements.length?state.movements.map(m=>`<div class="history-item"><b>${m.products?.name||'Producto'}</b> · ${m.movement_type} ${m.quantity}<div class="muted">${new Date(m.created_at).toLocaleString()} · ${m.note||''}</div></div>`).join(''):'<div class="muted">Sin movimientos.</div>';
+  $('#movementsBody').innerHTML=state.movements.length?state.movements.map(m=>{
+    const saleId=String(m.note||'').match(/^Venta\s+([0-9a-f-]{36})$/i)?.[1];
+    const sale=saleId?state.sales.find(s=>s.id===saleId):null;
+    const label=m.movement_type==='out'?'📤 Salida':m.movement_type==='in'?'📥 Entrada':'🔄 Movimiento';
+    const reference=sale
+      ? `Venta ${sale.id.slice(0,8).toUpperCase()} · ${sale.payment_method||'Sin método'} · $${Number(sale.total||0).toFixed(2)}`
+      : (m.note||'Sin referencia');
+
+    return `<div class="history-item movement-card">
+      <div class="movement-main">
+        <b>${label} · ${m.products?.name||'Producto'}</b>
+        <span class="movement-qty">${m.movement_type==='out'?'-':'+'}${m.quantity}</span>
+      </div>
+      <div class="muted">${new Date(m.created_at).toLocaleString()} · ${reference}</div>
+    </div>`;
+  }).join(''):'<div class="muted">Sin movimientos.</div>';
 }
 
 async function loadProfile(){
@@ -56,13 +71,24 @@ export async function reload(){
     const products=await sb.from('products').select('*,locations(name)').eq('company_id',state.companyId).order('created_at',{ascending:false});
     if(products.error)throw products.error;state.items=products.data||[];
 
-    const [mov,customers,suppliers,purchases,sales]=await Promise.all([
+    const [mov,customers,suppliers,purchases,sales,saleItems]=await Promise.all([
       querySafe('movements',sb.from('inventory_movements').select('*,products(name)').eq('company_id',state.companyId).order('created_at',{ascending:false}).limit(100)),
       querySafe('customers',sb.from('customers').select('*').eq('company_id',state.companyId).order('created_at',{ascending:false})),
       querySafe('suppliers',sb.from('suppliers').select('*').eq('company_id',state.companyId).order('created_at',{ascending:false})),
       querySafe('purchases',sb.from('purchase_orders').select('*,suppliers(name)').eq('company_id',state.companyId).order('created_at',{ascending:false})),
-      querySafe('sales',sb.from('sales').select('*,customers(name)').eq('company_id',state.companyId).order('created_at',{ascending:false}))
+      querySafe('sales',sb.from('sales').select('*,customers(name)').eq('company_id',state.companyId).order('created_at',{ascending:false})),
+      querySafe('sale_items',sb.from('sale_items').select('*').eq('company_id',state.companyId).order('created_at',{ascending:true}))
     ]);
+
+    const itemsBySale=new Map();
+    for(const item of saleItems){
+      if(!itemsBySale.has(item.sale_id))itemsBySale.set(item.sale_id,[]);
+      itemsBySale.get(item.sale_id).push(item);
+    }
+    for(const sale of sales){
+      sale.sale_items=itemsBySale.get(sale.id)||[];
+    }
+
     state.movements=mov;state.customers=customers;state.suppliers=suppliers;state.purchases=purchases;state.sales=sales;
     renderInventory();renderOperational();setSync('Sincronizado',true);
   }catch(e){console.error(e);setSync('Error al sincronizar',false);toast(e.message||'Error al sincronizar')}

@@ -1,41 +1,40 @@
-# KeyTrack Pro Enterprise 4.4 — POS con inventario
+# KeyTrack Pro Enterprise 4.5 — Stable
 
-Esta actualización convierte **Nueva Venta** en un punto de venta real.
+Esta actualización mejora la versión 4.4 actual sin reconstruir la aplicación.
 
-## Incluye
+## Correcciones importantes
 
-- Buscar producto por nombre, SKU, código, FCC ID u OEM.
-- Agregar múltiples productos a una venta.
-- Precio unitario editable.
-- Cantidad.
-- Descuento por línea.
-- Descuento general.
-- Impuestos.
-- Métodos de pago.
-- Cliente registrado o venta general.
-- Total automático.
-- Validación de existencia.
-- Descuento automático del inventario.
-- Movimiento de salida automático por cada producto.
-- Tabla `sale_items` para conservar el detalle de lo vendido.
+- Una **Cotización**, **Pendiente** o **Cancelada** ya NO descuenta inventario.
+- Solo el estado **Completada** crea salida de inventario.
+- Se conserva la operación transaccional: si falta stock, no se guarda una venta parcial.
+
+## Mejoras
+
+- Pantalla de Ventas con tarjetas profesionales.
+- Cada venta muestra:
+  - folio corto
+  - fecha/hora
+  - cliente
+  - método de pago
+  - número de partidas
+  - unidades
+  - total
+  - estado
+- Botón **Ver detalle**.
+- Detalle completo de productos vendidos.
+- Botón **Imprimir** desde el detalle.
+- Historial de producto más legible:
+  - ya no muestra solo el UUID completo
+  - muestra folio corto de venta, precio y método de pago
+- Movimientos más claros.
+- Escáner USB/Bluetooth: al escribir un SKU/código exacto y enviar Enter, agrega el producto directamente al carrito.
 
 ## Instalación
 
-### 1. Supabase
+1. En Supabase ejecuta UNA VEZ:
+   `upgrade-v4-5.sql`
+2. En GitHub reemplaza/sube todos los archivos del ZIP.
+3. Espera Vercel.
+4. Recarga con `Ctrl + Shift + R`.
 
-Ejecuta **una sola vez**:
-
-`pos-v4-4.sql`
-
-### 2. GitHub
-
-Reemplaza/sube todos los archivos de este ZIP.
-
-### 3. Vercel
-
-Espera el deployment y abre con `Ctrl + Shift + R`.
-
-## Importante
-
-La venta y el descuento del inventario ocurren en una función transaccional de Supabase.
-Si una partida no tiene suficiente existencia, no se guarda una venta parcial.
+No borres los datos existentes.

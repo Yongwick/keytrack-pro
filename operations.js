@@ -137,6 +137,103 @@ function openSaleDialog(){
   setTimeout(()=>$('#saleProductSearch').focus(),100);
 }
 
+
+function shortSaleId(id){
+  return String(id||'').slice(0,8).toUpperCase();
+}
+
+function statusClass(status){
+  const s=String(status||'').toLowerCase();
+  if(s==='completada')return 'sale-status completed';
+  if(s==='cancelada')return 'sale-status cancelled';
+  if(s==='cotización')return 'sale-status quote';
+  return 'sale-status pending';
+}
+
+function openSaleDetail(sale){
+  if(!sale)return;
+
+  const items=sale.sale_items||[];
+  const linesSubtotal=items.reduce((n,x)=>n+safeNumber(x.subtotal),0);
+
+  $('#saleDetailTitle').textContent=`Venta ${shortSaleId(sale.id)}`;
+  $('#saleDetailMeta').textContent=
+    `${new Date(sale.created_at).toLocaleString()} · ${sale.customers?.name||'Venta general'}`;
+
+  $('#saleDetailBody').innerHTML=`
+    <div class="sale-detail-grid">
+      <section>
+        <div class="table">
+          <table class="sale-detail-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>SKU</th>
+                <th>Cant.</th>
+                <th>Precio</th>
+                <th>Desc.</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${items.length?items.map(item=>`
+                <tr>
+                  <td><b>${esc(item.product_name||'Producto')}</b></td>
+                  <td>${esc(item.sku||'—')}</td>
+                  <td>${safeNumber(item.quantity)}</td>
+                  <td>${money(item.unit_price)}</td>
+                  <td>${money(item.discount)}</td>
+                  <td><b>${money(item.subtotal)}</b></td>
+                </tr>
+              `).join(''):'<tr><td colspan="6" class="muted">Esta venta no tiene partidas disponibles.</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <aside class="sale-detail-summary">
+        <div><span>Cliente</span><b>${esc(sale.customers?.name||'Venta general')}</b></div>
+        <div><span>Estado</span><b>${esc(sale.status||'—')}</b></div>
+        <div><span>Método</span><b>${esc(sale.payment_method||'—')}</b></div>
+        <div><span>Partidas</span><b>${items.length}</b></div>
+        <div><span>Unidades</span><b>${items.reduce((n,x)=>n+safeNumber(x.quantity),0)}</b></div>
+        <div><span>Subtotal partidas</span><b>${money(linesSubtotal)}</b></div>
+        <div class="sale-detail-total"><span>TOTAL</span><b>${money(sale.total)}</b></div>
+        ${sale.notes?`<div class="sale-detail-notes"><span>Notas</span><p>${esc(sale.notes)}</p></div>`:''}
+      </aside>
+    </div>`;
+
+  $('#saleDetailDialog').showModal();
+}
+
+function printSaleDetail(){
+  const title=$('#saleDetailTitle').textContent;
+  const meta=$('#saleDetailMeta').textContent;
+  const body=$('#saleDetailBody').innerHTML;
+  const win=window.open('','_blank','width=800,height=700');
+
+  if(!win)return toast('El navegador bloqueó la ventana de impresión.');
+
+  win.document.write(`<!doctype html>
+    <html><head><meta charset="utf-8"><title>${esc(title)}</title>
+    <style>
+      body{font-family:Arial,sans-serif;padding:24px;color:#111}
+      h1{font-size:22px;margin:0 0 6px}
+      .muted{color:#666}.sale-detail-grid{display:block}
+      table{width:100%;border-collapse:collapse;margin-top:18px}
+      th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}
+      .sale-detail-summary{margin-top:20px}
+      .sale-detail-summary>div{display:flex;justify-content:space-between;padding:6px 0}
+      .sale-detail-total{font-size:20px;font-weight:bold;border-top:2px solid #111;margin-top:8px;padding-top:10px!important}
+      button{display:none}
+    </style></head><body>
+    <h1>${esc(title)}</h1><div class="muted">${esc(meta)}</div>${body}
+    </body></html>`);
+  win.document.close();
+  win.focus();
+  setTimeout(()=>win.print(),250);
+}
+
+
 export function renderOperational(){
   $('#purchaseSupplier').innerHTML=
     '<option value="">Selecciona proveedor</option>'+
@@ -171,11 +268,28 @@ export function renderOperational(){
     :'<div class="muted">No hay compras.</div>';
 
   $('#salesBody').innerHTML=state.sales.length
-    ?state.sales.map(x=>`
-      <div class="history-item">
-        <b>${esc(x.customers?.name||'Venta general')}</b> · ${money(x.total)}
-        <div class="muted">${esc(x.status||'')}</div>
-      </div>`).join('')
+    ?state.sales.map(sale=>{
+      const items=sale.sale_items||[];
+      const units=items.reduce((n,x)=>n+safeNumber(x.quantity),0);
+      return `<article class="sale-card" data-sale-id="${sale.id}">
+        <div class="sale-card-main">
+          <div class="sale-card-title">
+            <b>Venta ${shortSaleId(sale.id)}</b>
+            <span class="${statusClass(sale.status)}">${esc(sale.status||'—')}</span>
+          </div>
+          <div class="muted">
+            ${new Date(sale.created_at).toLocaleString()} ·
+            ${esc(sale.customers?.name||'Venta general')} ·
+            ${esc(sale.payment_method||'Sin método')}
+          </div>
+          <div class="muted">${items.length} partida${items.length===1?'':'s'} · ${units} unidad${units===1?'':'es'}</div>
+        </div>
+        <div class="sale-card-total">
+          <strong>${money(sale.total)}</strong>
+          <button type="button" class="btn small" data-sale-view="${sale.id}">Ver detalle</button>
+        </div>
+      </article>`;
+    }).join('')
     :'<div class="muted">No hay ventas.</div>';
 }
 
@@ -206,9 +320,39 @@ export function initOperations({reload,switchView}){
 
   $('#saleX').onclick=$('#saleCancel').onclick=()=>$('#saleDialog').close();
 
+  $('#saleDetailX').onclick=$('#saleDetailClose').onclick=()=>$('#saleDetailDialog').close();
+  $('#salePrint').onclick=printSaleDetail;
+
+  $('#salesBody').addEventListener('click',event=>{
+    const button=event.target.closest('[data-sale-view]');
+    if(!button)return;
+    const sale=state.sales.find(x=>x.id===button.dataset.saleView);
+    openSaleDetail(sale);
+  });
+
   // Búsqueda POS
   $('#saleProductSearch').addEventListener('input',event=>{
     renderSaleSearchResults(event.target.value);
+  });
+
+  // Si un escáner USB/Bluetooth escribe un SKU/código exacto y manda Enter,
+  // se agrega directamente sin usar el mouse.
+  $('#saleProductSearch').addEventListener('keydown',event=>{
+    if(event.key!=='Enter')return;
+    event.preventDefault();
+
+    const q=event.target.value.trim().toLowerCase();
+    if(!q)return;
+
+    const product=state.items.find(x=>[
+      x.sku,x.barcode,x.fcc_id,x.oem_number,x.serial_number
+    ].some(v=>String(v||'').trim().toLowerCase()===q));
+
+    if(product){
+      addProductToSale(product);
+    }else{
+      renderSaleSearchResults(q);
+    }
   });
 
   $('#saleSearchResults').addEventListener('click',event=>{

@@ -2,6 +2,8 @@
 import {$,state,sb,val,esc,toast,safeNumber} from './core.js';
 import {renderInventory} from './inventory.js';
 
+function moneyForHistory(v){return '$'+Number(v||0).toFixed(2)}
+
 export function openProduct(product=null){
   $('#ititle').textContent=product?'Editar artículo':'Nuevo artículo';
   const set=(id,v='')=>{const el=$(id);if(el)el.value=v??''};
@@ -51,7 +53,32 @@ export async function openHistory(product){
   $('#history').showModal();
   const r=await sb.from('inventory_movements').select('*').eq('company_id',state.companyId).eq('product_id',product.id).order('created_at',{ascending:false});
   if(r.error){$('#hbody').innerHTML=`<div class="module-error">${esc(r.error.message)}</div>`;return}
-  $('#hbody').innerHTML=(r.data||[]).length?(r.data||[]).map(m=>`<div class="history-item"><b>${esc(m.movement_type)} · ${m.quantity}</b><div class="muted">${new Date(m.created_at).toLocaleString()} · ${esc(m.note||'')}</div></div>`).join(''):'<div class="muted">Sin movimientos.</div>';
+  $('#hbody').innerHTML=(r.data||[]).length?(r.data||[]).map(m=>{
+    const saleId=String(m.note||'').match(/^Venta\s+([0-9a-f-]{36})$/i)?.[1];
+    const sale=saleId?state.sales.find(s=>s.id===saleId):null;
+    const item=sale?.sale_items?.find(x=>x.product_id===product.id);
+
+    if(sale){
+      return `<div class="history-item movement-history-card">
+        <div class="movement-main">
+          <b>💰 Venta · -${m.quantity} unidad${Number(m.quantity)===1?'':'es'}</b>
+          <span>${moneyForHistory(sale.total)}</span>
+        </div>
+        <div class="muted">
+          ${new Date(m.created_at).toLocaleString()} ·
+          Venta ${sale.id.slice(0,8).toUpperCase()} ·
+          ${esc(sale.payment_method||'Sin método')}
+        </div>
+        ${item?`<div class="muted">Precio unitario: ${moneyForHistory(item.unit_price)} · Subtotal: ${moneyForHistory(item.subtotal)}</div>`:''}
+      </div>`;
+    }
+
+    const label=m.movement_type==='out'?'📤 Salida':m.movement_type==='in'?'📥 Entrada':'🔄 Movimiento';
+    return `<div class="history-item">
+      <b>${label} · ${m.quantity}</b>
+      <div class="muted">${new Date(m.created_at).toLocaleString()} · ${esc(m.note||'Sin referencia')}</div>
+    </div>`;
+  }).join(''):'<div class="muted">Sin movimientos.</div>';
 }
 
 function openMove(product){

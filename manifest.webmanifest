@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 3.0",
+  "name": "KeyTrack Pro Enterprise 4.0",
   "short_name": "KeyTrack Pro",
-  "description": "Inventario multiempresa para llaves, controles y equipos.",
+  "description": "Inventario y operación multiempresa modular.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

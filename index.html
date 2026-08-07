@@ -450,6 +450,7 @@ button,.btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 const sb=createClient('https://ngzoyfxnbonjqeprkpxp.supabase.co','sb_publishable_IZfg7e_-acYq6QHpceVTxQ_GIiXLI-G');
 const $=s=>document.querySelector(s);let mode='login',session=null,profile=null,companyId=null,companyName='',items=[],locs=[],movements=[],customers=[],suppliers=[],purchases=[],sales=[],saCompanies=[],saPlans=[],isPlatformAdmin=false,stream=null,scanTarget='search';
+let loadSuperAdmin=async()=>{};
 const toast=m=>{let t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)};
 const val=id=>$(id).value.trim(),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function authMode(m){mode=m;$('#namebox').classList.toggle('hidden',m==='login');$('#companybox').classList.toggle('hidden',m==='login');$('#tl').classList.toggle('primary',m==='login');$('#ts').classList.toggle('primary',m==='signup');$('#as').textContent=m==='login'?'Iniciar sesión':'Crear cuenta';$('#err').textContent=''}
@@ -968,9 +969,9 @@ $('#companyAdminForm').onsubmit=async e=>{
     new_trial_ends_at:$('#cadTrialEnds').value||null,new_period_ends_at:$('#cadPeriodEnds').value||null,new_admin_notes:val('#cadNotes')||null
   });
   if(r.error)return toast(r.error.message);
-  $('#companyAdminDialog').close();toast('Empresa actualizada');loadSuperAdmin();
+  $('#companyAdminDialog').close();toast('Empresa actualizada');if(typeof loadSuperAdmin==='function')await loadSuperAdmin();
 };
-async function loadSuperAdmin(){
+loadSuperAdmin=async function(){
   if(!isPlatformAdmin){
     saCompanies=[];
     saPlans=[];
@@ -1000,7 +1001,7 @@ async function loadSuperAdmin(){
 }
 if($('#saSearch')) $('#saSearch').oninput=renderSuperAdmin;
 if($('#saStatusFilter')) $('#saStatusFilter').onchange=renderSuperAdmin;
-if($('#saRefresh')) $('#saRefresh').onclick=()=>loadSuperAdmin();
+if($('#saRefresh')) $('#saRefresh').onclick=()=>{if(typeof loadSuperAdmin==='function')loadSuperAdmin()};
 
 async function startScanner(target){scanTarget=target;$('#scanner').showModal();$('#scanmsg').textContent='Solicitando cámara…';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});$('#video').srcObject=stream;await $('#video').play();if(!('BarcodeDetector'in window)){$('#scanmsg').textContent='Este navegador no permite detección automática. Usa “Ingresar manualmente”.';return}let detector=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','itf']});let active=true;const loop=async()=>{if(!active||!stream)return;try{let codes=await detector.detect($('#video'));if(codes[0]){applyScan(codes[0].rawValue);active=false;stopScanner();return}}catch{}requestAnimationFrame(loop)};loop()}catch(err){$('#scanmsg').textContent='No se pudo abrir la cámara: '+err.message}}
 function applyScan(code){if(scanTarget==='field')$('#ibar').value=code;else{$('#search').value=code;render()}toast('Código detectado: '+code)}

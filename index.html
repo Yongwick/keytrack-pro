@@ -452,7 +452,34 @@ const sb=createClient('https://ngzoyfxnbonjqeprkpxp.supabase.co','sb_publishable
 const $=s=>document.querySelector(s);let mode='login',session=null,profile=null,companyId=null,companyName='',items=[],locs=[],movements=[],customers=[],suppliers=[],purchases=[],sales=[],saCompanies=[],saPlans=[],isPlatformAdmin=false,stream=null,scanTarget='search';
 const toast=m=>{let t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)};
 // Función segura disponible desde el inicio; se reemplaza más abajo con la implementación completa.
-let loadSuperAdmin=async()=>{};
+async function loadSuperAdmin(){
+  if(!isPlatformAdmin){
+    saCompanies=[];
+    saPlans=[];
+    renderSuperAdmin();
+    return;
+  }
+  try{
+    const [companiesResult,plansResult]=await Promise.all([
+      sb.rpc('platform_company_overview'),
+      sb.from('subscription_plans').select('*').order('sort_order',{ascending:true})
+    ]);
+    if(companiesResult.error)throw companiesResult.error;
+    saCompanies=companiesResult.data||[];
+    saPlans=plansResult.error?[]:(plansResult.data||[]);
+    if($('#cadPlan')){
+      $('#cadPlan').innerHTML=saPlans.length
+        ? saPlans.map(p=>`<option value="${esc(p.code)}">${esc(p.name||p.code)}</option>`).join('')
+        : '<option value="free">Gratis</option><option value="pro">Pro</option><option value="business">Business</option><option value="enterprise">Enterprise</option>';
+    }
+    renderSuperAdmin();
+  }catch(error){
+    console.warn('Super Admin:',error);
+    saCompanies=[];
+    renderSuperAdmin();
+    toast('No se pudo cargar Super Admin');
+  }
+}
 const val=id=>$(id).value.trim(),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function authMode(m){mode=m;$('#namebox').classList.toggle('hidden',m==='login');$('#companybox').classList.toggle('hidden',m==='login');$('#tl').classList.toggle('primary',m==='login');$('#ts').classList.toggle('primary',m==='signup');$('#as').textContent=m==='login'?'Iniciar sesión':'Crear cuenta';$('#err').textContent=''}
 $('#tl').onclick=()=>authMode('login');$('#ts').onclick=()=>authMode('signup');authMode('login');
@@ -972,34 +999,6 @@ $('#companyAdminForm').onsubmit=async e=>{
   if(r.error)return toast(r.error.message);
   $('#companyAdminDialog').close();toast('Empresa actualizada');await loadSuperAdmin();
 };
-loadSuperAdmin=async function(){
-  if(!isPlatformAdmin){
-    saCompanies=[];
-    saPlans=[];
-    renderSuperAdmin();
-    return;
-  }
-  try{
-    const [companiesResult,plansResult]=await Promise.all([
-      sb.rpc('platform_company_overview'),
-      sb.from('subscription_plans').select('*').order('sort_order',{ascending:true})
-    ]);
-    if(companiesResult.error)throw companiesResult.error;
-    saCompanies=companiesResult.data||[];
-    saPlans=plansResult.error?[]:(plansResult.data||[]);
-    if($('#cadPlan')){
-      $('#cadPlan').innerHTML=saPlans.length
-        ? saPlans.map(p=>`<option value="${esc(p.code)}">${esc(p.name||p.code)}</option>`).join('')
-        : '<option value="free">Gratis</option><option value="pro">Pro</option><option value="business">Business</option><option value="enterprise">Enterprise</option>';
-    }
-    renderSuperAdmin();
-  }catch(error){
-    console.warn('Super Admin:',error);
-    saCompanies=[];
-    renderSuperAdmin();
-    toast('No se pudo cargar Super Admin');
-  }
-}
 if($('#saSearch')) $('#saSearch').oninput=renderSuperAdmin;
 if($('#saStatusFilter')) $('#saStatusFilter').onchange=renderSuperAdmin;
 if($('#saRefresh')) $('#saRefresh').onclick=()=>loadSuperAdmin();

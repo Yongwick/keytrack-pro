@@ -1,58 +1,38 @@
-# KeyTrack Pro Enterprise 4.1 — Stable
+# KeyTrack Pro Enterprise 4.2 — Super Admin Global
 
-Esta versión estabiliza Enterprise 4.0 y elimina la dependencia de
-`public.admin_company_overview`.
+Esta versión corrige el motivo por el cual Super Admin mostraba únicamente
+la empresa del usuario administrador.
 
-## Cambio principal
+## Por qué ocurría
 
-**Super Admin ya NO usa vistas (`VIEW`) de Supabase.**
+Las consultas directas a `companies`, `company_members` y `products`
+están protegidas por RLS. Por seguridad, Supabase solo devolvía los datos
+de la empresa a la que pertenece el usuario actual.
 
-Los datos se calculan directamente desde estas tablas:
+Eso es correcto para los usuarios normales, pero no sirve para el panel
+global de Super Admin.
 
-- `companies`
-- `company_members`
-- `products`
-- `profiles`
-- `company_subscriptions`
-- `subscription_plans`
+## Solución
 
-Las tablas opcionales de planes y suscripciones no bloquean el panel si están vacías.
+Se incluye:
 
-## Estructura simplificada
+`superadmin-global.sql`
 
-Todos los archivos están en la raíz del repositorio:
+El script crea una función segura `SECURITY DEFINER` que:
 
-- `index.html`
-- `app.css`
-- `app.js`
-- `core.js`
-- `auth.js`
-- `inventory.js`
-- `dashboard.js`
-- `products.js`
-- `operations.js`
-- `branches.js`
-- `scanner.js`
-- `superadmin.js`
-- `sw.js`
-- `manifest.webmanifest`
-
-Esto coincide con la forma en que actualmente estás subiendo los archivos a GitHub
-y evita errores 404 de `/js/app.js` y `/css/app.css`.
+1. Comprueba que el usuario esté registrado en `platform_admins`.
+2. Solo entonces permite obtener estadísticas globales.
+3. No desactiva RLS para los usuarios normales.
+4. No expone la service-role key en el navegador.
 
 ## Instalación
 
-1. **No ejecutes SQL nuevo.**
-2. Descomprime este ZIP.
-3. En GitHub reemplaza/sube todos los archivos del paquete.
-4. Verifica que `app.js`, `app.css`, `superadmin.js`, etc. estén en la raíz.
-5. Espera el nuevo deployment de Vercel.
-6. Abre primero en incógnito o haz `Ctrl + Shift + R`.
+1. En Supabase → SQL Editor ejecuta **una sola vez**:
+   `superadmin-global.sql`
+2. En GitHub reemplaza/sube todos los archivos de este ZIP.
+3. Espera el deployment de Vercel.
+4. Abre la aplicación con Ctrl+Shift+R o en incógnito.
+5. En Super Admin pulsa **Actualizar**.
 
-## Importante
-
-La versión 4.1 ya no consulta:
-
-`admin_company_overview`
-
-Por lo tanto no debes crear esa vista para que Super Admin funcione.
+Ahora deben aparecer todas las empresas creadas, no únicamente
+KeyTrack Empresa Principal.

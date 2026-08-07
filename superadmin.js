@@ -1,23 +1,5 @@
 import {$,state,sb,esc,toast,safeNumber} from './core.js';
 
-function indexBy(list,key='id'){
-  return new Map((list||[]).map(x=>[x[key],x]));
-}
-
-async function optionalTable(name,query,fallback=[]){
-  try{
-    const r=await query;
-    if(r.error){
-      console.warn(`Tabla opcional ${name}:`,r.error);
-      return fallback;
-    }
-    return r.data||fallback;
-  }catch(error){
-    console.warn(`Tabla opcional ${name}:`,error);
-    return fallback;
-  }
-}
-
 export async function loadSuperAdmin(){
   if(!state.isPlatformAdmin)return;
 
@@ -25,80 +7,52 @@ export async function loadSuperAdmin(){
   $('#saActive').textContent='…';
   $('#saUsers').textContent='…';
   $('#saProducts').textContent='…';
-  $('#saBody').innerHTML='<tr><td colspan="8" class="muted">Cargando empresas…</td></tr>';
+  $('#saBody').innerHTML='<tr><td colspan="8" class="muted">Cargando todas las empresas…</td></tr>';
 
   try{
-    // Todas son tablas reales. No se usa ninguna VIEW.
-    const companiesResult=await sb
-      .from('companies')
-      .select('*')
-      .order('created_at',{ascending:true});
+    // IMPORTANTE:
+    // Las consultas directas a companies/company_members/products están sujetas
+    // a RLS y solo muestran la empresa del usuario actual.
+    // Este RPC es SECURITY DEFINER y verifica platform_admins antes de devolver datos.
+    const overview=await sb.rpc('superadmin_company_overview');
 
-    if(companiesResult.error)throw companiesResult.error;
+    if(overview.error)throw overview.error;
 
-    const companies=companiesResult.data||[];
+    const rows=overview.data||[];
 
-    const [members,products,subscriptions,plans,profiles]=await Promise.all([
-      optionalTable(
-        'company_members',
-        sb.from('company_members').select('*').eq('status','active')
-      ),
-      optionalTable(
-        'products',
-        sb.from('products').select('id,company_id,quantity')
-      ),
-      optionalTable(
-        'company_subscriptions',
-        sb.from('company_subscriptions').select('*')
-      ),
-      optionalTable(
-        'subscription_plans',
-        sb.from('subscription_plans').select('*').order('monthly_price')
-      ),
-      optionalTable(
-        'profiles',
-        sb.from('profiles').select('*')
-      )
-    ]);
+    // Planes y suscripciones siguen siendo opcionales.
+    let plans=[];
+    let subscriptions=[];
 
-    state.saPlans=plans||[];
+    try{
+      const r=await sb.from('subscription_plans').select('*').order('monthly_price');
+      if(!r.error)plans=r.data||[];
+    }catch(error){console.warn('subscription_plans:',error)}
 
-    const planMap=indexBy(plans);
-    const profileMap=indexBy(profiles);
-    const subscriptionMap=new Map((subscriptions||[]).map(x=>[x.company_id,x]));
+    try{
+      const r=await sb.from('company_subscriptions').select('*');
+      if(!r.error)subscriptions=r.data||[];
+    }catch(error){console.warn('company_subscriptions:',error)}
 
-    state.saCompanies=companies.map(company=>{
-      const companyMembers=(members||[]).filter(x=>x.company_id===company.id);
-      const companyProducts=(products||[]).filter(x=>x.company_id===company.id);
-      const subscription=subscriptionMap.get(company.id)||{};
+    state.saPlans=plans;
+
+    const planMap=new Map(plans.map(x=>[x.id,x]));
+    const subscriptionMap=new Map(subscriptions.map(x=>[x.company_id,x]));
+
+    state.saCompanies=rows.map(company=>{
+      const subscription=subscriptionMap.get(company.company_id)||{};
       const plan=planMap.get(subscription.plan_id)||{};
 
-      const ownerMember=
-        companyMembers.find(x=>x.role==='owner') ||
-        companyMembers.find(x=>x.user_id===company.owner_user_id) ||
-        companyMembers[0];
-
-      const ownerProfile=ownerMember ? profileMap.get(ownerMember.user_id) : null;
-
-      let ownerDisplay='Propietario';
-      if(ownerMember?.user_id===state.session?.user?.id){
-        ownerDisplay=state.session.user.email||ownerProfile?.full_name||'Propietario';
-      }else if(ownerProfile?.email){
-        ownerDisplay=ownerProfile.email;
-      }else if(ownerProfile?.full_name){
-        ownerDisplay=ownerProfile.full_name;
-      }
-
       return {
-        company_id:company.id,
-        company_name:company.name||'Empresa',
-        owner_email:ownerDisplay,
+        company_id:company.company_id,
+        company_name:company.company_name||'Empresa',
+        owner_email:company.owner_email||'Sin propietario',
         plan_id:subscription.plan_id||null,
-        plan_name:plan.name||subscription.plan_name||'Gratis',
+        plan_name:plan.name||'Gratis',
         subscription_status:subscription.status||'active',
-        member_count:companyMembers.length,
-        product_count:companyProducts.length,
-        unit_count:companyProducts.reduce((sum,p)=>sum+safeNumber(p.quantity),0),
+        member_count:safeNumber(company.member_count),
+        product_count:safeNumber(company.product_count),
+        unit_count:safeNumber(company.unit_count),
         created_at:company.created_at,
         max_users:subscription.max_users ?? plan.max_users ?? 1,
         max_products:subscription.max_products ?? plan.max_products ?? 100,
@@ -109,14 +63,23 @@ export async function loadSuperAdmin(){
     renderSuperAdmin();
 
   }catch(error){
-    console.error('Super Admin:',error);
+    console.error('Super Admin global:',error);
+
     $('#saCompanies').textContent='0';
     $('#saActive').textContent='0';
     $('#saUsers').textContent='0';
     $('#saProducts').textContent='0';
+
+    let message=error.message||'No se pudieron cargar las empresas';
+
+    if(message.includes('superadmin_company_overview')){
+      message='Falta instalar superadmin-global.sql en Supabase.';
+    }
+
     $('#saBody').innerHTML=
-      `<tr><td colspan="8" class="module-error">${esc(error.message||'No se pudieron cargar las empresas')}</td></tr>`;
-    toast(error.message||'No se pudo cargar Super Admin');
+      `<tr><td colspan="8" class="module-error">${esc(message)}</td></tr>`;
+
+    toast(message);
   }
 }
 
@@ -129,6 +92,7 @@ export function renderSuperAdmin(){
     const searchOk=!q||[
       x.company_name,x.owner_email,x.plan_name,x.subscription_status
     ].join(' ').toLowerCase().includes(q);
+
     return statusOk&&searchOk;
   });
 
@@ -139,13 +103,14 @@ export function renderSuperAdmin(){
     .reduce((n,x)=>n+safeNumber(x.member_count),0);
   $('#saProducts').textContent=(state.saCompanies||[])
     .reduce((n,x)=>n+safeNumber(x.product_count),0);
+
   $('#saCount').textContent=`${rows.length} empresa${rows.length===1?'':'s'}`;
 
   $('#saBody').innerHTML=rows.length?rows.map(x=>`
     <tr>
       <td>
         <b>${esc(x.company_name)}</b>
-        <div class="muted">${esc(x.owner_email||'Propietario')}</div>
+        <div class="muted">${esc(x.owner_email||'Sin propietario')}</div>
       </td>
       <td><span class="badge">${esc(x.plan_name||'Gratis')}</span></td>
       <td>${esc(x.subscription_status||'active')}</td>

@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#08111f">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/icon.svg">
-<title>KeyTrack Pro · Responsive</title>
+<title>KeyTrack Pro · Sucursales Pro</title>
 <style>
 :root{--bg:#07101f;--panel:#101b2d;--panel2:#152238;--text:#f5f7fb;--muted:#93a4ba;--accent:#4f8cff;--line:#25344b;--danger:#ef4444;--ok:#22c55e;--warn:#f59e0b}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#07101f,#0a1424 45%,#07101f);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;min-height:100vh}
@@ -50,147 +50,12 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
 
 .detail-grid{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(320px,1.2fr);gap:16px}
 @media(max-width:760px){.detail-grid{grid-template-columns:1fr}}
-
-.mobile-inventory{display:none}
-.product-card-mobile{background:#0d192b;border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}
-.product-card-head{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:12px;align-items:start}
-.product-card-head img{width:72px;height:72px;object-fit:contain;border-radius:12px;background:#fff}
-.product-card-info{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}
-.product-card-info div{background:#0a1424;border:1px solid rgba(148,163,184,.14);border-radius:10px;padding:9px}
-.product-card-info small{display:block;color:var(--muted);margin-bottom:3px}
-.product-card-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
-.product-card-actions .btn{width:100%;justify-content:center}
-.qty-mobile{font-size:24px;font-weight:800;text-align:center;min-width:42px}
-@media(max-width:980px){
-  .layout-shell{grid-template-columns:1fr}
-  .sidebar{position:static;max-height:none;padding:10px}
-  .sidebar .nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px!important;overflow:visible!important}
-  .sidebar .nav .btn{width:100%;white-space:normal;text-align:center;justify-content:center;min-height:48px}
-  .sales-nav{order:9}
-}
-@media(max-width:720px){
-  .desktop-inventory{display:none}
-  .mobile-inventory{display:block}
-  .product-card-info{grid-template-columns:1fr}
-  .tools{grid-template-columns:1fr!important}
-  .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-}
-@media(max-width:430px){
-  .sidebar .nav{grid-template-columns:1fr 1fr!important}
-  .product-card-head{grid-template-columns:62px minmax(0,1fr)}
-  .product-card-head img{width:62px;height:62px}
-  .qty-mobile{grid-column:1/-1;text-align:left;font-size:18px}
-}
-
-
-/* ===== KeyTrack Pro · Corrección móvil completa 2026-08 ===== */
-html,body{max-width:100%;overflow-x:hidden}
-img,video,canvas,svg{max-width:100%}
-button,.btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-.workspace,.panel,.card,.table{min-width:0}
-.table{-webkit-overflow-scrolling:touch}
-
-/* Cabecera y controles */
-@media(max-width:760px){
-  .app{padding:10px}
-  header{align-items:flex-start;padding-bottom:12px}
-  header>.brand{width:100%}
-  header>.row{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-  header>.row .status,header>.row .badge{min-width:0;text-align:center;justify-content:center}
-  header>.row .btn{width:100%;min-height:44px}
-  #companyBadge{grid-column:1/-1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  #user{display:none}
-  .brand h1{font-size:1.35rem}
-  .brand .muted{font-size:.82rem}
-  .logo{width:42px;height:42px;border-radius:12px}
-}
-
-/* Menú principal: botones siempre visibles y utilizables */
-@media(max-width:980px){
-  .layout-shell{display:block}
-  .sidebar{position:static!important;max-height:none!important;margin-bottom:12px;padding:8px!important;overflow:visible!important}
-  .sidebar .nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;overflow:visible!important}
-  .sidebar .nav .btn{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;min-height:46px!important;padding:9px 8px!important;text-align:center!important;white-space:normal!important;line-height:1.15!important}
-}
-@media(max-width:380px){
-  .sidebar .nav{grid-template-columns:1fr!important}
-}
-
-/* Tarjetas de estadísticas */
-@media(max-width:720px){
-  .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
-  .card{padding:12px}
-  .num{font-size:23px}
-}
-@media(max-width:380px){.stats{grid-template-columns:1fr!important}}
-
-/* Buscadores y filtros */
-@media(max-width:760px){
-  .tools{display:grid!important;grid-template-columns:1fr!important;gap:8px!important;padding:10px!important}
-  #inventoryView>section.card .row{display:grid!important;grid-template-columns:1fr!important;align-items:stretch!important;width:100%!important}
-  #inventoryView>section.card .row>.row{display:grid!important;grid-template-columns:1fr!important;justify-content:stretch!important;width:100%!important}
-  #vehicleMake,#vehicleModel,#vehicleYear{max-width:none!important;width:100%!important}
-  #vehicleSearch,#vehicleClear{width:100%!important;min-height:44px}
-  .field{min-height:44px;font-size:16px}
-}
-
-/* Inventario móvil en tarjetas */
-@media(max-width:720px){
-  .desktop-inventory{display:none!important}
-  .mobile-inventory{display:block!important;padding:0 10px 10px}
-  .panelhead{padding:12px}
-  .product-card-mobile{margin:10px 0;padding:12px}
-  .product-card-head{grid-template-columns:62px minmax(0,1fr) auto!important;gap:10px!important}
-  .product-card-head img{width:62px!important;height:62px!important;object-fit:contain!important}
-  .product-card-head>div:nth-child(2){min-width:0;overflow-wrap:anywhere}
-  .qty-mobile{font-size:20px!important;min-width:34px!important}
-  .product-card-info{grid-template-columns:1fr!important;gap:7px!important}
-  .product-card-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
-  .product-card-actions .btn{white-space:normal!important;min-height:42px!important;padding:8px 6px!important}
-}
-@media(max-width:420px){
-  .product-card-head{grid-template-columns:56px minmax(0,1fr)!important}
-  .product-card-head img{width:56px!important;height:56px!important}
-  .qty-mobile{grid-column:1/-1!important;text-align:left!important}
-  .product-card-actions{grid-template-columns:1fr!important}
-}
-
-/* Tablas de módulos administrativos */
-@media(max-width:760px){
-  table{min-width:760px}
-  .table{width:100%;overflow-x:auto!important}
-  th,td{padding:10px}
-}
-
-/* Formularios y ventanas */
-@media(max-width:760px){
-  dialog{width:calc(100% - 12px)!important;max-width:none!important;max-height:94dvh;overflow:auto;border-radius:14px}
-  dialog form{padding:12px}
-  .grid{grid-template-columns:1fr!important;gap:9px!important}
-  .span{grid-column:auto!important}
-  .dh{position:sticky;top:0;z-index:2;background:var(--panel);padding:12px}
-  .fa{display:grid!important;grid-template-columns:1fr 1fr!important;width:100%}
-  .fa .btn{width:100%;min-height:44px}
-}
-
-/* Sucursales, dashboard y ficha */
-@media(max-width:760px){
-  .branch-grid,.kpi-grid,.detail-grid{grid-template-columns:1fr!important;padding:10px!important;gap:10px!important}
-  .branch-actions{display:grid!important;grid-template-columns:1fr 1fr!important}
-  #branchesView .panelhead>.row{display:grid!important;grid-template-columns:1fr 1fr!important;width:100%}
-  #branchesView .panelhead .btn{width:100%;white-space:normal}
-  #detailBody{padding:10px!important}
-}
-
-/* Evita que textos largos rompan el diseño */
-.muted,.history-item,.detail-card,.branch-card,td{overflow-wrap:anywhere;word-break:break-word}
-
 </style>
 </head>
 <body>
 <div id="auth" class="auth">
  <div class="authbox card">
-  <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Multiempresa · Datos independientes por negocio · FIX 2026-08-06</div></div></div>
+  <div class="brand"><div class="logo">⚿</div><div><h1>KeyTrack Pro</h1><div class="muted">Multiempresa · Datos independientes por negocio</div></div></div>
   <div class="tabs"><button id="tl" class="btn primary">Iniciar sesión</button><button id="ts" class="btn">Crear cuenta</button></div>
   <form id="af" class="stack">
    <div id="namebox"><label>Tu nombre</label><input id="fullname" class="field"></div>
@@ -217,7 +82,7 @@ button,.btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   <button class="btn" data-view="dashboard">Dashboard</button>
   <button class="btn" data-view="detail">Ficha de producto</button>
   <button class="btn" data-view="movements">Movimientos</button>
-  <button class="btn" data-view="branches">Sucursales</button><button class="btn" data-view="customers">Clientes</button><button class="btn" data-view="suppliers">Proveedores</button><button class="btn" data-view="purchases">Compras</button><button class="btn sales-nav" data-view="sales">💰 Ventas</button><button id="superAdminNav" class="btn hidden" data-view="superadmin">Super Admin</button>
+  <button class="btn" data-view="branches">Sucursales</button><button class="btn" data-view="customers">Clientes</button><button class="btn" data-view="suppliers">Proveedores</button><button class="btn" data-view="purchases">Compras</button><button class="btn" data-view="sales">Ventas</button><button id="superAdminNav" class="btn hidden" data-view="superadmin">Super Admin</button>
 </div>
 
 
@@ -250,7 +115,7 @@ button,.btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 
 <section class="panel">
  <div class="panelhead row"><h3>Inventario sincronizado</h3><span id="count" class="muted"></span></div>
- <div class="table desktop-inventory"><table><thead><tr><th>Foto</th><th>Artículo</th><th>Marca / FCC</th><th>SKU / OEM</th><th>Vehículo</th><th>Ubicación</th><th>Cantidad</th><th>Acciones</th></tr></thead><tbody id="body"></tbody></table></div><div id="mobileBody" class="mobile-inventory"></div>
+ <div class="table"><table><thead><tr><th>Foto</th><th>Artículo</th><th>Marca / FCC</th><th>SKU / OEM</th><th>Vehículo</th><th>Ubicación</th><th>Cantidad</th><th>Acciones</th></tr></thead><tbody id="body"></tbody></table></div>
 </section>
 </section>
 
@@ -292,18 +157,7 @@ button,.btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 <section id="customersView" class="hidden panel"><div class="panelhead row"><h3>Clientes</h3><button id="newCustomer" class="btn primary">+ Nuevo cliente</button></div><div id="customersBody" class="history"></div></section>
 <section id="suppliersView" class="hidden panel"><div class="panelhead row"><h3>Proveedores</h3><button id="newSupplier" class="btn primary">+ Nuevo proveedor</button></div><div id="suppliersBody" class="history"></div></section>
 <section id="purchasesView" class="hidden panel"><div class="panelhead row"><h3>Órdenes de compra</h3><button id="newPurchase" class="btn primary">+ Nueva compra</button></div><div id="purchasesBody" class="history"></div></section>
-<section id="salesView" class="hidden">
-  <section class="stats sales-stats">
-    <div class="card"><div class="muted">Ventas registradas</div><div id="salesCount" class="num">0</div></div>
-    <div class="card"><div class="muted">Total vendido</div><div id="salesTotal" class="num">$0.00</div></div>
-    <div class="card"><div class="muted">Ventas de hoy</div><div id="salesToday" class="num">0</div></div>
-    <div class="card"><div class="muted">Ingresos de hoy</div><div id="salesTodayTotal" class="num">$0.00</div></div>
-  </section>
-  <section class="panel">
-    <div class="panelhead row"><div><h3>Ventas</h3><div class="muted">Historial de ventas de esta empresa.</div></div><button id="newSale" class="btn primary">+ Nueva venta</button></div>
-    <div id="salesBody" class="history"></div>
-  </section>
-</section>
+<section id="salesView" class="hidden panel"><div class="panelhead row"><h3>Ventas</h3><button id="newSale" class="btn primary">+ Nueva venta</button></div><div id="salesBody" class="history"></div></section>
 
 <section id="superadminView" class="hidden">
   <section class="stats">
@@ -422,10 +276,10 @@ button,.btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
  </form>
 </dialog>
 
-<dialog id="customerDialog"><div class="dh row"><h3>Nuevo cliente</h3><button id="customerX" class="btn">×</button></div><form id="customerForm"><div class="grid"><div><label>Nombre *</label><input id="customerName" class="field" required></div><div><label>Teléfono</label><input id="customerPhone" class="field"></div><div><label>Correo</label><input id="customerEmail" class="field" type="email"></div><div><label>Empresa</label><input id="customerCompany" class="field"></div><div class="span"><label>Notas</label><textarea id="customerNotes" class="field"></textarea></div></div><div class="row fa"><button id="customerCancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div></form></dialog>
-<dialog id="supplierDialog"><div class="dh row"><h3>Nuevo proveedor</h3><button id="supplierX" class="btn">×</button></div><form id="supplierForm"><div class="grid"><div><label>Nombre *</label><input id="supplierName" class="field" required></div><div><label>Contacto</label><input id="supplierContact" class="field"></div><div><label>Teléfono</label><input id="supplierPhone" class="field"></div><div><label>Correo</label><input id="supplierEmail" class="field" type="email"></div><div><label>Sitio web</label><input id="supplierWebsite" class="field"></div><div class="span"><label>Notas</label><textarea id="supplierNotes" class="field"></textarea></div></div><div class="row fa"><button id="supplierCancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div></form></dialog>
-<dialog id="purchaseDialog"><div class="dh row"><h3>Nueva orden de compra</h3><button id="purchaseX" class="btn">×</button></div><form id="purchaseForm"><div class="grid"><div><label>Proveedor *</label><select id="purchaseSupplier" class="field" required></select></div><div><label>Estado</label><select id="purchaseStatus" class="field"><option value="draft">Borrador</option><option value="ordered">Ordenada</option><option value="received">Recibida</option><option value="cancelled">Cancelada</option></select></div><div><label>Fecha esperada</label><input id="purchaseExpected" class="field" type="date"></div><div><label>Total</label><input id="purchaseTotal" class="field" type="number" min="0" step="0.01"></div><div class="span"><label>Notas</label><textarea id="purchaseNotes" class="field"></textarea></div></div><div class="row fa"><button id="purchaseCancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div></form></dialog>
-<dialog id="saleDialog"><div class="dh row"><h3>Nueva venta</h3><button id="saleX" class="btn">×</button></div><form id="saleForm"><div class="grid"><div><label>Cliente</label><select id="saleCustomer" class="field"></select></div><div><label>Estado</label><select id="saleStatus" class="field"><option value="completed">Completada</option><option value="draft">Borrador</option><option value="cancelled">Cancelada</option></select></div><div><label>Total</label><input id="saleTotal" class="field" type="number" min="0" step="0.01"></div><div><label>Método de pago</label><select id="salePayment" class="field"><option>Efectivo</option><option>Tarjeta</option><option>Transferencia</option><option>Otro</option></select></div><div class="span"><label>Notas</label><textarea id="saleNotes" class="field"></textarea></div></div><div class="row fa"><button id="saleCancel" type="button" class="btn">Cancelar</button><button class="btn primary">Guardar</button></div></form></dialog>
+<dialog id="customerDialog"><div class="dh row"><h3>Nuevo cliente</h3><button id="customerX" class="btn">×</button></div><form id="customerForm"><div class="grid"><div><label>Nombre *</label><input id="customerName" class="field" required></div><div><label>Teléfono</label><input id="customerPhone" class="field"></div><div><label>Correo</label><input id="customerEmail" class="field" type="email"></div><div><label>Empresa</label><input id="customerCompany" class="field"></div><div class="span"><label>Notas</label><textarea id="customerNotes" class="field"></textarea></div></div><div class="row fa"><button id="customerCancel" type="button" class="btn">Cancelar</button><button class="btn primary" type="submit">Guardar</button></div></form></dialog>
+<dialog id="supplierDialog"><div class="dh row"><h3>Nuevo proveedor</h3><button id="supplierX" class="btn">×</button></div><form id="supplierForm"><div class="grid"><div><label>Nombre *</label><input id="supplierName" class="field" required></div><div><label>Contacto</label><input id="supplierContact" class="field"></div><div><label>Teléfono</label><input id="supplierPhone" class="field"></div><div><label>Correo</label><input id="supplierEmail" class="field" type="email"></div><div><label>Sitio web</label><input id="supplierWebsite" class="field"></div><div class="span"><label>Notas</label><textarea id="supplierNotes" class="field"></textarea></div></div><div class="row fa"><button id="supplierCancel" type="button" class="btn">Cancelar</button><button class="btn primary" type="submit">Guardar</button></div></form></dialog>
+<dialog id="purchaseDialog"><div class="dh row"><h3>Nueva orden de compra</h3><button id="purchaseX" class="btn">×</button></div><form id="purchaseForm"><div class="grid"><div><label>Proveedor *</label><select id="purchaseSupplier" class="field" required></select></div><div><label>Estado</label><select id="purchaseStatus" class="field"><option value="draft">Borrador</option><option value="ordered">Ordenada</option><option value="received">Recibida</option><option value="cancelled">Cancelada</option></select></div><div><label>Fecha esperada</label><input id="purchaseExpected" class="field" type="date"></div><div><label>Total</label><input id="purchaseTotal" class="field" type="number" min="0" step="0.01"></div><div class="span"><label>Notas</label><textarea id="purchaseNotes" class="field"></textarea></div></div><div class="row fa"><button id="purchaseCancel" type="button" class="btn">Cancelar</button><button class="btn primary" type="submit">Guardar</button></div></form></dialog>
+<dialog id="saleDialog"><div class="dh row"><h3>Nueva venta</h3><button id="saleX" class="btn">×</button></div><form id="saleForm"><div class="grid"><div><label>Cliente</label><select id="saleCustomer" class="field"></select></div><div><label>Estado</label><select id="saleStatus" class="field"><option value="completed">Completada</option><option value="draft">Borrador</option><option value="cancelled">Cancelada</option></select></div><div><label>Total</label><input id="saleTotal" class="field" type="number" min="0" step="0.01"></div><div><label>Método de pago</label><select id="salePayment" class="field"><option>Efectivo</option><option>Tarjeta</option><option>Transferencia</option><option>Otro</option></select></div><div class="span"><label>Notas</label><textarea id="saleNotes" class="field"></textarea></div></div><div class="row fa"><button id="saleCancel" type="button" class="btn">Cancelar</button><button class="btn primary" type="submit">Guardar</button></div></form></dialog>
 
 <dialog id="companyAdminDialog">
  <div class="dh row"><div><h3>Administrar empresa</h3><div id="cadName" class="muted"></div></div><button id="cadX" class="btn">×</button></div>
@@ -449,38 +303,8 @@ button,.btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 <script type="module">
 import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 const sb=createClient('https://ngzoyfxnbonjqeprkpxp.supabase.co','sb_publishable_IZfg7e_-acYq6QHpceVTxQ_GIiXLI-G');
-console.log('KEYTRACK_FIX_2026_08_06_LOADED');
 const $=s=>document.querySelector(s);let mode='login',session=null,profile=null,companyId=null,companyName='',items=[],locs=[],movements=[],customers=[],suppliers=[],purchases=[],sales=[],saCompanies=[],saPlans=[],isPlatformAdmin=false,stream=null,scanTarget='search';
 const toast=m=>{let t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)};
-// Función segura disponible desde el inicio; se reemplaza más abajo con la implementación completa.
-async function loadSuperAdmin(){
-  if(!isPlatformAdmin){
-    saCompanies=[];
-    saPlans=[];
-    renderSuperAdmin();
-    return;
-  }
-  try{
-    const [companiesResult,plansResult]=await Promise.all([
-      sb.rpc('platform_company_overview'),
-      sb.from('subscription_plans').select('*').order('sort_order',{ascending:true})
-    ]);
-    if(companiesResult.error)throw companiesResult.error;
-    saCompanies=companiesResult.data||[];
-    saPlans=plansResult.error?[]:(plansResult.data||[]);
-    if($('#cadPlan')){
-      $('#cadPlan').innerHTML=saPlans.length
-        ? saPlans.map(p=>`<option value="${esc(p.code)}">${esc(p.name||p.code)}</option>`).join('')
-        : '<option value="free">Gratis</option><option value="pro">Pro</option><option value="business">Business</option><option value="enterprise">Enterprise</option>';
-    }
-    renderSuperAdmin();
-  }catch(error){
-    console.warn('Super Admin:',error);
-    saCompanies=[];
-    renderSuperAdmin();
-    toast('No se pudo cargar Super Admin');
-  }
-}
 const val=id=>$(id).value.trim(),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function authMode(m){mode=m;$('#namebox').classList.toggle('hidden',m==='login');$('#companybox').classList.toggle('hidden',m==='login');$('#tl').classList.toggle('primary',m==='login');$('#ts').classList.toggle('primary',m==='signup');$('#as').textContent=m==='login'?'Iniciar sesión':'Crear cuenta';$('#err').textContent=''}
 $('#tl').onclick=()=>authMode('login');$('#ts').onclick=()=>authMode('signup');authMode('login');
@@ -493,6 +317,175 @@ if(r.error){$('#err').textContent=r.error.message;console.error('Error de inicio
 else if(mode==='signup'&&!r.data.session)toast('Revisa tu correo para confirmar la cuenta');
 };
 $('#logout').onclick=()=>sb.auth.signOut();
+
+
+// ============================================================
+// OPERACIONES COMERCIALES — manejadores robustos
+// Clientes, Proveedores, Compras y Ventas
+// ============================================================
+function openBusinessDialog(dialogId){
+  const dialog=$(dialogId);
+  if(!dialog){
+    console.error('No existe el diálogo:',dialogId);
+    return toast('No se pudo abrir el formulario');
+  }
+  if(typeof renderOperationalSelects==='function')renderOperationalSelects();
+  dialog.showModal();
+}
+
+document.addEventListener('click',event=>{
+  const button=event.target.closest('button');
+  if(!button)return;
+
+  if(button.id==='newCustomer'){
+    event.preventDefault();
+    openBusinessDialog('#customerDialog');
+    return;
+  }
+  if(button.id==='newSupplier'){
+    event.preventDefault();
+    openBusinessDialog('#supplierDialog');
+    return;
+  }
+  if(button.id==='newPurchase'){
+    event.preventDefault();
+    if(!suppliers.length){
+      toast('Primero crea un proveedor');
+      switchView('suppliers');
+      return;
+    }
+    openBusinessDialog('#purchaseDialog');
+    return;
+  }
+  if(button.id==='newSale'){
+    event.preventDefault();
+    openBusinessDialog('#saleDialog');
+    return;
+  }
+
+  const closeMap={
+    customerX:'#customerDialog',customerCancel:'#customerDialog',
+    supplierX:'#supplierDialog',supplierCancel:'#supplierDialog',
+    purchaseX:'#purchaseDialog',purchaseCancel:'#purchaseDialog',
+    saleX:'#saleDialog',saleCancel:'#saleDialog'
+  };
+  if(closeMap[button.id]){
+    event.preventDefault();
+    $(closeMap[button.id])?.close();
+  }
+});
+
+document.addEventListener('submit',async event=>{
+  const form=event.target;
+  if(!['customerForm','supplierForm','purchaseForm','saleForm'].includes(form.id))return;
+
+  event.preventDefault();
+
+  const submitButton=form.querySelector('button[type="submit"],button.primary');
+  if(submitButton){
+    submitButton.disabled=true;
+    submitButton.dataset.originalText=submitButton.textContent;
+    submitButton.textContent='Guardando…';
+  }
+
+  try{
+    if(!companyId)throw new Error('No se encontró la empresa activa.');
+
+    if(form.id==='customerForm'){
+      const name=val('#customerName');
+      if(!name)throw new Error('Escribe el nombre del cliente.');
+
+      const result=await sb.from('customers').insert({
+        company_id:companyId,
+        name,
+        phone:val('#customerPhone')||null,
+        email:val('#customerEmail')||null,
+        company:val('#customerCompany')||null,
+        notes:val('#customerNotes')||null,
+        created_by:session.user.id
+      });
+      if(result.error)throw result.error;
+
+      $('#customerDialog').close();
+      form.reset();
+      toast('Cliente guardado');
+    }
+
+    if(form.id==='supplierForm'){
+      const name=val('#supplierName');
+      if(!name)throw new Error('Escribe el nombre del proveedor.');
+
+      const result=await sb.from('suppliers').insert({
+        company_id:companyId,
+        name,
+        contact_name:val('#supplierContact')||null,
+        phone:val('#supplierPhone')||null,
+        email:val('#supplierEmail')||null,
+        website:val('#supplierWebsite')||null,
+        notes:val('#supplierNotes')||null
+      });
+      if(result.error)throw result.error;
+
+      $('#supplierDialog').close();
+      form.reset();
+      toast('Proveedor guardado');
+    }
+
+    if(form.id==='purchaseForm'){
+      const supplierId=$('#purchaseSupplier').value;
+      if(!supplierId)throw new Error('Selecciona un proveedor.');
+
+      const result=await sb.from('purchase_orders').insert({
+        company_id:companyId,
+        supplier_id:supplierId,
+        status:$('#purchaseStatus').value,
+        expected_date:$('#purchaseExpected').value||null,
+        total:Number($('#purchaseTotal').value||0),
+        notes:val('#purchaseNotes')||null,
+        created_by:session.user.id
+      });
+      if(result.error)throw result.error;
+
+      $('#purchaseDialog').close();
+      form.reset();
+      toast('Compra guardada');
+    }
+
+    if(form.id==='saleForm'){
+      const result=await sb.from('sales').insert({
+        company_id:companyId,
+        customer_id:$('#saleCustomer').value||null,
+        status:$('#saleStatus').value,
+        total:Number($('#saleTotal').value||0),
+        payment_method:$('#salePayment').value||null,
+        notes:val('#saleNotes')||null,
+        created_by:session.user.id
+      });
+      if(result.error)throw result.error;
+
+      $('#saleDialog').close();
+      form.reset();
+      toast('Venta guardada');
+    }
+
+    await load();
+
+    if(form.id==='customerForm')renderCustomers();
+    if(form.id==='supplierForm')renderSuppliers();
+    if(form.id==='purchaseForm')renderPurchases();
+    if(form.id==='saleForm')renderSales();
+
+  }catch(error){
+    console.error('Error en operación comercial:',error);
+    toast(error.message||'No se pudo guardar');
+  }finally{
+    if(submitButton){
+      submitButton.disabled=false;
+      submitButton.textContent=submitButton.dataset.originalText||'Guardar';
+    }
+  }
+});
+
 
 async function loadProfile(){
   let r=await sb.from('company_members')
@@ -694,7 +687,7 @@ function renderDashboard(){
 
   const today=new Date().toISOString().slice(0,10);
   const todayMovements=movements.filter(m=>String(m.created_at||'').slice(0,10)===today);
-  if($('#dashMoves'))$('#dashMoves').textContent=todayMovements.length;
+  $('#dashToday').textContent=todayMovements.length;
 
   const critical=items
     .filter(p=>Number(p.quantity||0)<=Number(p.minimum_quantity||0))
@@ -731,55 +724,110 @@ function renderDashboard(){
     : '<div class="muted">No hay actividad reciente.</div>';
 }
 
-function render(){
-  const a=list();
+function render(){let a=list();$('#body').innerHTML=a.map(x=>`<tr><td>${x.image_url?`<img class="thumb" src="${esc(x.image_url)}" alt="">`:'—'}</td><td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td><td>${esc(x.brand||'—')}<div class="muted">${esc(x.fcc_id||'Sin FCC')}</div></td><td>${esc(x.sku||'—')}<div class="muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</div></td><td>${esc(x.vehicle_compatibility||'—')}</td><td>${esc(x.locations?.name||'—')}</td><td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td><td><div class="acts"><button class="btn small" data-a="m" data-id="${x.id}">±</button><button class="btn small" data-a="v" data-id="${x.id}">Ver ficha</button><button class="btn small" data-a="h" data-id="${x.id}">Historial</button><button class="btn small" data-a="e" data-id="${x.id}">Editar</button>${profile?.role==='owner'||profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}</div></td></tr>`).join('');$('#count').textContent=a.length+' resultados';$('#si').textContent=items.length;$('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);$('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;$('#sz').textContent=items.filter(x=>x.quantity===0).length}
 
-  $('#body').innerHTML=a.map(x=>`<tr>
-    <td>${x.image_url?`<img class="thumb" src="${esc(x.image_url)}" alt="">`:'—'}</td>
-    <td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td>
-    <td>${esc(x.brand||'—')}<div class="muted">${esc(x.fcc_id||'Sin FCC')}</div></td>
-    <td>${esc(x.sku||'—')}<div class="muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</div></td>
-    <td>${esc(x.vehicle_compatibility||'—')}</td>
-    <td>${esc(x.locations?.name||'—')}</td>
-    <td class="${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}"><b>${x.quantity}</b></td>
-    <td><div class="acts">
-      <button class="btn small" data-a="m" data-id="${x.id}">±</button>
-      <button class="btn small" data-a="v" data-id="${x.id}">Ver ficha</button>
-      <button class="btn small" data-a="h" data-id="${x.id}">Historial</button>
-      <button class="btn small" data-a="e" data-id="${x.id}">Editar</button>
-      ${profile?.role==='owner'||profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}
-    </div></td>
-  </tr>`).join('');
+function openItem(x){$('#ititle').textContent=x?'Editar artículo':'Nuevo artículo';$('#iid').value=x?.id||'';$('#oldimg').value=x?.image_url||'';$('#iname').value=x?.name||'';$('#icat').value=x?.category||'Llave';$('#iq').value=x?.quantity??1;$('#ibrand').value=x?.brand||'';$('#isku').value=x?.sku||'';$('#ioem').value=x?.oem_number||'';$('#iser').value=x?.serial_number||'';$('#iloc').value=x?.location_id||'';$('#imin').value=x?.minimum_quantity??2;$('#ibar').value=x?.barcode||'';$('#ifcc').value=x?.fcc_id||'';$('#iic').value=x?.ic_number||'';$('#ifreq').value=x?.frequency||'';$('#ichip').value=x?.chip_type||'';$('#ibuttons').value=x?.button_count??'';$('#ibattery').value=x?.battery_type||'';$('#icondition').value=x?.condition_status||'Nuevo';$('#isupplier').value=x?.supplier||'';$('#icost').value=x?.cost??'';$('#iprice').value=x?.sale_price??'';$('#ivehicle').value=x?.vehicle_compatibility||'';$('#iequiv').value=x?.equivalences||'';$('#inotes').value=x?.notes||'';if($('#iphoto')) $('#iphoto').value=''; if($('#iphotos')) $('#iphotos').value=''; if($('#idoc')) $('#idoc').value=''; if($('#itemError'))$('#itemError').textContent='';$('#item').showModal()}
+$('#add').onclick=()=>openItem();$('#ix').onclick=$('#icancel').onclick=()=>$('#item').close();
 
-  $('#mobileBody').innerHTML=a.map(x=>`
-    <article class="product-card-mobile">
-      <div class="product-card-head">
-        ${x.image_url?`<img src="${esc(x.image_url)}" alt="">`:'<div class="thumb" style="width:62px;height:62px;display:grid;place-items:center">Sin foto</div>'}
-        <div>
-          <b>${esc(x.name)}</b>
-          <div class="muted">${esc(x.brand||'Sin marca')} · ${esc(x.fcc_id||'Sin FCC')}</div>
-          <div class="muted">${esc(x.sku||'Sin SKU')} · ${esc(x.oem_number||'Sin OEM')}</div>
-        </div>
-        <div class="qty-mobile ${x.quantity===0?'zero':x.quantity<=x.minimum_quantity?'low':''}">${x.quantity}</div>
-      </div>
-      <div class="product-card-info">
-        <div><small>Vehículo</small>${esc(x.vehicle_compatibility||'Sin compatibilidad')}</div>
-        <div><small>Ubicación</small>${esc(x.locations?.name||'Sin ubicación')}</div>
-      </div>
-      <div class="product-card-actions">
-        <button class="btn small" data-a="v" data-id="${x.id}">Ver ficha</button>
-        <button class="btn small" data-a="e" data-id="${x.id}">Editar</button>
-        <button class="btn small" data-a="h" data-id="${x.id}">Historial</button>
-        <button class="btn small" data-a="m" data-id="${x.id}">Entrada / salida</button>
-        ${profile?.role==='owner'||profile?.role==='admin'||profile?.role==='manager'?`<button class="btn small danger" data-a="d" data-id="${x.id}">Borrar</button>`:''}
-      </div>
-    </article>`).join('');
+async function uploadFile(bucket,file){if(!file)return null;let ext=(file.name.split('.').pop()||'bin').toLowerCase(),path=`${companyId}/${session.user.id}/${crypto.randomUUID()}.${ext}`;let u=await sb.storage.from(bucket).upload(path,file,{upsert:false});if(u.error)throw u.error;return sb.storage.from(bucket).getPublicUrl(path).data.publicUrl}
+async function uploadPhoto(file){return uploadFile('product-images',file)}
+$('#if').onsubmit=async e=>{
+  e.preventDefault();
+  const saveBtn=$('#itemSave'),errorBox=$('#itemError');
+  errorBox.textContent='';
+  saveBtn.disabled=true;
+  saveBtn.textContent='Guardando…';
+  const id=val('#iid');
 
-  $('#count').textContent=a.length+' resultados';
-  $('#si').textContent=items.length;
-  $('#su').textContent=items.reduce((n,x)=>n+x.quantity,0);
-  $('#sl').textContent=items.filter(x=>x.quantity>0&&x.quantity<=x.minimum_quantity).length;
-  $('#sz').textContent=items.filter(x=>x.quantity===0).length;
+  try{
+    if(!val('#iname'))throw new Error('Escribe el nombre del producto.');
+    if(!companyId)throw new Error('No se encontró la empresa activa. Cierra sesión y vuelve a entrar.');
+
+    const p={
+      name:val('#iname'),
+      category:$('#icat').value,
+      quantity:Number($('#iq').value||0),
+      brand:val('#ibrand')||null,
+      sku:val('#isku')||null,
+      oem_number:val('#ioem')||null,
+      serial_number:val('#iser')||null,
+      location_id:$('#iloc').value||null,
+      minimum_quantity:Number($('#imin').value||0),
+      barcode:val('#ibar')||null,
+      fcc_id:val('#ifcc')||null,
+      ic_number:val('#iic')||null,
+      frequency:val('#ifreq')||null,
+      chip_type:val('#ichip')||null,
+      button_count:$('#ibuttons').value?Number($('#ibuttons').value):null,
+      battery_type:val('#ibattery')||null,
+      condition_status:$('#icondition').value,
+      supplier:val('#isupplier')||null,
+      cost:Number($('#icost').value||0),
+      sale_price:Number($('#iprice').value||0),
+      vehicle_compatibility:val('#ivehicle')||null,
+      equivalences:val('#iequiv')||null,
+      notes:val('#inotes')||null
+    };
+
+    let result;
+    if(id){
+      result=await sb.from('products').update(p).eq('id',id).eq('company_id',companyId).select('id').single();
+    }else{
+      result=await sb.from('products').insert({...p,company_id:companyId,created_by:session.user.id}).select('id').single();
+    }
+    if(result.error)throw result.error;
+
+    const productId=id||result.data.id;
+    let fileWarnings=[];
+
+    const primaryFile=$('#iphoto')?.files?.[0];
+    if(primaryFile){
+      try{
+        const imageUrl=await uploadPhoto(primaryFile);
+        const u=await sb.from('products').update({image_url:imageUrl}).eq('id',productId).eq('company_id',companyId);
+        if(u.error)throw u.error;
+      }catch(fileErr){
+        fileWarnings.push('No se pudo subir la fotografía principal: '+fileErr.message);
+      }
+    }
+
+    const extraFiles=Array.from($('#iphotos')?.files||[]);
+    if(extraFiles.length){
+      try{
+        const rows=[];
+        for(let idx=0;idx<extraFiles.length;idx++){
+          const imageUrl=await uploadPhoto(extraFiles[idx]);
+          rows.push({company_id:companyId,product_id:productId,image_url:imageUrl,sort_order:idx});
+        }
+        const extraResult=await sb.from('product_images').insert(rows);
+        if(extraResult.error)throw extraResult.error;
+      }catch(fileErr){
+        fileWarnings.push('No se pudieron subir algunas fotografías adicionales: '+fileErr.message);
+      }
+    }
+
+    const docFile=$('#idoc')?.files?.[0];
+    if(docFile){
+      try{
+        const documentUrl=await uploadFile('product-documents',docFile);
+        const d=await sb.from('products').update({document_url:documentUrl}).eq('id',productId).eq('company_id',companyId);
+        if(d.error)throw d.error;
+      }catch(fileErr){
+        fileWarnings.push('No se pudo subir el PDF: '+fileErr.message);
+      }
+    }
+
+    $('#item').close();
+    toast(fileWarnings.length?'Producto guardado. '+fileWarnings.join(' '):'Producto guardado correctamente');
+    await load();
+  }catch(err){
+    console.error('Error guardando producto:',err);
+    errorBox.textContent=err.message||'No se pudo guardar el producto.';
+    toast(err.message||'No se pudo guardar el producto');
+  }finally{
+    saveBtn.disabled=false;
+    saveBtn.textContent='Guardar';
+  }
 };
 
 function renderProductDetail(product){
@@ -896,7 +944,7 @@ $('#mf').onsubmit=async event=>{
   await load();
 };
 
-document.querySelector('#inventoryView').addEventListener('click',async event=>{
+$('#body').addEventListener('click',async event=>{
   const button=event.target.closest('button[data-a]');
   if(!button)return;
 
@@ -946,22 +994,20 @@ function renderOperationalSelects(){if($('#purchaseSupplier'))$('#purchaseSuppli
 function renderCustomers(){$('#customersBody').innerHTML=customers.length?customers.map(x=>`<div class="history-item"><b>${esc(x.name)}</b>${x.company?` · ${esc(x.company)}`:''}<div class="muted">${esc(x.phone||'Sin teléfono')} · ${esc(x.email||'Sin correo')}</div></div>`).join(''):'<div class="history-item muted">Sin clientes.</div>'}
 function renderSuppliers(){$('#suppliersBody').innerHTML=suppliers.length?suppliers.map(x=>`<div class="history-item"><b>${esc(x.name)}</b><div class="muted">${esc(x.contact_name||'Sin contacto')} · ${esc(x.phone||'Sin teléfono')} · ${esc(x.email||'Sin correo')}</div></div>`).join(''):'<div class="history-item muted">Sin proveedores.</div>'}
 function renderPurchases(){$('#purchasesBody').innerHTML=purchases.length?purchases.map(x=>`<div class="history-item"><b>${esc(x.suppliers?.name||'Proveedor')}</b> · $${Number(x.total||0).toFixed(2)}<div class="muted">${esc(x.status)} · ${new Date(x.created_at).toLocaleString()}</div></div>`).join(''):'<div class="history-item muted">Sin órdenes de compra.</div>'}
-function renderSales(){
-  const today=new Date().toISOString().slice(0,10);
-  const todaySales=sales.filter(x=>String(x.created_at||'').slice(0,10)===today);
-  const total=sales.reduce((sum,x)=>sum+Number(x.total||0),0);
-  const todayTotal=todaySales.reduce((sum,x)=>sum+Number(x.total||0),0);
+function renderSales(){$('#salesBody').innerHTML=sales.length?sales.map(x=>`<div class="history-item"><b>${esc(x.customers?.name||'Venta general')}</b> · $${Number(x.total||0).toFixed(2)}<div class="muted">${esc(x.status)} · ${esc(x.payment_method||'Sin método')} · ${new Date(x.created_at).toLocaleString()}</div></div>`).join(''):'<div class="history-item muted">Sin ventas.</div>'}
 
-  if($('#salesCount'))$('#salesCount').textContent=sales.length;
-  if($('#salesTotal'))$('#salesTotal').textContent='$'+total.toFixed(2);
-  if($('#salesToday'))$('#salesToday').textContent=todaySales.length;
-  if($('#salesTodayTotal'))$('#salesTodayTotal').textContent='$'+todayTotal.toFixed(2);
 
-  $('#salesBody').innerHTML=sales.length?sales.map(x=>`
-    <div class="history-item">
-      <b>${esc(x.customers?.name||'Venta general')}</b> · $${Number(x.total||0).toFixed(2)}
-      <div class="muted">${esc(x.status||'registrada')} · ${esc(x.payment_method||'Sin método')} · ${new Date(x.created_at).toLocaleString()}</div>
-    </div>`).join(''):'<div class="history-item muted">Aún no hay ventas registradas.</div>';
+
+
+async function loadSuperAdmin(){
+  if(!isPlatformAdmin)return toast('Acceso restringido');
+  $('#saBody').innerHTML='<tr><td colspan="8" class="muted">Cargando empresas…</td></tr>';
+  const [companiesResult,plansResult]=await Promise.all([sb.rpc('platform_list_companies'),sb.rpc('platform_list_plans')]);
+  if(companiesResult.error)return toast(companiesResult.error.message);
+  if(plansResult.error)return toast(plansResult.error.message);
+  saCompanies=companiesResult.data||[];saPlans=plansResult.data||[];
+  $('#cadPlan').innerHTML=saPlans.map(p=>`<option value="${p.code}">${esc(p.name)}</option>`).join('');
+  renderSuperAdmin();
 }
 function renderSuperAdmin(){
   const q=val('#saSearch').toLowerCase(),status=$('#saStatusFilter').value;
@@ -998,11 +1044,9 @@ $('#companyAdminForm').onsubmit=async e=>{
     new_trial_ends_at:$('#cadTrialEnds').value||null,new_period_ends_at:$('#cadPeriodEnds').value||null,new_admin_notes:val('#cadNotes')||null
   });
   if(r.error)return toast(r.error.message);
-  $('#companyAdminDialog').close();toast('Empresa actualizada');await loadSuperAdmin();
+  $('#companyAdminDialog').close();toast('Empresa actualizada');loadSuperAdmin();
 };
-if($('#saSearch')) $('#saSearch').oninput=renderSuperAdmin;
-if($('#saStatusFilter')) $('#saStatusFilter').onchange=renderSuperAdmin;
-if($('#saRefresh')) $('#saRefresh').onclick=()=>loadSuperAdmin();
+if($('#saSearch')) $('#saSearch').oninput=renderSuperAdmin;if($('#saStatusFilter')) $('#saStatusFilter').onchange=renderSuperAdmin;if($('#saRefresh')) $('#saRefresh').onclick=loadSuperAdmin;
 
 async function startScanner(target){scanTarget=target;$('#scanner').showModal();$('#scanmsg').textContent='Solicitando cámara…';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});$('#video').srcObject=stream;await $('#video').play();if(!('BarcodeDetector'in window)){$('#scanmsg').textContent='Este navegador no permite detección automática. Usa “Ingresar manualmente”.';return}let detector=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','itf']});let active=true;const loop=async()=>{if(!active||!stream)return;try{let codes=await detector.detect($('#video'));if(codes[0]){applyScan(codes[0].rawValue);active=false;stopScanner();return}}catch{}requestAnimationFrame(loop)};loop()}catch(err){$('#scanmsg').textContent='No se pudo abrir la cámara: '+err.message}}
 function applyScan(code){if(scanTarget==='field')$('#ibar').value=code;else{$('#search').value=code;render()}toast('Código detectado: '+code)}

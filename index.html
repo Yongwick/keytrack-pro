@@ -7,7 +7,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
-<title>KeyTrack Pro Enterprise 4.2</title>
+<title>KeyTrack Pro Enterprise 4.4</title>
 <link rel="stylesheet" href="./app.css">
 </head>
 <body>
@@ -28,10 +28,10 @@
 
 <div id="app" class="app hidden">
 <header>
- <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.2 · Super Admin global</div></div></div>
+ <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.4 · POS con control de inventario</div></div></div>
  <div class="row">
   <span class="status"><span id="dot" class="dot"></span><span id="cloud">Conectando…</span></span>
-  <span id="versionBadge" class="badge" title="Versión estable">v4.2</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
+  <span id="versionBadge" class="badge" title="Versión estable">v4.4</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
   <button id="csv" class="btn">CSV</button><button id="logout" class="btn">Salir</button><button id="add" class="btn primary">+ Nuevo</button>
  </div>
 </header>
@@ -237,7 +237,112 @@
 <dialog id="customerDialog"><div class="dh row"><h3>Nuevo cliente</h3><button id="customerX" class="btn">×</button></div><form id="customerForm"><div class="grid"><div><label>Nombre *</label><input id="customerName" class="field" required></div><div><label>Teléfono</label><input id="customerPhone" class="field"></div><div><label>Correo</label><input id="customerEmail" class="field" type="email"></div><div><label>Empresa</label><input id="customerCompany" class="field"></div><div class="span"><label>Notas</label><textarea id="customerNotes" class="field"></textarea></div></div><div class="row fa"><button id="customerCancel" type="button" class="btn">Cancelar</button><button class="btn primary" type="submit">Guardar</button></div></form></dialog>
 <dialog id="supplierDialog"><div class="dh row"><h3>Nuevo proveedor</h3><button id="supplierX" class="btn">×</button></div><form id="supplierForm"><div class="grid"><div><label>Nombre *</label><input id="supplierName" class="field" required></div><div><label>Contacto</label><input id="supplierContact" class="field"></div><div><label>Teléfono</label><input id="supplierPhone" class="field"></div><div><label>Correo</label><input id="supplierEmail" class="field" type="email"></div><div><label>Sitio web</label><input id="supplierWebsite" class="field"></div><div class="span"><label>Notas</label><textarea id="supplierNotes" class="field"></textarea></div></div><div class="row fa"><button id="supplierCancel" type="button" class="btn">Cancelar</button><button class="btn primary" type="submit">Guardar</button></div></form></dialog>
 <dialog id="purchaseDialog"><div class="dh row"><h3>Nueva orden de compra</h3><button id="purchaseX" class="btn">×</button></div><form id="purchaseForm"><div class="grid"><div><label>Proveedor *</label><select id="purchaseSupplier" class="field" required></select></div><div><label>Estado</label><select id="purchaseStatus" class="field"><option value="draft">Borrador</option><option value="ordered">Ordenada</option><option value="received">Recibida</option><option value="cancelled">Cancelada</option></select></div><div><label>Fecha esperada</label><input id="purchaseExpected" class="field" type="date"></div><div><label>Total</label><input id="purchaseTotal" class="field" type="number" min="0" step="0.01"></div><div class="span"><label>Notas</label><textarea id="purchaseNotes" class="field"></textarea></div></div><div class="row fa"><button id="purchaseCancel" type="button" class="btn">Cancelar</button><button class="btn primary" type="submit">Guardar</button></div></form></dialog>
-<dialog id="saleDialog"><div class="dh row"><h3>Nueva venta</h3><button id="saleX" class="btn">×</button></div><form id="saleForm"><div class="grid"><div><label>Cliente</label><select id="saleCustomer" class="field"></select></div><div><label>Estado</label><select id="saleStatus" class="field"><option value="completed">Completada</option><option value="draft">Borrador</option><option value="cancelled">Cancelada</option></select></div><div><label>Total</label><input id="saleTotal" class="field" type="number" min="0" step="0.01"></div><div><label>Método de pago</label><select id="salePayment" class="field"><option>Efectivo</option><option>Tarjeta</option><option>Transferencia</option><option>Otro</option></select></div><div class="span"><label>Notas</label><textarea id="saleNotes" class="field"></textarea></div></div><div class="row fa"><button id="saleCancel" type="button" class="btn">Cancelar</button><button class="btn primary" type="submit">Guardar</button></div></form></dialog>
+
+<dialog id="saleDialog">
+  <form id="saleForm">
+    <div class="modal-head">
+      <h2>💰 Nueva venta</h2>
+      <button type="button" class="x" id="saleX">×</button>
+    </div>
+
+    <div class="pos-grid">
+      <section class="pos-products">
+        <div class="field-group">
+          <label>Buscar producto</label>
+          <div class="pos-search-row">
+            <input id="saleProductSearch" class="field" placeholder="SKU, código, FCC ID, OEM o nombre...">
+            <button type="button" class="btn" id="saleScan">📷 Escanear</button>
+          </div>
+        </div>
+
+        <div id="saleSearchResults" class="pos-results">
+          <div class="muted">Escribe para buscar un producto.</div>
+        </div>
+
+        <h3 style="margin-top:16px">Productos vendidos</h3>
+        <div class="table pos-cart-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>SKU</th>
+                <th>Precio</th>
+                <th>Cant.</th>
+                <th>Desc.</th>
+                <th>Subtotal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="saleCartBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="pos-summary">
+        <div class="field-group">
+          <label>Cliente</label>
+          <select id="saleCustomer" class="field">
+            <option value="">Venta general</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label>Estado</label>
+          <select id="saleStatus" class="field">
+            <option>Completada</option>
+            <option>Pendiente</option>
+            <option>Cotización</option>
+            <option>Cancelada</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label>Método de pago</label>
+          <select id="salePayment" class="field">
+            <option>Efectivo</option>
+            <option>Tarjeta</option>
+            <option>Zelle</option>
+            <option>Cash App</option>
+            <option>Venmo</option>
+            <option>Transferencia</option>
+            <option>Crédito</option>
+            <option>Otro</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label>Descuento general</label>
+          <input id="saleDiscount" class="field" type="number" min="0" step="0.01" value="0">
+        </div>
+
+        <div class="field-group">
+          <label>Impuestos</label>
+          <input id="saleTax" class="field" type="number" min="0" step="0.01" value="0">
+        </div>
+
+        <div class="pos-totals">
+          <div><span>Subtotal</span><strong id="saleSubtotal">$0.00</strong></div>
+          <div><span>Descuento</span><strong id="saleDiscountLabel">$0.00</strong></div>
+          <div><span>Impuestos</span><strong id="saleTaxLabel">$0.00</strong></div>
+          <div class="pos-grand-total"><span>TOTAL</span><strong id="saleGrandTotal">$0.00</strong></div>
+        </div>
+
+        <div class="field-group">
+          <label>Notas</label>
+          <textarea id="saleNotes" class="field" rows="4"></textarea>
+        </div>
+      </aside>
+    </div>
+
+    <div id="saleError" class="err"></div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn" id="saleCancel">Cancelar</button>
+      <button type="submit" class="btn primary" id="saleSave">Guardar venta</button>
+    </div>
+  </form>
+</dialog>
+
 
 <dialog id="companyAdminDialog">
  <div class="dh row"><div><h3>Administrar empresa</h3><div id="cadName" class="muted"></div></div><button id="cadX" class="btn">×</button></div>

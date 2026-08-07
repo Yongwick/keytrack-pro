@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#08111f">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/icon.svg">
-<title>KeyTrack Pro · Sucursales Pro</title>
+<title>KeyTrack Pro · Responsive</title>
 <style>
 :root{--bg:#07101f;--panel:#101b2d;--panel2:#152238;--text:#f5f7fb;--muted:#93a4ba;--accent:#4f8cff;--line:#25344b;--danger:#ef4444;--ok:#22c55e;--warn:#f59e0b}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#07101f,#0a1424 45%,#07101f);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;min-height:100vh}
@@ -81,6 +81,109 @@ dialog{width:min(720px,calc(100% - 18px));padding:0;border:1px solid var(--line)
   .product-card-head img{width:62px;height:62px}
   .qty-mobile{grid-column:1/-1;text-align:left;font-size:18px}
 }
+
+
+/* ===== KeyTrack Pro · Corrección móvil completa 2026-08 ===== */
+html,body{max-width:100%;overflow-x:hidden}
+img,video,canvas,svg{max-width:100%}
+button,.btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.workspace,.panel,.card,.table{min-width:0}
+.table{-webkit-overflow-scrolling:touch}
+
+/* Cabecera y controles */
+@media(max-width:760px){
+  .app{padding:10px}
+  header{align-items:flex-start;padding-bottom:12px}
+  header>.brand{width:100%}
+  header>.row{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  header>.row .status,header>.row .badge{min-width:0;text-align:center;justify-content:center}
+  header>.row .btn{width:100%;min-height:44px}
+  #companyBadge{grid-column:1/-1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #user{display:none}
+  .brand h1{font-size:1.35rem}
+  .brand .muted{font-size:.82rem}
+  .logo{width:42px;height:42px;border-radius:12px}
+}
+
+/* Menú principal: botones siempre visibles y utilizables */
+@media(max-width:980px){
+  .layout-shell{display:block}
+  .sidebar{position:static!important;max-height:none!important;margin-bottom:12px;padding:8px!important;overflow:visible!important}
+  .sidebar .nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;overflow:visible!important}
+  .sidebar .nav .btn{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;min-height:46px!important;padding:9px 8px!important;text-align:center!important;white-space:normal!important;line-height:1.15!important}
+}
+@media(max-width:380px){
+  .sidebar .nav{grid-template-columns:1fr!important}
+}
+
+/* Tarjetas de estadísticas */
+@media(max-width:720px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  .card{padding:12px}
+  .num{font-size:23px}
+}
+@media(max-width:380px){.stats{grid-template-columns:1fr!important}}
+
+/* Buscadores y filtros */
+@media(max-width:760px){
+  .tools{display:grid!important;grid-template-columns:1fr!important;gap:8px!important;padding:10px!important}
+  #inventoryView>section.card .row{display:grid!important;grid-template-columns:1fr!important;align-items:stretch!important;width:100%!important}
+  #inventoryView>section.card .row>.row{display:grid!important;grid-template-columns:1fr!important;justify-content:stretch!important;width:100%!important}
+  #vehicleMake,#vehicleModel,#vehicleYear{max-width:none!important;width:100%!important}
+  #vehicleSearch,#vehicleClear{width:100%!important;min-height:44px}
+  .field{min-height:44px;font-size:16px}
+}
+
+/* Inventario móvil en tarjetas */
+@media(max-width:720px){
+  .desktop-inventory{display:none!important}
+  .mobile-inventory{display:block!important;padding:0 10px 10px}
+  .panelhead{padding:12px}
+  .product-card-mobile{margin:10px 0;padding:12px}
+  .product-card-head{grid-template-columns:62px minmax(0,1fr) auto!important;gap:10px!important}
+  .product-card-head img{width:62px!important;height:62px!important;object-fit:contain!important}
+  .product-card-head>div:nth-child(2){min-width:0;overflow-wrap:anywhere}
+  .qty-mobile{font-size:20px!important;min-width:34px!important}
+  .product-card-info{grid-template-columns:1fr!important;gap:7px!important}
+  .product-card-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+  .product-card-actions .btn{white-space:normal!important;min-height:42px!important;padding:8px 6px!important}
+}
+@media(max-width:420px){
+  .product-card-head{grid-template-columns:56px minmax(0,1fr)!important}
+  .product-card-head img{width:56px!important;height:56px!important}
+  .qty-mobile{grid-column:1/-1!important;text-align:left!important}
+  .product-card-actions{grid-template-columns:1fr!important}
+}
+
+/* Tablas de módulos administrativos */
+@media(max-width:760px){
+  table{min-width:760px}
+  .table{width:100%;overflow-x:auto!important}
+  th,td{padding:10px}
+}
+
+/* Formularios y ventanas */
+@media(max-width:760px){
+  dialog{width:calc(100% - 12px)!important;max-width:none!important;max-height:94dvh;overflow:auto;border-radius:14px}
+  dialog form{padding:12px}
+  .grid{grid-template-columns:1fr!important;gap:9px!important}
+  .span{grid-column:auto!important}
+  .dh{position:sticky;top:0;z-index:2;background:var(--panel);padding:12px}
+  .fa{display:grid!important;grid-template-columns:1fr 1fr!important;width:100%}
+  .fa .btn{width:100%;min-height:44px}
+}
+
+/* Sucursales, dashboard y ficha */
+@media(max-width:760px){
+  .branch-grid,.kpi-grid,.detail-grid{grid-template-columns:1fr!important;padding:10px!important;gap:10px!important}
+  .branch-actions{display:grid!important;grid-template-columns:1fr 1fr!important}
+  #branchesView .panelhead>.row{display:grid!important;grid-template-columns:1fr 1fr!important;width:100%}
+  #branchesView .panelhead .btn{width:100%;white-space:normal}
+  #detailBody{padding:10px!important}
+}
+
+/* Evita que textos largos rompan el diseño */
+.muted,.history-item,.detail-card,.branch-card,td{overflow-wrap:anywhere;word-break:break-word}
 
 </style>
 </head>

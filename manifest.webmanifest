@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 4.5",
+  "name": "KeyTrack Pro Enterprise 4.6",
   "short_name": "KeyTrack Pro",
-  "description": "Inventario y operación multiempresa estable, sin vistas auxiliares.",
+  "description": "Inventario, POS y operación multiempresa.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -20,5 +20,6 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "orientation": "any"
 }

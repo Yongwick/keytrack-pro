@@ -7,7 +7,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
-<title>KeyTrack Pro Enterprise 4.5</title>
+<title>KeyTrack Pro Enterprise 4.6</title>
 <link rel="stylesheet" href="./app.css">
 </head>
 <body>
@@ -28,11 +28,12 @@
 
 <div id="app" class="app hidden">
 <header>
- <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.5 · POS estable y ventas detalladas</div></div></div>
+ <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.6 · Instalable como app</div></div></div>
  <div class="row">
   <span class="status"><span id="dot" class="dot"></span><span id="cloud">Conectando…</span></span>
-  <span id="versionBadge" class="badge" title="Versión estable">v4.5</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
-  <button id="csv" class="btn">CSV</button><button id="logout" class="btn">Salir</button><button id="add" class="btn primary">+ Nuevo</button>
+  <span id="versionBadge" class="badge" title="Versión estable">v4.6</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
+  <button id="installApp" class="btn hidden" type="button">⬇ Instalar app</button>
+<button id="csv" class="btn">CSV</button><button id="logout" class="btn">Salir</button><button id="add" class="btn primary">+ Nuevo</button>
  </div>
 </header>
 <div class="layout-shell"><aside class="sidebar"><div class="nav" style="display:flex;gap:8px;overflow:auto;margin-bottom:14px">
@@ -375,6 +376,34 @@
     <button type="button" class="btn" id="saleDetailClose">Cerrar</button>
     <button type="button" class="btn primary" id="salePrint">🖨 Imprimir</button>
   </div>
+</dialog>
+
+
+<dialog id="installHelpDialog">
+  <div class="modal-head">
+    <div>
+      <h2>Instalar KeyTrack Pro</h2>
+      <div class="muted">Añádelo a tu pantalla de inicio como una aplicación.</div>
+    </div>
+    <button type="button" class="x" id="installHelpX">×</button>
+  </div>
+  <div class="install-help">
+    <div class="install-app-icon">
+      <img src="./icon-192.png" alt="KeyTrack Pro">
+      <div><b>KeyTrack Pro</b><div class="muted">Inventario y POS multiempresa</div></div>
+    </div>
+    <div id="iosInstallSteps">
+      <div class="install-step"><span class="install-step-number">1</span><div><b>Toca Compartir</b><div class="muted">En Safari toca el botón de compartir.</div></div></div>
+      <div class="install-step"><span class="install-step-number">2</span><div><b>Selecciona “Añadir a pantalla de inicio”</b><div class="muted">Puede ser necesario desplazarte en el menú.</div></div></div>
+      <div class="install-step"><span class="install-step-number">3</span><div><b>Toca “Añadir”</b><div class="muted">El icono aparecerá junto a tus otras apps.</div></div></div>
+    </div>
+    <div id="genericInstallSteps" class="hidden">
+      <div class="install-step"><span class="install-step-number">1</span><div><b>Abre el menú del navegador</b><div class="muted">Busca “Instalar aplicación” o “Añadir a pantalla de inicio”.</div></div></div>
+      <div class="install-step"><span class="install-step-number">2</span><div><b>Confirma la instalación</b><div class="muted">Después podrás abrir KeyTrack Pro desde su propio icono.</div></div></div>
+    </div>
+    <div class="install-security-note"><b>Tu información no se mueve ni se borra.</b><div class="muted">La app instalada usa la misma cuenta y la misma base de datos de Supabase.</div></div>
+  </div>
+  <div class="modal-actions"><button type="button" class="btn primary" id="installHelpClose">Entendido</button></div>
 </dialog>
 
 <div id="toast" class="toast"></div>

@@ -8,6 +8,7 @@ import {initOperations,renderOperational} from './operations.js';
 import {initBranches,renderBranches} from './branches.js';
 import {initSuperAdmin,loadSuperAdmin} from './superadmin.js';
 import {initScanner} from './scanner.js';
+import {initInstallApp} from './install.js';
 
 const views=['inventory','dashboard','detail','movements','branches','customers','suppliers','purchases','sales','superadmin'];
 
@@ -105,6 +106,7 @@ initOperations({reload,switchView});
 initBranches({reload});
 initSuperAdmin();
 initScanner({renderInventory});
+initInstallApp();
 
 initAuth({
   onReady:async()=>{try{await loadProfile();switchView('inventory');await reload()}catch(e){console.error(e);toast(e.message)}},

@@ -1,4 +1,4 @@
-const CACHE='keytrack-v4-5-shell';
+const CACHE='keytrack-v4-6-shell';
 
 const ASSETS=[
   '/',
@@ -13,7 +13,7 @@ const ASSETS=[
   '/operations.js',
   '/branches.js',
   '/superadmin.js',
-  '/scanner.js',
+  '/scanner.js','/install.js',
   '/manifest.webmanifest',
   '/icon-192.png',
   '/icon-512.png'

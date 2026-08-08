@@ -1,14 +1,20 @@
-# KeyTrack Pro Enterprise 4.6 — Instalar app
+# KeyTrack Pro Enterprise 4.7 — Mobile Responsive
 
-Agrega el botón **⬇ Instalar app**.
+Esta versión corrige la visualización de la app instalada en teléfonos.
 
-- Android/Chrome/Edge: usa el instalador PWA del navegador.
-- iPhone/iPad: muestra instrucciones para “Añadir a pantalla de inicio”.
-- Si ya está instalada, el botón desaparece.
-- Los datos no se borran ni se migran; sigue usando la misma cuenta y Supabase.
+## Cambios
+- Inventario móvil en tarjetas compactas.
+- Elimina los espacios verticales gigantes entre productos.
+- Foto, artículo, SKU/OEM, FCC, vehículo, ubicación y stock reorganizados.
+- Botones grandes y táctiles.
+- Navegación horizontal compacta en móvil.
+- Filtros y buscador por vehículo adaptados.
+- POS y diálogos ajustados a pantallas pequeñas.
+- Escritorio conserva el diseño de tabla actual.
 
 ## Instalación
-1. No requiere SQL nuevo.
-2. Sube/reemplaza todos los archivos del ZIP en GitHub.
-3. Espera Vercel.
-4. Recarga con Ctrl+Shift+R o abre en incógnito.
+1. No requiere SQL.
+2. Sube/reemplaza todos los archivos en GitHub.
+3. Espera el deployment de Vercel.
+4. La app instalada se actualizará; no necesitas desinstalarla.
+5. Si no cambia enseguida, ciérrala por completo y vuelve a abrirla.

@@ -1,21 +1,34 @@
-# KeyTrack Pro Enterprise 4.28 — Layout Separation Fix
+# KeyTrack Pro Enterprise 4.29 — Clean Responsive Cards
 
-## Qué corrige
+## Cambio importante
+Se dejó de usar la estructura antigua de celdas agrupadas para el inventario.
+Cada producto ahora usa una única estructura estable:
 
-### Vertical
-- Marca/FCC y SKU/OEM vuelven a usar solamente la estructura original.
-- Vehículo muestra únicamente compatibilidad del vehículo.
-- Ubicación muestra únicamente ubicación.
-- Ya no se repiten Marca/FCC/SKU/OEM dentro de Vehículo.
-- Ya no aparece el vehículo dentro de Ubicación.
+- Foto
+- Nombre
+- Marca
+- FCC ID
+- SKU
+- OEM / PN
+- Vehículo
+- Ubicación
+- Stock
+- Acciones
 
-### Horizontal en celular
-- Se usan exclusivamente estructuras dedicadas para horizontal.
-- Marca | FCC ID | SKU | OEM/PN en una fila real.
-- Vehículo y Ubicación usan bloques propios.
-- Se ocultan por completo los bloques antiguos para evitar duplicados.
-- Stock mantiene su propia columna y no se superpone con Editar.
-- Acciones quedan separadas del stock.
+## Vertical
+- Marca, FCC, SKU y OEM aparecen una sola vez.
+- Vehículo contiene únicamente vehículos.
+- Ubicación contiene únicamente ubicación.
+- Stock queda arriba a la derecha.
+- Sin columnas colapsadas ni datos duplicados.
+
+## Horizontal
+- Marca | FCC ID | SKU | OEM/PN en cuatro columnas reales.
+- Vehículo 70% | Ubicación 30%.
+- Stock tiene su propia columna.
+- ± | Ficha | Historial | Editar quedan separados del stock.
+- No hay nombre de producto en una letra por línea.
+- Se eliminan los grandes espacios vacíos generados por los layouts anteriores.
 
 ## Instalación
 No requiere SQL.

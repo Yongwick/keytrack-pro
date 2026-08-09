@@ -52,58 +52,62 @@ export function renderInventory(){
 
   body.innerHTML=rows.map(x=>{
     const qty=safeNumber(x.quantity),min=safeNumber(x.minimum_quantity);
-    return `<tr>
-      <td class="product-photo-cell">${x.image_url?`<img class="product-photo" src="${esc(x.image_url)}" alt="">`:'<div class="photo-placeholder">🔑</div>'}</td>
-      <td class="product-title-cell"><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td>
-      <td class="product-meta-pair product-brand-fcc">
-        <div class="product-meta-field meta-brand"><span class="product-meta-label">Marca</span><span class="product-meta-value">${esc(x.brand||'—')}</span></div>
-        <div class="product-meta-field meta-fcc"><span class="product-meta-label">FCC ID</span><span class="product-meta-value muted">${esc(x.fcc_id||'Sin FCC')}</span></div>
-      </td>
-      <td class="product-meta-pair product-sku-oem">
-        <div class="product-meta-field meta-sku"><span class="product-meta-label">SKU</span><span class="product-meta-value strong">${esc(x.sku||'—')}</span></div>
-        <div class="product-meta-field meta-oem"><span class="product-meta-label">OEM / PN</span><span class="product-meta-value muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</span></div>
+    return `<tr class="inventory-card-row">
+      <td class="product-photo-cell">
+        ${x.image_url?`<img class="product-photo" src="${esc(x.image_url)}" alt="">`:'<div class="photo-placeholder">🔑</div>'}
       </td>
 
-      <td class="product-landscape-meta-cell">
-        <div class="landscape-meta-grid">
-          <div class="landscape-meta-field">
+      <td class="product-title-cell">
+        <b>${esc(x.name)}</b>
+        <div class="muted">${esc(x.notes||'Sin notas')}</div>
+      </td>
+
+      <td class="product-meta-cell">
+        <div class="product-meta-grid">
+          <div class="product-meta-field meta-brand">
             <span class="product-meta-label">Marca</span>
             <span class="product-meta-value">${esc(x.brand||'—')}</span>
           </div>
-          <div class="landscape-meta-field">
+          <div class="product-meta-field meta-fcc">
             <span class="product-meta-label">FCC ID</span>
             <span class="product-meta-value muted">${esc(x.fcc_id||'Sin FCC')}</span>
           </div>
-          <div class="landscape-meta-field">
+          <div class="product-meta-field meta-sku">
             <span class="product-meta-label">SKU</span>
             <span class="product-meta-value strong">${esc(x.sku||'—')}</span>
           </div>
-          <div class="landscape-meta-field">
+          <div class="product-meta-field meta-oem">
             <span class="product-meta-label">OEM / PN</span>
             <span class="product-meta-value muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</span>
           </div>
         </div>
       </td>
 
-      <td class="product-landscape-vehicle-cell">
-        <span class="product-meta-label">Vehículo</span>
-        <div class="landscape-vehicle-value">${vehicle(x.vehicle_compatibility)}</div>
+      <td class="product-info-cell">
+        <div class="product-info-grid">
+          <div class="product-vehicle-box">
+            <span class="product-meta-label">Vehículo</span>
+            <div class="product-info-value">${vehicle(x.vehicle_compatibility)}</div>
+          </div>
+          <div class="product-location-box">
+            <span class="product-meta-label">Ubicación</span>
+            <div class="product-info-value">${esc(x.locations?.name||'—')}</div>
+          </div>
+        </div>
       </td>
 
-      <td class="product-landscape-location-cell">
-        <span class="product-meta-label">Ubicación</span>
-        <span class="product-meta-value">${esc(x.locations?.name||'—')}</span>
+      <td class="product-stock-cell">
+        ${qtyPill(qty,min)}
       </td>
 
-      <td class="product-vehicle-cell">${vehicle(x.vehicle_compatibility)}</td>
-      <td class="product-location-cell">${esc(x.locations?.name||'—')}</td>
-      <td class="product-stock-cell">${qtyPill(qty,min)}</td>
-      <td class="product-actions-cell"><div class="inventory-actions">
-        <button class="btn small" data-product-action="move" data-id="${x.id}">±</button>
-        <button class="btn small" data-product-action="view" data-id="${x.id}">Ficha</button>
-        <button class="btn small" data-product-action="history" data-id="${x.id}">Historial</button>
-        <button class="btn small" data-product-action="edit" data-id="${x.id}">Editar</button>
-      </div></td>
+      <td class="product-actions-cell">
+        <div class="inventory-actions">
+          <button class="btn small" data-product-action="move" data-id="${x.id}">±</button>
+          <button class="btn small" data-product-action="view" data-id="${x.id}">Ficha</button>
+          <button class="btn small" data-product-action="history" data-id="${x.id}">Historial</button>
+          <button class="btn small" data-product-action="edit" data-id="${x.id}">Editar</button>
+        </div>
+      </td>
     </tr>`;
   }).join('');
 

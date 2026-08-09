@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 4.28",
+  "name": "KeyTrack Pro Enterprise 4.29",
   "short_name": "KeyTrack Pro",
-  "description": "Inventario con layouts vertical y horizontal completamente separados.",
+  "description": "Inventario con tarjetas responsive limpias y estructura única.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

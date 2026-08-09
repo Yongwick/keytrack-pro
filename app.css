@@ -1381,3 +1381,166 @@ button:disabled{opacity:.55;cursor:not-allowed}
     grid-template-columns:1fr;
   }
 }
+
+/* KEYTRACK PRO 4.14 — MOBILE COMPACT */
+
+@media (min-width: 430px) and (max-width: 980px) {
+  #inventoryView tbody tr{
+    grid-template-columns:72px minmax(0,1fr) auto!important;
+    grid-template-areas:
+      "photo title qty"
+      "brand sku sku"
+      "vehicle vehicle vehicle"
+      "location location location"
+      "actions actions actions"!important;
+    column-gap:10px!important;
+    row-gap:8px!important;
+    padding:11px!important;
+  }
+
+  #inventoryView tbody td:nth-child(3){grid-area:brand!important}
+  #inventoryView tbody td:nth-child(4){grid-area:sku!important}
+  #inventoryView tbody td:nth-child(5){grid-area:vehicle!important}
+  #inventoryView tbody td:nth-child(6){grid-area:location!important}
+  #inventoryView tbody td:nth-child(8){grid-area:actions!important}
+
+  #inventoryView tbody td:nth-child(3),
+  #inventoryView tbody td:nth-child(4){
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+
+  #inventoryView tbody td:nth-child(3),
+  #inventoryView tbody td:nth-child(4),
+  #inventoryView tbody td:nth-child(5),
+  #inventoryView tbody td:nth-child(6){
+    padding:8px 10px!important;
+    border-radius:10px!important;
+  }
+
+  #inventoryView tbody td:nth-child(3)::before,
+  #inventoryView tbody td:nth-child(4)::before,
+  #inventoryView tbody td:nth-child(5)::before,
+  #inventoryView tbody td:nth-child(6)::before{
+    margin-bottom:2px!important;
+    font-size:.64rem!important;
+  }
+
+  #inventoryView tbody td:nth-child(6){
+    min-height:38px!important;
+  }
+
+  #inventoryView .inventory-actions,
+  #inventoryView tbody td:nth-child(8){
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:6px!important;
+  }
+
+  #inventoryView .inventory-actions .btn,
+  #inventoryView tbody td:nth-child(8) .btn,
+  #inventoryView tbody td:nth-child(8) button{
+    min-height:38px!important;
+    padding:7px 5px!important;
+    font-size:.74rem!important;
+  }
+
+  #inventoryView .inventory-actions .danger,
+  #inventoryView tbody td:nth-child(8) .danger{
+    grid-column:1 / 2!important;
+    opacity:.9;
+  }
+
+  #inventoryView .product-photo,
+  #inventoryView .photo-placeholder{
+    width:58px!important;
+    height:58px!important;
+    max-width:58px!important;
+    max-height:58px!important;
+  }
+
+  #inventoryView tbody td:nth-child(2) b{
+    font-size:.96rem!important;
+    line-height:1.24!important;
+  }
+
+  #inventoryView .qty-pill{
+    min-width:44px!important;
+    min-height:34px!important;
+    padding:6px 8px!important;
+    font-size:.84rem!important;
+  }
+}
+
+@media (max-width: 429px) {
+  #inventoryView tbody tr{
+    row-gap:7px!important;
+    padding:9px!important;
+  }
+
+  #inventoryView tbody td:nth-child(3),
+  #inventoryView tbody td:nth-child(4),
+  #inventoryView tbody td:nth-child(5),
+  #inventoryView tbody td:nth-child(6){
+    padding:8px 9px!important;
+    border-radius:10px!important;
+  }
+
+  #inventoryView tbody td:nth-child(3)::before,
+  #inventoryView tbody td:nth-child(4)::before,
+  #inventoryView tbody td:nth-child(5)::before,
+  #inventoryView tbody td:nth-child(6)::before{
+    margin-bottom:2px!important;
+    font-size:.63rem!important;
+  }
+
+  #inventoryView .inventory-actions,
+  #inventoryView tbody td:nth-child(8){
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:6px!important;
+  }
+
+  #inventoryView .inventory-actions .btn,
+  #inventoryView tbody td:nth-child(8) .btn,
+  #inventoryView tbody td:nth-child(8) button{
+    min-height:38px!important;
+    padding:7px 5px!important;
+    font-size:.74rem!important;
+  }
+
+  #inventoryView .inventory-actions .danger,
+  #inventoryView tbody td:nth-child(8) .danger{
+    grid-column:1 / 2!important;
+  }
+
+  #inventoryView .product-photo,
+  #inventoryView .photo-placeholder{
+    width:48px!important;
+    height:48px!important;
+    max-width:48px!important;
+    max-height:48px!important;
+  }
+
+  #inventoryView tbody td:nth-child(2) b{
+    font-size:.91rem!important;
+    line-height:1.2!important;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 980px) {
+  #inventoryView tbody tr{
+    grid-template-columns:68px minmax(0,1fr) auto!important;
+  }
+
+  #inventoryView tbody td:nth-child(3),
+  #inventoryView tbody td:nth-child(4){
+    min-height:58px!important;
+  }
+
+  #inventoryView tbody td:nth-child(5),
+  #inventoryView tbody td:nth-child(6){
+    min-height:48px!important;
+  }
+}

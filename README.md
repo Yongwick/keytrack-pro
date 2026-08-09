@@ -1,19 +1,21 @@
-# KeyTrack Pro Enterprise 4.16 — Wide Layout + Danger Zone
+# KeyTrack Pro Enterprise 4.17 — Wide Fields + Delete Fix
 
-## Cambios principales
+## Corregido
+- El botón **Borrar** desaparece de las tarjetas del inventario.
+- El borrado queda únicamente en **Editar → Zona de peligro → Eliminar producto**.
+- El formulario Editar activa correctamente la Zona de peligro.
+- Nuevo producto no muestra opción de eliminar.
 
-- En pantallas anchas se aprovecha mejor todo el espacio horizontal.
-- Marca y FCC quedan visualmente separados.
-- SKU y OEM / PN quedan visualmente separados.
-- Vehículo y ubicación usan columnas propias.
-- Las acciones normales ya no muestran **Borrar**.
-- **Eliminar producto** se mueve al final del formulario Editar, dentro de una **Zona de peligro**.
-- El borrado pide doble confirmación.
-- Conserva cámara, Excel, PWA, ventas, Super Admin y los datos existentes.
+## Pantallas anchas
+- Marca y FCC ID aparecen como campos independientes.
+- SKU y OEM / PN aparecen como campos independientes.
+- Marca/FCC usan todo el ancho asignado, no quedan amontonados a la izquierda.
+- SKU/OEM usan todo el ancho asignado.
+- Vehículo recibe más espacio horizontal.
+- Ubicación usa una columna menor.
+- Solo quedan las acciones: ±, Ficha, Historial y Editar.
 
 ## Instalación
-1. No requiere SQL.
-2. Reemplaza todos los archivos en GitHub.
-3. Espera Vercel.
-4. No desinstales la app.
-5. Cierra completamente KeyTrack Pro y vuelve a abrirla.
+No requiere SQL ni desinstalar la PWA.
+Reemplaza todos los archivos en GitHub, espera Vercel, cierra completamente
+KeyTrack Pro y vuelve a abrirla.

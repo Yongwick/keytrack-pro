@@ -5,6 +5,8 @@ import {renderInventory} from './inventory.js';
 function moneyForHistory(v){return '$'+Number(v||0).toFixed(2)}
 
 export function openProduct(product=null){
+  state.editingProductId=product?.id||null;
+  $('#productDangerZone')?.classList.toggle('hidden',!product);
   $('#ititle').textContent=product?'Editar artículo':'Nuevo artículo';
   const set=(id,v='')=>{const el=$(id);if(el)el.value=v??''};
   set('#iid',product?.id);set('#oldimg',product?.image_url);set('#iname',product?.name);

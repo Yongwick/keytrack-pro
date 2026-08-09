@@ -42,8 +42,14 @@ export function renderInventory(){
     return `<tr>
       <td>${x.image_url?`<img class="product-photo" src="${esc(x.image_url)}" alt="">`:'<div class="photo-placeholder">🔑</div>'}</td>
       <td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td>
-      <td><span class="nowrap">${esc(x.brand||'—')}</span><div class="muted nowrap">${esc(x.fcc_id||'Sin FCC')}</div></td>
-      <td><b class="nowrap">${esc(x.sku||'—')}</b><div class="muted nowrap">${esc(x.oem_number||x.barcode||'Sin OEM')}</div></td>
+      <td class="product-meta-pair product-brand-fcc">
+        <div class="product-meta-field"><span class="product-meta-label">Marca</span><span class="product-meta-value">${esc(x.brand||'—')}</span></div>
+        <div class="product-meta-field"><span class="product-meta-label">FCC ID</span><span class="product-meta-value muted">${esc(x.fcc_id||'Sin FCC')}</span></div>
+      </td>
+      <td class="product-meta-pair product-sku-oem">
+        <div class="product-meta-field"><span class="product-meta-label">SKU</span><span class="product-meta-value strong">${esc(x.sku||'—')}</span></div>
+        <div class="product-meta-field"><span class="product-meta-label">OEM / PN</span><span class="product-meta-value muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</span></div>
+      </td>
       <td>${vehicle(x.vehicle_compatibility)}</td>
       <td>${esc(x.locations?.name||'—')}</td>
       <td>${qtyPill(qty,min)}</td>
@@ -52,7 +58,6 @@ export function renderInventory(){
         <button class="btn small" data-product-action="view" data-id="${x.id}">Ficha</button>
         <button class="btn small" data-product-action="history" data-id="${x.id}">Historial</button>
         <button class="btn small" data-product-action="edit" data-id="${x.id}">Editar</button>
-        ${['owner','admin','manager'].includes(state.profile?.role)?`<button class="btn small danger" data-product-action="delete" data-id="${x.id}">Borrar</button>`:''}
       </div></td>
     </tr>`;
   }).join('');

@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 4.19",
+  "name": "KeyTrack Pro Enterprise 4.20",
   "short_name": "KeyTrack Pro",
-  "description": "Inventario multiempresa con ficha contextual e indicadores de stock restaurados.",
+  "description": "Inventario multiempresa con stock visible y vehículo corregido en pantallas anchas.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

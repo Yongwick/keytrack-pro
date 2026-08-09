@@ -151,6 +151,8 @@ export function initProducts({reload,switchView}){
     $('#move').close();toast('Movimiento registrado');await reload();
   };
 
+  $('#detailBackInventory')?.addEventListener('click',()=>switchView('inventory'));
+
   $('#body').addEventListener('click',async e=>{
     const b=e.target.closest('[data-product-action]');if(!b)return;
     const product=state.items.find(x=>x.id===b.dataset.id);if(!product)return;

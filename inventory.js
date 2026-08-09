@@ -20,9 +20,22 @@ export function filteredItems(){
 }
 
 function qtyPill(qty,min){
-  if(qty===0)return `<span class="qty-pill qty-out">● 0</span>`;
-  if(qty<=min)return `<span class="qty-pill qty-low">● ${qty}</span>`;
-  return `<span class="qty-pill qty-ok">● ${qty}</span>`;
+  if(qty===0){
+    return `<div class="stock-status stock-out">
+      <span class="qty-pill qty-out">● ${qty}</span>
+      <span class="stock-warning">⚠ Sin existencia</span>
+    </div>`;
+  }
+  if(qty<=min){
+    return `<div class="stock-status stock-low">
+      <span class="qty-pill qty-low">● ${qty}</span>
+      <span class="stock-warning">⚠ Stock bajo</span>
+    </div>`;
+  }
+  return `<div class="stock-status stock-ok">
+    <span class="qty-pill qty-ok">● ${qty}</span>
+    <span class="stock-label">En stock</span>
+  </div>`;
 }
 
 function vehicle(text){
@@ -40,8 +53,8 @@ export function renderInventory(){
   body.innerHTML=rows.map(x=>{
     const qty=safeNumber(x.quantity),min=safeNumber(x.minimum_quantity);
     return `<tr>
-      <td>${x.image_url?`<img class="product-photo" src="${esc(x.image_url)}" alt="">`:'<div class="photo-placeholder">🔑</div>'}</td>
-      <td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td>
+      <td class="product-photo-cell">${x.image_url?`<img class="product-photo" src="${esc(x.image_url)}" alt="">`:'<div class="photo-placeholder">🔑</div>'}</td>
+      <td class="product-title-cell"><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td>
       <td class="product-meta-pair product-brand-fcc">
         <div class="product-meta-field meta-brand"><span class="product-meta-label">Marca</span><span class="product-meta-value">${esc(x.brand||'—')}</span></div>
         <div class="product-meta-field meta-fcc"><span class="product-meta-label">FCC ID</span><span class="product-meta-value muted">${esc(x.fcc_id||'Sin FCC')}</span></div>
@@ -50,10 +63,10 @@ export function renderInventory(){
         <div class="product-meta-field meta-sku"><span class="product-meta-label">SKU</span><span class="product-meta-value strong">${esc(x.sku||'—')}</span></div>
         <div class="product-meta-field meta-oem"><span class="product-meta-label">OEM / PN</span><span class="product-meta-value muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</span></div>
       </td>
-      <td>${vehicle(x.vehicle_compatibility)}</td>
-      <td>${esc(x.locations?.name||'—')}</td>
-      <td>${qtyPill(qty,min)}</td>
-      <td><div class="inventory-actions">
+      <td class="product-vehicle-cell">${vehicle(x.vehicle_compatibility)}</td>
+      <td class="product-location-cell">${esc(x.locations?.name||'—')}</td>
+      <td class="product-stock-cell">${qtyPill(qty,min)}</td>
+      <td class="product-actions-cell"><div class="inventory-actions">
         <button class="btn small" data-product-action="move" data-id="${x.id}">±</button>
         <button class="btn small" data-product-action="view" data-id="${x.id}">Ficha</button>
         <button class="btn small" data-product-action="history" data-id="${x.id}">Historial</button>

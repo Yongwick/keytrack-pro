@@ -1,24 +1,30 @@
-# KeyTrack Pro Enterprise 4.18 — Mobile Fields + Delete Confirm
+# KeyTrack Pro Enterprise 4.19 — Context Detail + Stock Alerts
 
-## Correcciones incluidas
-- En móvil, Marca, FCC ID, SKU y OEM / PN son cuatro secciones independientes.
-- En pantallas anchas, Marca, FCC, SKU y OEM son cuatro columnas independientes.
-- Vehículo recibe más espacio y ya no debe desbordarse hacia la derecha.
-- Ubicación conserva una columna compacta.
+## Ficha de producto
+- Se elimina **Ficha de producto** del menú principal.
+- La ficha sigue disponible desde el botón **Ficha** de cada producto.
+- Se abre como vista contextual del producto seleccionado.
+- Incluye botón **← Volver al inventario**.
 
-## Eliminar producto
-- Ya no aparece "Zona de peligro" permanentemente.
-- El botón rojo **Eliminar producto** aparece abajo a la izquierda, a la misma altura que Cancelar y Guardar.
-- Solo aparece al editar un producto existente.
-- Al tocarlo se abre una confirmación con:
-  - “Eliminar este producto es una acción permanente y no se puede deshacer.”
-  - Nombre del producto
-  - SKU
-  - OEM / PN
-  - Cancelar
-  - Sí, eliminar producto
+## Stock
+Cada tarjeta vuelve a mostrar claramente la cantidad arriba a la derecha:
+
+- Verde: cantidad normal + **En stock**
+- Amarillo: cantidad igual o menor al mínimo + **⚠ Stock bajo**
+- Rojo: cantidad 0 + **⚠ Sin existencia**
+
+Las tarjetas superiores de Inventario bajo y Sin existencia continúan funcionando como filtros.
+
+## Diseño
+- Marca, FCC ID, SKU y OEM / PN siguen como secciones separadas.
+- En pantallas anchas se restauran todos esos campos usando todo el ancho.
+- Vehículo conserva un espacio amplio.
+- Ubicación permanece compacta.
+- Cantidad no desaparece en tablet/pantalla horizontal.
 
 ## Instalación
-No requiere SQL ni desinstalar la PWA.
-Reemplaza todos los archivos en GitHub, espera el deploy de Vercel,
-cierra completamente KeyTrack Pro y vuelve a abrirla.
+1. No requiere SQL.
+2. Reemplaza todos los archivos del ZIP en GitHub.
+3. Espera Vercel.
+4. No desinstales la PWA.
+5. Cierra completamente KeyTrack Pro y vuelve a abrirla.

@@ -7,7 +7,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
-<title>KeyTrack Pro Enterprise 4.18</title>
+<title>KeyTrack Pro Enterprise 4.19</title>
 <link rel="stylesheet" href="./app.css">
 </head>
 <body>
@@ -28,10 +28,10 @@
 
 <div id="app" class="app hidden">
 <header>
- <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.18 · Mobile Fields + Delete Confirm</div></div></div>
+ <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.19 · Context Detail + Stock Alerts</div></div></div>
  <div class="row">
   <span class="status"><span id="dot" class="dot"></span><span id="cloud">Conectando…</span></span>
-  <span id="versionBadge" class="badge" title="Versión estable">v4.18</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
+  <span id="versionBadge" class="badge" title="Versión estable">v4.19</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
   <button id="mobileMenuToggle" class="btn mobile-only" type="button">☰ Menú</button>
 <button id="installApp" class="btn hidden" type="button">⬇ Instalar app</button>
 <button id="csv" class="btn">⇅ Importar / Exportar</button><button id="add" class="btn primary">+ Nuevo</button>
@@ -45,8 +45,7 @@
 <div class="nav" style="display:flex;gap:8px;overflow:auto;margin-bottom:14px">
   <button class="btn active" data-view="inventory">Inventario</button>
   <button class="btn" data-view="dashboard">Dashboard</button>
-  <button class="btn" data-view="detail">Ficha de producto</button>
-  <button class="btn" data-view="movements">Movimientos</button>
+    <button class="btn" data-view="movements">Movimientos</button>
   <button class="btn" data-view="branches">Sucursales</button><button class="btn" data-view="customers">Clientes</button><button class="btn" data-view="suppliers">Proveedores</button><button class="btn" data-view="purchases">Compras</button><button class="btn" data-view="sales">Ventas</button><button id="superAdminNav" class="btn hidden" data-view="superadmin">Super Admin</button>
 </div>
 <div class="sidebar-footer">
@@ -101,7 +100,7 @@
 </section>
 
 <section id="detailView" class="hidden panel">
-  <div class="panelhead row"><div><h3>Ficha completa del producto</h3><div class="muted">Selecciona un producto desde el inventario.</div></div></div>
+  <div class="panelhead row"><div><h3>Ficha completa del producto</h3><div class="muted">Detalle del producto seleccionado desde Inventario.</div></div><button id="detailBackInventory" class="btn">← Volver al inventario</button></div>
   <div id="detailBody" style="padding:18px" class="muted">Sin producto seleccionado.</div>
 </section>
 

@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 4.15",
+  "name": "KeyTrack Pro Enterprise 4.16",
   "short_name": "KeyTrack Pro",
-  "description": "Inventario y POS multiempresa con controles móviles corregidos.",
+  "description": "Inventario y POS multiempresa con mejor uso de pantallas anchas.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

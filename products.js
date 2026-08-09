@@ -162,4 +162,53 @@ export function initProducts({reload,switchView}){
       if(r.error)return toast(r.error.message);toast('Producto eliminado');await reload();
     }
   });
+
+  const dangerZone=$('#productDangerZone');
+  const deleteFromEdit=$('#deleteProductFromEdit');
+
+  function syncDangerZone(){
+    const editing=!!state.editingProductId;
+    dangerZone?.classList.toggle('hidden',!editing);
+  }
+
+  // Observe product dialog open state and show danger zone only when editing.
+  const productDialog=$('#item');
+  productDialog?.addEventListener('close',()=>{
+    state.editingProductId=null;
+    syncDangerZone();
+  });
+
+  deleteFromEdit?.addEventListener('click',async()=>{
+    const id=state.editingProductId;
+    if(!id)return toast('Este producto todavía no ha sido guardado.');
+
+    const product=state.items.find(x=>x.id===id);
+    const name=product?.name||'este producto';
+    const sku=product?.sku?` (SKU ${product.sku})`:'';
+
+    const first=confirm(`¿Eliminar "${name}"${sku}?`);
+    if(!first)return;
+
+    const second=confirm('Esta acción no se puede deshacer. ¿Confirmas que deseas eliminarlo?');
+    if(!second)return;
+
+    const result=await sb.from('products')
+      .delete()
+      .eq('id',id)
+      .eq('company_id',state.companyId);
+
+    if(result.error){
+      console.error('Eliminar producto:',result.error);
+      return toast(result.error.message||'No se pudo eliminar el producto.');
+    }
+
+    toast('Producto eliminado.');
+    productDialog?.close();
+    state.editingProductId=null;
+    await reload();
+  });
+
+  // Make helper available to the editor logic.
+  window.keytrackSyncDangerZone=syncDangerZone;
+
 }

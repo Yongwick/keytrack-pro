@@ -7,7 +7,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
-<title>KeyTrack Pro Enterprise 4.15</title>
+<title>KeyTrack Pro Enterprise 4.16</title>
 <link rel="stylesheet" href="./app.css">
 </head>
 <body>
@@ -28,10 +28,10 @@
 
 <div id="app" class="app hidden">
 <header>
- <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.15 · Action Buttons Fix</div></div></div>
+ <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.16 · Wide Layout + Danger Zone</div></div></div>
  <div class="row">
   <span class="status"><span id="dot" class="dot"></span><span id="cloud">Conectando…</span></span>
-  <span id="versionBadge" class="badge" title="Versión estable">v4.15</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
+  <span id="versionBadge" class="badge" title="Versión estable">v4.16</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
   <button id="mobileMenuToggle" class="btn mobile-only" type="button">☰ Menú</button>
 <button id="installApp" class="btn hidden" type="button">⬇ Instalar app</button>
 <button id="csv" class="btn">⇅ Importar / Exportar</button><button id="add" class="btn primary">+ Nuevo</button>
@@ -450,7 +450,16 @@
 
     <div id="saleError" class="err"></div>
 
-    <div class="modal-actions">
+    
+<div id="productDangerZone" class="danger-zone hidden">
+  <div>
+    <b>Zona de peligro</b>
+    <div class="muted">Eliminar este producto borra su registro del inventario.</div>
+  </div>
+  <button id="deleteProductFromEdit" type="button" class="btn danger">🗑 Eliminar producto</button>
+</div>
+
+<div class="modal-actions">
       <button type="button" class="btn" id="saleCancel">Cancelar</button>
       <button type="submit" class="btn primary" id="saleSave">Guardar venta</button>
     </div>

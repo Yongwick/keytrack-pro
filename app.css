@@ -1635,3 +1635,151 @@ button:disabled{opacity:.55;cursor:not-allowed}
     grid-column:1 / 2!important;
   }
 }
+
+
+/* ==========================================================
+   KEYTRACK PRO 4.16 — WIDE LAYOUT + DANGER ZONE
+   ========================================================== */
+
+/* Wide phone / tablet / landscape: use full available width */
+@media (min-width: 700px) and (max-width: 1180px) {
+  #inventoryView tbody tr{
+    grid-template-columns:72px minmax(0,1.15fr) minmax(0,.8fr) minmax(0,1fr) minmax(0,.9fr) minmax(0,1.8fr) minmax(90px,.7fr) auto!important;
+    grid-template-areas:
+      "photo title title title title title qty qty"
+      "photo brand fcc sku oem vehicle location location"
+      "photo actions actions actions actions actions actions actions"!important;
+    gap:10px 14px!important;
+    align-items:start!important;
+  }
+
+  /* Re-map existing columns into separate visual fields */
+  #inventoryView tbody td:nth-child(1){grid-area:photo!important}
+  #inventoryView tbody td:nth-child(2){grid-area:title!important}
+  #inventoryView tbody td:nth-child(7){grid-area:qty!important}
+  #inventoryView tbody td:nth-child(8){grid-area:actions!important}
+
+  /* Existing MARCA/FCC cell becomes two subfields */
+  #inventoryView tbody td:nth-child(3){
+    grid-area:brand!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:6px!important;
+    background:transparent!important;
+    border:0!important;
+    padding:0!important;
+  }
+
+  /* Existing SKU/OEM cell */
+  #inventoryView tbody td:nth-child(4){
+    grid-area:sku!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:6px!important;
+    background:transparent!important;
+    border:0!important;
+    padding:0!important;
+  }
+
+  #inventoryView tbody td:nth-child(5){
+    grid-area:vehicle!important;
+    min-height:58px!important;
+  }
+
+  #inventoryView tbody td:nth-child(6){
+    grid-area:location!important;
+    min-height:58px!important;
+  }
+
+  /* Convert line breaks inside combined cells into separated rows */
+  #inventoryView tbody td:nth-child(3),
+  #inventoryView tbody td:nth-child(4){
+    line-height:1.35!important;
+  }
+
+  #inventoryView tbody td:nth-child(3)::before{
+    content:"MARCA"!important;
+    display:block!important;
+    font-size:.66rem!important;
+    font-weight:800!important;
+    color:var(--muted)!important;
+    margin-bottom:2px!important;
+  }
+
+  #inventoryView tbody td:nth-child(4)::before{
+    content:"SKU"!important;
+    display:block!important;
+    font-size:.66rem!important;
+    font-weight:800!important;
+    color:var(--muted)!important;
+    margin-bottom:2px!important;
+  }
+
+  /* Add a clear split between first/second value line */
+  #inventoryView tbody td:nth-child(3) .muted::before{
+    content:"FCC ID";
+    display:block;
+    font-size:.62rem;
+    font-weight:800;
+    color:var(--muted);
+    margin-top:6px;
+    margin-bottom:2px;
+  }
+
+  #inventoryView tbody td:nth-child(4) .muted::before{
+    content:"OEM / PN";
+    display:block;
+    font-size:.62rem;
+    font-weight:800;
+    color:var(--muted);
+    margin-top:6px;
+    margin-bottom:2px;
+  }
+
+  #inventoryView .inventory-actions,
+  #inventoryView tbody td:nth-child(8){
+    grid-template-columns:repeat(4,minmax(100px,150px))!important;
+    justify-content:start!important;
+  }
+}
+
+/* Larger desktop/tablet landscape: even more horizontal use */
+@media (min-width: 981px) {
+  #inventoryView tbody tr{
+    width:100%!important;
+  }
+}
+
+/* Danger zone in edit product dialog */
+.danger-zone{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-top:18px;
+  padding:14px;
+  border:1px solid rgba(239,68,68,.35);
+  border-radius:12px;
+  background:rgba(127,29,29,.10);
+}
+
+.danger-zone > div{
+  min-width:0;
+}
+
+.danger-zone .danger{
+  flex:0 0 auto;
+  border-color:rgba(239,68,68,.5)!important;
+  background:#5f1723!important;
+}
+
+@media (max-width:760px){
+  .danger-zone{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+
+  .danger-zone .danger{
+    width:100%;
+  }
+}

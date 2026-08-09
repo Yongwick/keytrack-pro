@@ -1,18 +1,19 @@
-# KeyTrack Pro Enterprise 4.15 — Action Buttons Fix
+# KeyTrack Pro Enterprise 4.16 — Wide Layout + Danger Zone
 
-Corrige el problema visible en v4.14 donde los botones ±, Ficha, Historial,
-Editar y Borrar podían comprimirse hasta mostrar las letras verticalmente.
+## Cambios principales
 
-## Cambios
-- Botones siempre horizontales.
-- En celular: acciones en 2 columnas.
-- En pantallas móviles más anchas: hasta 4 columnas cuando caben.
-- Borrar ya no se convierte en una columna angosta.
-- Eliminado espacio vacío innecesario debajo de las acciones.
-- Conserva el diseño compacto de Marca/FCC + SKU/OEM.
-- Conserva cámara, Excel, PWA, ventas, Super Admin y datos existentes.
+- En pantallas anchas se aprovecha mejor todo el espacio horizontal.
+- Marca y FCC quedan visualmente separados.
+- SKU y OEM / PN quedan visualmente separados.
+- Vehículo y ubicación usan columnas propias.
+- Las acciones normales ya no muestran **Borrar**.
+- **Eliminar producto** se mueve al final del formulario Editar, dentro de una **Zona de peligro**.
+- El borrado pide doble confirmación.
+- Conserva cámara, Excel, PWA, ventas, Super Admin y los datos existentes.
 
 ## Instalación
-No requiere SQL ni desinstalar la PWA.
-Reemplaza todos los archivos en GitHub, espera el deploy de Vercel,
-cierra completamente KeyTrack Pro y vuelve a abrirla.
+1. No requiere SQL.
+2. Reemplaza todos los archivos en GitHub.
+3. Espera Vercel.
+4. No desinstales la app.
+5. Cierra completamente KeyTrack Pro y vuelve a abrirla.

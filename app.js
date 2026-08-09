@@ -117,3 +117,19 @@ window.addEventListener('error',e=>console.error('KeyTrack runtime:',e.error||e.
 window.addEventListener('unhandledrejection',e=>console.error('KeyTrack async:',e.reason));
 
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(console.warn));
+
+const mobileMenuToggle=document.querySelector('#mobileMenuToggle');
+const sidebar=document.querySelector('.sidebar');
+if(mobileMenuToggle && sidebar){
+  mobileMenuToggle.addEventListener('click',()=>{
+    sidebar.classList.toggle('mobile-open');
+    mobileMenuToggle.textContent=sidebar.classList.contains('mobile-open')?'✕ Cerrar':'☰ Menú';
+  });
+  sidebar.addEventListener('click',event=>{
+    const button=event.target.closest('[data-view]');
+    if(button && window.matchMedia('(max-width:760px)').matches){
+      sidebar.classList.remove('mobile-open');
+      mobileMenuToggle.textContent='☰ Menú';
+    }
+  });
+}

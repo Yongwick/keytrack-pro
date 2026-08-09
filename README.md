@@ -1,20 +1,17 @@
-# KeyTrack Pro Enterprise 4.7 — Mobile Responsive
+# KeyTrack Pro Enterprise 4.8 — Mobile Polished
 
-Esta versión corrige la visualización de la app instalada en teléfonos.
+Mejora la interfaz móvil sin modificar Supabase ni los datos.
 
-## Cambios
-- Inventario móvil en tarjetas compactas.
-- Elimina los espacios verticales gigantes entre productos.
-- Foto, artículo, SKU/OEM, FCC, vehículo, ubicación y stock reorganizados.
-- Botones grandes y táctiles.
-- Navegación horizontal compacta en móvil.
-- Filtros y buscador por vehículo adaptados.
-- POS y diálogos ajustados a pantallas pequeñas.
-- Escritorio conserva el diseño de tabla actual.
+- Menú móvil con botón ☰ Menú.
+- Todos los módulos visibles sin desplazamiento horizontal.
+- Tarjetas de inventario más limpias.
+- Acciones táctiles más grandes.
+- Header reorganizado para teléfonos.
+- POS y ventas mejor adaptados.
 
 ## Instalación
 1. No requiere SQL.
-2. Sube/reemplaza todos los archivos en GitHub.
-3. Espera el deployment de Vercel.
-4. La app instalada se actualizará; no necesitas desinstalarla.
-5. Si no cambia enseguida, ciérrala por completo y vuelve a abrirla.
+2. Reemplaza/sube los archivos en GitHub.
+3. Espera Vercel.
+4. No desinstales la app.
+5. Ciérrala y vuelve a abrirla.

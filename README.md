@@ -1,24 +1,19 @@
-# KeyTrack Pro Enterprise 4.9 — Mobile Navigation
+# KeyTrack Pro Enterprise 4.11 — Mobile Cards Fix
 
-Mejora la navegación de la aplicación instalada.
+Esta versión conserva las funciones de 4.10 y corrige la presentación del inventario en celular.
 
 ## Cambios
-- Se elimina **Salir** de la cabecera.
-- **Salir de KeyTrack Pro** queda al final del menú.
-- El botón superior siempre dice **☰ Menú**.
-- El menú abre como panel lateral y tiene su propia **X** para cerrar.
-- Nueva barra inferior móvil:
-  - Inicio
-  - Inventario
-  - + Nuevo
-  - Ventas
-  - Más
-- CSV y + Nuevo permanecen accesibles arriba.
-- No modifica Supabase ni los datos existentes.
+- MARCA / FCC ya no se enciman con SKU / OEM.
+- Cada bloque de información usa una fila independiente en móvil.
+- Vehículo y ubicación ocupan todo el ancho.
+- Textos largos pueden envolver sin invadir otros campos.
+- Botones de acciones quedan debajo del producto.
+- Conserva Importar / Exportar Excel/CSV, ventas, PWA y navegación móvil.
+- Nuevo caché PWA `keytrack-v4-11-shell` para forzar la actualización del CSS.
 
 ## Instalación
-1. No requiere SQL.
-2. Reemplaza/sube todos los archivos en GitHub.
-3. Espera Vercel.
-4. No desinstales la PWA.
-5. Cierra KeyTrack Pro completamente y vuelve a abrirlo.
+1. Reemplaza en GitHub todos los archivos con los del ZIP.
+2. Espera el deployment de Vercel.
+3. NO necesitas desinstalar KeyTrack Pro.
+4. Cierra completamente la app y vuelve a abrirla.
+5. Si aún aparece la versión anterior, abre primero el sitio en Chrome y recarga.

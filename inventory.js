@@ -85,14 +85,5 @@ export function initInventory({switchView}){
   low?.addEventListener('click',()=>{state.stockFilter=state.stockFilter==='low'?'':'low';switchView('inventory');renderInventory()});
   out?.addEventListener('click',()=>{state.stockFilter=state.stockFilter==='out'?'':'out';switchView('inventory');renderInventory()});
 
-  $('#csv').addEventListener('click',()=>{
-    const cols=['Nombre','Categoría','Marca','SKU','OEM','Serie','Ubicación','Cantidad','Mínimo','Código','FCC ID','IC','Frecuencia','Chip','Botones','Batería','Estado','Proveedor','Costo','Precio'];
-    const rows=state.items.map(x=>[
-      x.name,x.category,x.brand,x.sku,x.oem_number,x.serial_number,x.locations?.name||'',
-      x.quantity,x.minimum_quantity,x.barcode,x.fcc_id,x.ic_number,x.frequency,x.chip_type,
-      x.button_count,x.battery_type,x.condition_status,x.supplier,x.cost,x.sale_price
-    ]);
-    const csv=[cols,...rows].map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n');
-    downloadText('keytrack-inventario.csv','\ufeff'+csv,'text/csv;charset=utf-8');
-  });
+
 }

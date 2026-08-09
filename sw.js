@@ -1,4 +1,4 @@
-const CACHE='keytrack-v4-9-shell';
+const CACHE='keytrack-v4-11-shell';
 
 const ASSETS=[
   '/',
@@ -13,8 +13,8 @@ const ASSETS=[
   '/operations.js',
   '/branches.js',
   '/superadmin.js',
-  '/scanner.js','/install.js',
-  '/manifest.webmanifest',
+  '/scanner.js','/install.js','/data-transfer.js',
+  '/plantilla-importacion-keytrack-pro.xlsx','/manifest.webmanifest',
   '/icon-192.png',
   '/icon-512.png'
 ];

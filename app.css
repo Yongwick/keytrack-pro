@@ -918,3 +918,162 @@ button:disabled{opacity:.55;cursor:not-allowed}
     display:none;
   }
 }
+
+#dataTransferDialog{width:min(1100px,96vw);max-width:1100px}
+.data-transfer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.data-transfer-card{border:1px solid var(--line);border-radius:14px;background:#0a1729;padding:14px}
+.data-transfer-card h3{margin:0 0 6px}.data-transfer-card p{margin:0 0 12px}
+.data-import-section{border-top:1px solid var(--line);padding-top:16px}
+.import-heading{align-items:center}.import-file-button{cursor:pointer}.import-file-name{margin:8px 0 12px}
+.import-options{display:grid;grid-template-columns:minmax(240px,440px);margin-bottom:12px}
+.import-options label span{display:block;margin-bottom:6px}
+.import-summary{display:grid;grid-template-columns:repeat(6,minmax(90px,1fr));gap:8px;margin:12px 0}
+.import-summary>div{display:grid;text-align:center;gap:2px;padding:10px;border:1px solid var(--line);border-radius:12px;background:#09172a}
+.import-summary b{font-size:1.25rem}.import-summary span{font-size:.74rem;color:var(--muted)}
+.import-summary .good b{color:#4ade80}.import-summary .update b{color:#60a5fa}.import-summary .bad b{color:#fb7185}.import-summary .warn b{color:#fbbf24}
+.import-preview-table{max-height:390px;overflow:auto}.import-preview-table table{min-width:820px}
+.import-status{display:inline-flex;padding:4px 8px;border-radius:999px;font-size:.72rem;font-weight:800}
+.import-status.new{background:rgba(34,197,94,.13);color:#4ade80}.import-status.update{background:rgba(59,130,246,.14);color:#93c5fd}
+.import-status.skip{background:rgba(148,163,184,.12);color:#cbd5e1}.import-status.error{background:rgba(244,63,94,.14);color:#fb7185}
+@media(max-width:760px){
+  #dataTransferDialog{width:calc(100vw - 8px)!important;max-height:96vh}
+  .data-transfer-grid{grid-template-columns:1fr}
+  .import-heading{display:grid!important;grid-template-columns:1fr;gap:10px!important}
+  .import-file-button{width:100%;justify-content:center}
+  .import-summary{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+
+/* =========================================================
+   KeyTrack Pro 4.11 — Mobile inventory cards fix
+   Evita que MARCA/FCC y SKU/OEM se encimen en pantallas angostas.
+   ========================================================= */
+@media (max-width: 760px) {
+  /* La tarjeta móvil puede crecer libremente con el contenido */
+  .mobile-product-card,
+  .inventory-mobile-card,
+  .product-mobile-card,
+  #inventoryBody > tr {
+    min-width: 0 !important;
+    height: auto !important;
+  }
+
+  /* Cualquier grid de datos dentro de una tarjeta pasa a una columna */
+  .mobile-product-card .product-meta,
+  .mobile-product-card .meta-grid,
+  .inventory-mobile-card .product-meta,
+  .inventory-mobile-card .meta-grid,
+  .product-mobile-card .product-meta,
+  .product-mobile-card .meta-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  /* Las celdas de la tabla que se convierten en tarjeta no pueden
+     conservar anchos/posiciones de escritorio */
+  #inventoryBody tr {
+    position: relative !important;
+  }
+
+  #inventoryBody td {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+  /* En la vista móvil existente, los campos informativos se apilan.
+     nth-child:
+       1 foto, 2 artículo, 3 marca/fcc, 4 sku/oem,
+       5 vehículo, 6 ubicación, 7 cantidad, 8 acciones.
+  */
+  #inventoryBody tr {
+    display: grid !important;
+    grid-template-columns: 86px minmax(0, 1fr) auto !important;
+    column-gap: 12px !important;
+    row-gap: 10px !important;
+    align-items: start !important;
+  }
+
+  #inventoryBody td:nth-child(1) {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+  }
+
+  #inventoryBody td:nth-child(2) {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+  }
+
+  #inventoryBody td:nth-child(7) {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    justify-self: end !important;
+  }
+
+  #inventoryBody td:nth-child(3),
+  #inventoryBody td:nth-child(4),
+  #inventoryBody td:nth-child(5),
+  #inventoryBody td:nth-child(6),
+  #inventoryBody td:nth-child(8) {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+  }
+
+  #inventoryBody td:nth-child(3) { grid-row: 2 !important; }
+  #inventoryBody td:nth-child(4) { grid-row: 3 !important; }
+  #inventoryBody td:nth-child(5) { grid-row: 4 !important; }
+  #inventoryBody td:nth-child(6) { grid-row: 5 !important; }
+  #inventoryBody td:nth-child(8) { grid-row: 6 !important; }
+
+  /* MARCA/FCC y SKU/OEM como bloques independientes */
+  #inventoryBody td:nth-child(3),
+  #inventoryBody td:nth-child(4),
+  #inventoryBody td:nth-child(5),
+  #inventoryBody td:nth-child(6) {
+    display: block !important;
+    padding: 10px 14px !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 12px !important;
+    background: rgba(5, 18, 34, .35) !important;
+    line-height: 1.35 !important;
+  }
+
+  /* Botones siempre debajo y sin invadir otros datos */
+  #inventoryBody td:nth-child(8) {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    padding-top: 4px !important;
+  }
+
+  #inventoryBody td:nth-child(8) button,
+  #inventoryBody td:nth-child(8) .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    justify-content: center !important;
+  }
+
+  /* El botón Borrar queda solo en la última fila si es impar */
+  #inventoryBody td:nth-child(8) .danger:last-child {
+    grid-column: 1 !important;
+  }
+}
+
+@media (max-width: 390px) {
+  #inventoryBody tr {
+    grid-template-columns: 72px minmax(0, 1fr) auto !important;
+    column-gap: 9px !important;
+  }
+
+  #inventoryBody td:nth-child(3),
+  #inventoryBody td:nth-child(4),
+  #inventoryBody td:nth-child(5),
+  #inventoryBody td:nth-child(6) {
+    padding: 9px 11px !important;
+  }
+}

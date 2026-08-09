@@ -9,6 +9,7 @@ import {initBranches,renderBranches} from './branches.js';
 import {initSuperAdmin,loadSuperAdmin} from './superadmin.js';
 import {initScanner} from './scanner.js';
 import {initInstallApp} from './install.js';
+import {initDataTransfer} from './data-transfer.js';
 
 const views=['inventory','dashboard','detail','movements','branches','customers','suppliers','purchases','sales','superadmin'];
 
@@ -107,6 +108,7 @@ initBranches({reload});
 initSuperAdmin();
 initScanner({renderInventory});
 initInstallApp();
+initDataTransfer({reload});
 
 initAuth({
   onReady:async()=>{try{await loadProfile();switchView('inventory');await reload()}catch(e){console.error(e);toast(e.message)}},

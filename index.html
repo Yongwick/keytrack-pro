@@ -7,7 +7,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
-<title>KeyTrack Pro Enterprise 4.9</title>
+<title>KeyTrack Pro Enterprise 4.11</title>
 <link rel="stylesheet" href="./app.css">
 </head>
 <body>
@@ -28,13 +28,13 @@
 
 <div id="app" class="app hidden">
 <header>
- <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.9 · Mobile Navigation</div></div></div>
+ <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.11 · Mobile Cards Fix</div></div></div>
  <div class="row">
   <span class="status"><span id="dot" class="dot"></span><span id="cloud">Conectando…</span></span>
-  <span id="versionBadge" class="badge" title="Versión estable">v4.9</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
+  <span id="versionBadge" class="badge" title="Versión estable">v4.11</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
   <button id="mobileMenuToggle" class="btn mobile-only" type="button">☰ Menú</button>
 <button id="installApp" class="btn hidden" type="button">⬇ Instalar app</button>
-<button id="csv" class="btn">CSV</button><button id="add" class="btn primary">+ Nuevo</button>
+<button id="csv" class="btn">⇅ Importar / Exportar</button><button id="add" class="btn primary">+ Nuevo</button>
  </div>
 </header>
 <div class="layout-shell"><aside class="sidebar">
@@ -166,6 +166,67 @@
   <button type="button" class="mobile-nav-item" data-mobile-view="sales"><span>▱</span><small>Ventas</small></button>
   <button type="button" class="mobile-nav-item" data-mobile-more><span>•••</span><small>Más</small></button>
 </nav>
+
+
+<dialog id="dataTransferDialog">
+  <div class="modal-head">
+    <div>
+      <h2>⇅ Importar / Exportar</h2>
+      <div class="muted">Carga productos desde Excel o descarga tus datos.</div>
+    </div>
+    <button type="button" class="x" id="dataTransferX">×</button>
+  </div>
+  <div class="data-transfer-grid">
+    <section class="data-transfer-card">
+      <h3>📤 Exportar inventario</h3>
+      <p class="muted">Descarga el inventario actual de esta empresa en formato CSV.</p>
+      <button type="button" id="exportInventoryCsv" class="btn">Descargar CSV</button>
+    </section>
+    <section class="data-transfer-card">
+      <h3>📄 Plantilla Excel</h3>
+      <p class="muted">Usa esta plantilla para preparar productos antes de importarlos.</p>
+      <a class="btn" href="./plantilla-importacion-keytrack-pro.xlsx"
+         download="plantilla-importacion-keytrack-pro.xlsx">Descargar plantilla Excel</a>
+    </section>
+  </div>
+  <section class="data-import-section">
+    <div class="row import-heading">
+      <div>
+        <h3>📥 Importar productos</h3>
+        <div class="muted">Formatos permitidos: .xlsx, .xls y .csv</div>
+      </div>
+      <label class="btn primary import-file-button">
+        Seleccionar archivo
+        <input id="productImportFile" type="file" accept=".xlsx,.xls,.csv" hidden>
+      </label>
+    </div>
+    <div id="importFileName" class="muted import-file-name">Ningún archivo seleccionado.</div>
+    <div id="importOptions" class="import-options hidden">
+      <label>
+        <span>Si el SKU ya existe</span>
+        <select id="importStrategy" class="field">
+          <option value="new">Solo agregar productos nuevos</option>
+          <option value="update">Actualizar existente por SKU y agregar nuevos</option>
+        </select>
+      </label>
+    </div>
+    <div id="importSummary" class="import-summary hidden"></div>
+    <div id="importPreviewWrap" class="import-preview-wrap hidden">
+      <div class="row"><h3>Vista previa</h3><span id="importPreviewCount" class="muted"></span></div>
+      <div class="table import-preview-table">
+        <table>
+          <thead><tr><th>Fila</th><th>Producto</th><th>SKU</th><th>Cantidad</th><th>Ubicación</th><th>Acción</th><th>Observaciones</th></tr></thead>
+          <tbody id="importPreviewBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div id="importError" class="err"></div>
+  </section>
+  <div class="modal-actions">
+    <button type="button" class="btn" id="dataTransferClose">Cerrar</button>
+    <button type="button" class="btn primary hidden" id="importProductsConfirm">Importar productos</button>
+  </div>
+</dialog>
 
 <dialog id="item">
  <div class="dh row"><h3 id="ititle">Nuevo artículo</h3><button id="ix" class="btn">×</button></div>
@@ -425,5 +486,6 @@
 
 <div id="toast" class="toast"></div>
 
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script type="module" src="./app.js"></script>
 </body></html>

@@ -43,12 +43,12 @@ export function renderInventory(){
       <td>${x.image_url?`<img class="product-photo" src="${esc(x.image_url)}" alt="">`:'<div class="photo-placeholder">🔑</div>'}</td>
       <td><b>${esc(x.name)}</b><div class="muted">${esc(x.notes||'Sin notas')}</div></td>
       <td class="product-meta-pair product-brand-fcc">
-        <div class="product-meta-field"><span class="product-meta-label">Marca</span><span class="product-meta-value">${esc(x.brand||'—')}</span></div>
-        <div class="product-meta-field"><span class="product-meta-label">FCC ID</span><span class="product-meta-value muted">${esc(x.fcc_id||'Sin FCC')}</span></div>
+        <div class="product-meta-field meta-brand"><span class="product-meta-label">Marca</span><span class="product-meta-value">${esc(x.brand||'—')}</span></div>
+        <div class="product-meta-field meta-fcc"><span class="product-meta-label">FCC ID</span><span class="product-meta-value muted">${esc(x.fcc_id||'Sin FCC')}</span></div>
       </td>
       <td class="product-meta-pair product-sku-oem">
-        <div class="product-meta-field"><span class="product-meta-label">SKU</span><span class="product-meta-value strong">${esc(x.sku||'—')}</span></div>
-        <div class="product-meta-field"><span class="product-meta-label">OEM / PN</span><span class="product-meta-value muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</span></div>
+        <div class="product-meta-field meta-sku"><span class="product-meta-label">SKU</span><span class="product-meta-value strong">${esc(x.sku||'—')}</span></div>
+        <div class="product-meta-field meta-oem"><span class="product-meta-label">OEM / PN</span><span class="product-meta-value muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</span></div>
       </td>
       <td>${vehicle(x.vehicle_compatibility)}</td>
       <td>${esc(x.locations?.name||'—')}</td>

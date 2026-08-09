@@ -6,7 +6,7 @@ function moneyForHistory(v){return '$'+Number(v||0).toFixed(2)}
 
 export function openProduct(product=null){
   state.editingProductId=product?.id||null;
-  $('#productDangerZone')?.classList.toggle('hidden',!product);
+  $('#deleteProductFromEdit')?.classList.toggle('hidden',!product);
   $('#ititle').textContent=product?'Editar artículo':'Nuevo artículo';
   const set=(id,v='')=>{const el=$(id);if(el)el.value=v??''};
   set('#iid',product?.id);set('#oldimg',product?.image_url);set('#iname',product?.name);
@@ -159,58 +159,85 @@ export function initProducts({reload,switchView}){
     if(a==='view'){renderProductDetail(product);switchView('detail')}
     if(a==='history')await openHistory(product);
     if(a==='move')openMove(product);
-    if(a==='delete'&&confirm(`¿Eliminar "${product.name}"?`)){
-      const r=await sb.from('products').delete().eq('id',product.id).eq('company_id',state.companyId);
-      if(r.error)return toast(r.error.message);toast('Producto eliminado');await reload();
-    }
   });
 
-  const dangerZone=$('#productDangerZone');
-  const deleteFromEdit=$('#deleteProductFromEdit');
+  const productDialog=$('#item');
+  const deleteButton=$('#deleteProductFromEdit');
+  const deleteDialog=$('#deleteProductDialog');
+  const deleteCancel=$('#deleteProductCancel');
+  const deleteConfirm=$('#deleteProductConfirm');
 
-  function syncDangerZone(){
-    const editing=!!state.editingProductId;
-    dangerZone?.classList.toggle('hidden',!editing);
+  function closeDeleteDialog(){
+    if(deleteDialog?.open)deleteDialog.close();
   }
 
-  // Observe product dialog open state and show danger zone only when editing.
-  const productDialog=$('#item');
+  function populateDeleteDialog(product){
+    $('#deleteProductName').textContent=product?.name||'Producto';
+    $('#deleteProductSku').textContent=product?.sku||'—';
+    $('#deleteProductOem').textContent=product?.oem_number||product?.barcode||'—';
+
+    const thumb=$('#deleteProductThumb');
+    if(product?.image_url){
+      thumb.innerHTML=`<img src="${esc(product.image_url)}" alt="">`;
+    }else{
+      thumb.textContent='🔑';
+    }
+  }
+
   productDialog?.addEventListener('close',()=>{
     state.editingProductId=null;
-    syncDangerZone();
+    deleteButton?.classList.add('hidden');
+    closeDeleteDialog();
   });
 
-  deleteFromEdit?.addEventListener('click',async()=>{
+  deleteButton?.addEventListener('click',()=>{
     const id=state.editingProductId;
     if(!id)return toast('Este producto todavía no ha sido guardado.');
 
     const product=state.items.find(x=>x.id===id);
-    const name=product?.name||'este producto';
-    const sku=product?.sku?` (SKU ${product.sku})`:'';
+    if(!product)return toast('Producto no encontrado.');
 
-    const first=confirm(`¿Eliminar "${name}"${sku}?`);
-    if(!first)return;
-
-    const second=confirm('Esta acción no se puede deshacer. ¿Confirmas que deseas eliminarlo?');
-    if(!second)return;
-
-    const result=await sb.from('products')
-      .delete()
-      .eq('id',id)
-      .eq('company_id',state.companyId);
-
-    if(result.error){
-      console.error('Eliminar producto:',result.error);
-      return toast(result.error.message||'No se pudo eliminar el producto.');
-    }
-
-    toast('Producto eliminado.');
-    productDialog?.close();
-    state.editingProductId=null;
-    await reload();
+    populateDeleteDialog(product);
+    deleteDialog.showModal();
   });
 
-  // Make helper available to the editor logic.
-  window.keytrackSyncDangerZone=syncDangerZone;
+  deleteCancel?.addEventListener('click',closeDeleteDialog);
+
+  deleteDialog?.addEventListener('cancel',event=>{
+    event.preventDefault();
+    closeDeleteDialog();
+  });
+
+  deleteConfirm?.addEventListener('click',async()=>{
+    const id=state.editingProductId;
+    if(!id)return closeDeleteDialog();
+
+    const product=state.items.find(x=>x.id===id);
+    if(!product)return toast('Producto no encontrado.');
+
+    deleteConfirm.disabled=true;
+    deleteConfirm.textContent='Eliminando…';
+
+    try{
+      const result=await sb.from('products')
+        .delete()
+        .eq('id',id)
+        .eq('company_id',state.companyId);
+
+      if(result.error)throw result.error;
+
+      closeDeleteDialog();
+      productDialog?.close();
+      state.editingProductId=null;
+      toast('Producto eliminado.');
+      await reload();
+    }catch(error){
+      console.error('Eliminar producto:',error);
+      toast(error.message||'No se pudo eliminar el producto.');
+    }finally{
+      deleteConfirm.disabled=false;
+      deleteConfirm.textContent='Sí, eliminar producto';
+    }
+  });
 
 }

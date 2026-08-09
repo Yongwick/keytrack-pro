@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 4.17",
+  "name": "KeyTrack Pro Enterprise 4.18",
   "short_name": "KeyTrack Pro",
-  "description": "Inventario y POS multiempresa con campos amplios y borrado protegido.",
+  "description": "Inventario y POS multiempresa con campos separados y eliminación confirmada.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

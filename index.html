@@ -7,7 +7,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
-<title>KeyTrack Pro Enterprise 4.17</title>
+<title>KeyTrack Pro Enterprise 4.18</title>
 <link rel="stylesheet" href="./app.css">
 </head>
 <body>
@@ -28,10 +28,10 @@
 
 <div id="app" class="app hidden">
 <header>
- <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.17 · Wide Fields + Delete Fix</div></div></div>
+ <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.18 · Mobile Fields + Delete Confirm</div></div></div>
  <div class="row">
   <span class="status"><span id="dot" class="dot"></span><span id="cloud">Conectando…</span></span>
-  <span id="versionBadge" class="badge" title="Versión estable">v4.17</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
+  <span id="versionBadge" class="badge" title="Versión estable">v4.18</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
   <button id="mobileMenuToggle" class="btn mobile-only" type="button">☰ Menú</button>
 <button id="installApp" class="btn hidden" type="button">⬇ Instalar app</button>
 <button id="csv" class="btn">⇅ Importar / Exportar</button><button id="add" class="btn primary">+ Nuevo</button>
@@ -259,8 +259,39 @@
    <div class="span"><label>Equivalencias</label><input id="iequiv" class="field" placeholder="Xhorse, KeyDIY, Autel, Ilco..."></div>
    <div class="span"><label>Notas</label><textarea id="inotes" class="field"></textarea></div>
   </div>
-  <div id="itemError" class="muted" style="color:#fb7185;margin-top:10px"></div><div class="row fa"><button id="icancel" type="button" class="btn">Cancelar</button><button id="itemSave" class="btn primary">Guardar</button></div>
+  <div id="itemError" class="muted" style="color:#fb7185;margin-top:10px"></div>
+  <div class="product-edit-footer">
+    <button id="deleteProductFromEdit" type="button" class="btn danger hidden">🗑 Eliminar producto</button>
+    <div class="product-edit-footer-actions">
+      <button id="icancel" type="button" class="btn">Cancelar</button>
+      <button id="itemSave" class="btn primary">Guardar</button>
+    </div>
+  </div>
  </form>
+</dialog>
+
+
+<dialog id="deleteProductDialog" class="delete-product-dialog">
+  <div class="delete-confirm-content">
+    <div class="delete-warning-icon">⚠</div>
+    <h3>Eliminar producto</h3>
+    <p>Eliminar este producto es una acción permanente y no se puede deshacer.</p>
+    <div class="delete-product-preview">
+      <div id="deleteProductThumb" class="delete-product-thumb">🔑</div>
+      <div>
+        <b id="deleteProductName">Producto</b>
+        <div class="delete-product-meta">
+          <span>SKU: <strong id="deleteProductSku">—</strong></span>
+          <span>OEM / PN: <strong id="deleteProductOem">—</strong></span>
+        </div>
+      </div>
+    </div>
+    <div class="delete-question">¿Estás seguro de que deseas eliminar este producto?</div>
+    <div class="delete-confirm-actions">
+      <button id="deleteProductCancel" type="button" class="btn">Cancelar</button>
+      <button id="deleteProductConfirm" type="button" class="btn danger">Sí, eliminar producto</button>
+    </div>
+  </div>
 </dialog>
 
 <dialog id="move">

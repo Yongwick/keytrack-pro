@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 4.27",
+  "name": "KeyTrack Pro Enterprise 4.28",
   "short_name": "KeyTrack Pro",
-  "description": "Inventario con estructura horizontal real y cuatro campos de identificación visibles.",
+  "description": "Inventario con layouts vertical y horizontal completamente separados.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

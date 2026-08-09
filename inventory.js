@@ -85,6 +85,16 @@ export function renderInventory(){
         </div>
       </td>
 
+      <td class="product-landscape-vehicle-cell">
+        <span class="product-meta-label">Vehículo</span>
+        <div class="landscape-vehicle-value">${vehicle(x.vehicle_compatibility)}</div>
+      </td>
+
+      <td class="product-landscape-location-cell">
+        <span class="product-meta-label">Ubicación</span>
+        <span class="product-meta-value">${esc(x.locations?.name||'—')}</span>
+      </td>
+
       <td class="product-vehicle-cell">${vehicle(x.vehicle_compatibility)}</td>
       <td class="product-location-cell">${esc(x.locations?.name||'—')}</td>
       <td class="product-stock-cell">${qtyPill(qty,min)}</td>

@@ -4251,3 +4251,276 @@ body{
     border-bottom:0!important;
   }
 }
+
+
+/* ==========================================================
+   KEYTRACK PRO 4.28 — LAYOUT SEPARATION FIX
+   Vertical y horizontal usan estructuras distintas, sin mezclarse.
+   ========================================================== */
+
+/* Landscape-only helpers are hidden globally */
+#inventoryView .product-landscape-meta-cell,
+#inventoryView .product-landscape-vehicle-cell,
+#inventoryView .product-landscape-location-cell{
+  display:none!important;
+}
+
+/* ----------------------------------------------------------
+   PORTRAIT / NORMAL MOBILE
+   Restore original structure and explicitly hide landscape-only blocks.
+   ---------------------------------------------------------- */
+@media (orientation:portrait), (max-width:599px){
+
+  #inventoryView .product-landscape-meta-cell,
+  #inventoryView .product-landscape-vehicle-cell,
+  #inventoryView .product-landscape-location-cell{
+    display:none!important;
+  }
+
+  /* Original metadata wrappers are active */
+  #inventoryView .product-brand-fcc,
+  #inventoryView .product-sku-oem{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  #inventoryView .product-brand-fcc .product-meta-field,
+  #inventoryView .product-sku-oem .product-meta-field{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    margin:0!important;
+  }
+
+  /* Original vehicle/location cells contain ONLY their own data */
+  #inventoryView .product-vehicle-cell{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+  }
+
+  #inventoryView .product-location-cell{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+  }
+
+  /* Remove any pseudo labels injected by landscape/tablet patches */
+  #inventoryView .product-vehicle-cell::before,
+  #inventoryView .product-location-cell::before{
+    content:none!important;
+    display:none!important;
+  }
+
+  /* Stock remains separate, never inside action row */
+  #inventoryView .product-stock-cell{
+    position:static!important;
+    z-index:auto!important;
+  }
+}
+
+/* ----------------------------------------------------------
+   PHONE LANDSCAPE
+   Use ONLY dedicated landscape structures.
+   ---------------------------------------------------------- */
+@media (orientation:landscape) and (max-height:560px) and (min-width:600px){
+
+  #inventoryView thead{
+    display:none!important;
+  }
+
+  #inventoryView tbody{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+    width:100%!important;
+  }
+
+  #inventoryView tbody tr{
+    display:grid!important;
+    grid-template-columns:
+      64px
+      minmax(0,1fr)
+      minmax(0,1fr)
+      minmax(0,1fr)
+      108px!important;
+    grid-template-areas:
+      "photo title title title qty"
+      ". meta meta meta qty"
+      ". lvehicle lvehicle llocation qty"
+      ". actions actions actions ."!important;
+    column-gap:10px!important;
+    row-gap:10px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    padding:12px!important;
+    margin:0!important;
+    overflow:hidden!important;
+    border:1px solid var(--line)!important;
+    border-radius:16px!important;
+    background:var(--panel)!important;
+  }
+
+  #inventoryView .product-photo-cell{grid-area:photo!important}
+  #inventoryView .product-title-cell{grid-area:title!important}
+  #inventoryView .product-stock-cell{grid-area:qty!important}
+  #inventoryView .product-landscape-meta-cell{grid-area:meta!important}
+  #inventoryView .product-landscape-vehicle-cell{grid-area:lvehicle!important}
+  #inventoryView .product-landscape-location-cell{grid-area:llocation!important}
+  #inventoryView .product-actions-cell{grid-area:actions!important}
+
+  /* Hide ALL legacy data cells in phone landscape */
+  #inventoryView .product-brand-fcc,
+  #inventoryView .product-sku-oem,
+  #inventoryView .product-vehicle-cell,
+  #inventoryView .product-location-cell{
+    display:none!important;
+  }
+
+  /* Dedicated ID row */
+  #inventoryView .product-landscape-meta-cell{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    padding:0!important;
+    margin:0!important;
+    border:0!important;
+    background:transparent!important;
+  }
+
+  #inventoryView .landscape-meta-grid{
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:10px!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+  }
+
+  #inventoryView .landscape-meta-field{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:66px!important;
+    padding:9px 11px!important;
+    background:#09172a!important;
+    border:1px solid rgba(255,255,255,.07)!important;
+    border-radius:10px!important;
+    overflow:hidden!important;
+  }
+
+  /* Dedicated vehicle/location row */
+  #inventoryView .product-landscape-vehicle-cell,
+  #inventoryView .product-landscape-location-cell{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:70px!important;
+    padding:9px 11px!important;
+    background:#09172a!important;
+    border:1px solid rgba(255,255,255,.07)!important;
+    border-radius:10px!important;
+    overflow:hidden!important;
+  }
+
+  #inventoryView .product-landscape-vehicle-cell .product-meta-label,
+  #inventoryView .product-landscape-location-cell .product-meta-label{
+    display:block!important;
+    margin-bottom:6px!important;
+    font-size:.64rem!important;
+    line-height:1!important;
+    font-weight:800!important;
+    text-transform:uppercase!important;
+    color:var(--muted)!important;
+  }
+
+  #inventoryView .landscape-vehicle-value{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+  }
+
+  #inventoryView .landscape-vehicle-value .vehicle-summary{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+    line-height:1.35!important;
+    max-height:none!important;
+  }
+
+  /* Stock has its own lane, never overlaps Edit */
+  #inventoryView .product-stock-cell{
+    display:flex!important;
+    position:static!important;
+    justify-content:flex-end!important;
+    align-items:flex-start!important;
+    width:108px!important;
+    min-width:108px!important;
+    max-width:108px!important;
+    padding:0!important;
+    margin:0!important;
+    border:0!important;
+    background:transparent!important;
+    overflow:visible!important;
+    z-index:2!important;
+  }
+
+  #inventoryView .stock-status{
+    width:104px!important;
+    min-width:104px!important;
+    max-width:104px!important;
+  }
+
+  #inventoryView .stock-warning,
+  #inventoryView .stock-label{
+    width:104px!important;
+    white-space:normal!important;
+    text-align:center!important;
+  }
+
+  /* Actions fully separate from stock */
+  #inventoryView .product-actions-cell{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    padding:0!important;
+    margin:0!important;
+    border:0!important;
+    background:transparent!important;
+    overflow:visible!important;
+  }
+
+  #inventoryView .inventory-actions{
+    display:grid!important;
+    grid-template-columns:72px repeat(3,minmax(120px,1fr))!important;
+    gap:8px!important;
+    width:min(100%,650px)!important;
+    max-width:650px!important;
+    min-width:0!important;
+    justify-content:start!important;
+  }
+
+  #inventoryView .inventory-actions .btn{
+    width:100%!important;
+    min-width:0!important;
+    min-height:40px!important;
+    padding:8px 10px!important;
+    white-space:nowrap!important;
+    font-size:.78rem!important;
+  }
+}

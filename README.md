@@ -1,29 +1,23 @@
-# KeyTrack Pro Enterprise 4.27 — Landscape Structure Fix
+# KeyTrack Pro Enterprise 4.28 — Layout Separation Fix
 
-## Qué cambia
-Esta versión corrige el problema de fondo en celular horizontal.
+## Qué corrige
 
-Ya no intenta mover internamente Marca/FCC y SKU/OEM con CSS.
+### Vertical
+- Marca/FCC y SKU/OEM vuelven a usar solamente la estructura original.
+- Vehículo muestra únicamente compatibilidad del vehículo.
+- Ubicación muestra únicamente ubicación.
+- Ya no se repiten Marca/FCC/SKU/OEM dentro de Vehículo.
+- Ya no aparece el vehículo dentro de Ubicación.
 
-Se crea una fila horizontal REAL e independiente con:
-
-**MARCA | FCC ID | SKU | OEM / PN**
-
-Los campos originales se ocultan únicamente en celular horizontal, evitando:
-- Marca desaparecida
-- SKU desplazado al extremo derecho
-- OEM / PN duplicado
-- espacios vacíos enormes
-
-## Layout horizontal
-1. Foto + nombre + stock
-2. Marca | FCC ID | SKU | OEM/PN
-3. Vehículo ~70% | Ubicación ~30%
-4. ± | Ficha | Historial | Editar
-
-La barra inferior permanece fija.
+### Horizontal en celular
+- Se usan exclusivamente estructuras dedicadas para horizontal.
+- Marca | FCC ID | SKU | OEM/PN en una fila real.
+- Vehículo y Ubicación usan bloques propios.
+- Se ocultan por completo los bloques antiguos para evitar duplicados.
+- Stock mantiene su propia columna y no se superpone con Editar.
+- Acciones quedan separadas del stock.
 
 ## Instalación
 No requiere SQL.
-Reemplaza los archivos en GitHub, espera Vercel,
+Reemplaza todos los archivos en GitHub, espera Vercel,
 cierra completamente KeyTrack Pro y vuelve a abrirla.

@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 4.22",
+  "name": "KeyTrack Pro Enterprise 4.23",
   "short_name": "KeyTrack Pro",
-  "description": "Inventario multiempresa con barra inferior universal y campos completos en horizontal.",
+  "description": "Inventario multiempresa con corrección específica para celular en horizontal.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

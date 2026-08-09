@@ -3111,3 +3111,274 @@ body{
     opacity:1!important;
   }
 }
+
+
+/* ==========================================================
+   KEYTRACK PRO 4.23 — MOBILE LANDSCAPE FIX
+   Celular horizontal conserva comportamiento móvil.
+   ========================================================== */
+
+/* Detect phones in landscape by limited viewport height.
+   This prevents tablet/desktop wide rules from taking over. */
+@media (orientation:landscape) and (max-height:560px) and (min-width:600px){
+
+  body{
+    padding-bottom:78px!important;
+  }
+
+  .app{
+    max-width:none!important;
+    width:100%!important;
+    padding:10px 12px!important;
+  }
+
+  .layout-shell{
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+  }
+
+  .workspace{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+
+  /* Sidebar goes back to mobile drawer instead of desktop rail */
+  .sidebar{
+    display:block!important;
+    position:fixed!important;
+    z-index:1000!important;
+    top:0!important;
+    right:0!important;
+    left:auto!important;
+    bottom:0!important;
+    width:min(340px,78vw)!important;
+    max-width:78vw!important;
+    margin:0!important;
+    padding:14px!important;
+    border-radius:0!important;
+    border-left:1px solid var(--line)!important;
+    background:#081426!important;
+    transform:translateX(105%)!important;
+    transition:transform .2s ease!important;
+    overflow-y:auto!important;
+    box-shadow:-18px 0 45px rgba(0,0,0,.42)!important;
+  }
+
+  .sidebar.mobile-open{
+    transform:translateX(0)!important;
+  }
+
+  .mobile-menu-head{
+    display:flex!important;
+  }
+
+  .sidebar-footer{
+    display:block!important;
+    margin-top:18px!important;
+    padding-top:14px!important;
+    border-top:1px solid var(--line)!important;
+  }
+
+  .sidebar .nav{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:7px!important;
+    margin-bottom:18px!important;
+  }
+
+  .sidebar .nav .btn{
+    width:100%!important;
+    justify-content:flex-start!important;
+    text-align:left!important;
+    min-height:44px!important;
+  }
+
+  body.mobile-menu-open::before{
+    content:""!important;
+    position:fixed!important;
+    inset:0!important;
+    z-index:999!important;
+    background:rgba(0,0,0,.62)!important;
+    backdrop-filter:blur(2px)!important;
+  }
+
+  /* Header uses mobile control pattern */
+  header>.row{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  #mobileMenuToggle{
+    display:inline-flex!important;
+    order:20!important;
+  }
+
+  #csv{
+    order:21!important;
+  }
+
+  #add{
+    order:22!important;
+  }
+
+  #installApp{
+    order:23!important;
+  }
+
+  /* Bottom nav stays visible */
+  .mobile-bottom-nav{
+    display:grid!important;
+  }
+
+  /* Inventory card landscape layout:
+     title + stock on top,
+     2x2 metadata,
+     vehicle full width,
+     location full width,
+     actions in one row. */
+  #inventoryView tbody tr{
+    display:grid!important;
+    grid-template-columns:64px minmax(0,1fr) 92px!important;
+    grid-template-areas:
+      "photo title qty"
+      "brand fcc fcc"
+      "sku oem oem"
+      "vehicle vehicle vehicle"
+      "location location location"
+      "actions actions actions"!important;
+    column-gap:10px!important;
+    row-gap:8px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow:hidden!important;
+    padding:10px!important;
+  }
+
+  #inventoryView .product-photo-cell{grid-area:photo!important}
+  #inventoryView .product-title-cell{grid-area:title!important}
+  #inventoryView .product-stock-cell{grid-area:qty!important}
+  #inventoryView .product-vehicle-cell{grid-area:vehicle!important}
+  #inventoryView .product-location-cell{grid-area:location!important}
+  #inventoryView .product-actions-cell{grid-area:actions!important}
+
+  #inventoryView .product-brand-fcc,
+  #inventoryView .product-sku-oem{
+    display:contents!important;
+  }
+
+  #inventoryView .meta-brand{grid-area:brand!important}
+  #inventoryView .meta-fcc{grid-area:fcc!important}
+  #inventoryView .meta-sku{grid-area:sku!important}
+  #inventoryView .meta-oem{grid-area:oem!important}
+
+  #inventoryView .product-meta-field{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:58px!important;
+    padding:8px 10px!important;
+    background:#09172a!important;
+    border:1px solid rgba(255,255,255,.06)!important;
+    border-radius:10px!important;
+    overflow:hidden!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  #inventoryView .product-meta-value{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  #inventoryView .product-title-cell{
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+
+  #inventoryView .product-title-cell b{
+    display:block!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+  }
+
+  #inventoryView .product-stock-cell{
+    display:flex!important;
+    width:92px!important;
+    min-width:92px!important;
+    max-width:92px!important;
+    justify-content:flex-end!important;
+    align-items:flex-start!important;
+    padding:0!important;
+    overflow:visible!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  #inventoryView .stock-status{
+    display:flex!important;
+    width:90px!important;
+    min-width:90px!important;
+    max-width:90px!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  #inventoryView .stock-warning,
+  #inventoryView .stock-label{
+    width:90px!important;
+    white-space:normal!important;
+    text-align:center!important;
+    line-height:1.1!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  #inventoryView .product-vehicle-cell,
+  #inventoryView .product-location-cell{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    padding:9px 11px!important;
+    overflow:hidden!important;
+  }
+
+  #inventoryView .vehicle-summary{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+    max-height:none!important;
+  }
+
+  #inventoryView .inventory-actions{
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:7px!important;
+    width:100%!important;
+  }
+
+  #inventoryView .inventory-actions .btn{
+    min-height:38px!important;
+    padding:7px 8px!important;
+    white-space:nowrap!important;
+  }
+}

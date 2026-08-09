@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 4.26",
+  "name": "KeyTrack Pro Enterprise 4.27",
   "short_name": "KeyTrack Pro",
-  "description": "Inventario con Marca/FCC y SKU/OEM corregidos en celular horizontal.",
+  "description": "Inventario con estructura horizontal real y cuatro campos de identificación visibles.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

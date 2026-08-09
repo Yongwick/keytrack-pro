@@ -63,6 +63,28 @@ export function renderInventory(){
         <div class="product-meta-field meta-sku"><span class="product-meta-label">SKU</span><span class="product-meta-value strong">${esc(x.sku||'—')}</span></div>
         <div class="product-meta-field meta-oem"><span class="product-meta-label">OEM / PN</span><span class="product-meta-value muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</span></div>
       </td>
+
+      <td class="product-landscape-meta-cell">
+        <div class="landscape-meta-grid">
+          <div class="landscape-meta-field">
+            <span class="product-meta-label">Marca</span>
+            <span class="product-meta-value">${esc(x.brand||'—')}</span>
+          </div>
+          <div class="landscape-meta-field">
+            <span class="product-meta-label">FCC ID</span>
+            <span class="product-meta-value muted">${esc(x.fcc_id||'Sin FCC')}</span>
+          </div>
+          <div class="landscape-meta-field">
+            <span class="product-meta-label">SKU</span>
+            <span class="product-meta-value strong">${esc(x.sku||'—')}</span>
+          </div>
+          <div class="landscape-meta-field">
+            <span class="product-meta-label">OEM / PN</span>
+            <span class="product-meta-value muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</span>
+          </div>
+        </div>
+      </td>
+
       <td class="product-vehicle-cell">${vehicle(x.vehicle_compatibility)}</td>
       <td class="product-location-cell">${esc(x.locations?.name||'—')}</td>
       <td class="product-stock-cell">${qtyPill(qty,min)}</td>

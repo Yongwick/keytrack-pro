@@ -3981,3 +3981,273 @@ body{
     font-size:.78rem!important;
   }
 }
+
+
+/* ==========================================================
+   KEYTRACK PRO 4.27 — LANDSCAPE STRUCTURE FIX
+   Estructura real, no reposicionamiento de campos internos.
+   ========================================================== */
+
+/* New dedicated landscape row is hidden everywhere by default */
+#inventoryView .product-landscape-meta-cell{
+  display:none!important;
+}
+
+@media (orientation:landscape) and (max-height:560px) and (min-width:600px){
+
+  /* Disable desktop table semantics visually */
+  #inventoryView thead{
+    display:none!important;
+  }
+
+  #inventoryView .table,
+  #inventoryView table,
+  #inventoryView tbody{
+    width:100%!important;
+    max-width:100%!important;
+  }
+
+  #inventoryView tbody{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+
+  /* One product = one stable card */
+  #inventoryView tbody tr{
+    display:grid!important;
+    grid-template-columns:
+      64px
+      minmax(0,1fr)
+      minmax(0,1fr)
+      minmax(0,1fr)
+      104px!important;
+    grid-template-areas:
+      "photo title title title qty"
+      ". meta meta meta qty"
+      ". vehicle vehicle location qty"
+      ". actions actions actions ."!important;
+    column-gap:10px!important;
+    row-gap:10px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    padding:12px!important;
+    margin:0!important;
+    overflow:hidden!important;
+    border:1px solid var(--line)!important;
+    border-radius:16px!important;
+    background:var(--panel)!important;
+  }
+
+  #inventoryView .product-photo-cell{grid-area:photo!important}
+  #inventoryView .product-title-cell{grid-area:title!important}
+  #inventoryView .product-stock-cell{grid-area:qty!important}
+  #inventoryView .product-landscape-meta-cell{grid-area:meta!important}
+  #inventoryView .product-vehicle-cell{grid-area:vehicle!important}
+  #inventoryView .product-location-cell{grid-area:location!important}
+  #inventoryView .product-actions-cell{grid-area:actions!important}
+
+  /* Hide the legacy pair cells ONLY in phone landscape.
+     This also removes the duplicated OEM/PN problem. */
+  #inventoryView .product-brand-fcc,
+  #inventoryView .product-sku-oem{
+    display:none!important;
+  }
+
+  /* Show the dedicated, real 4-field row */
+  #inventoryView .product-landscape-meta-cell{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    padding:0!important;
+    margin:0!important;
+    border:0!important;
+    background:transparent!important;
+    overflow:visible!important;
+  }
+
+  #inventoryView .landscape-meta-grid{
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:10px!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+  }
+
+  #inventoryView .landscape-meta-field{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:66px!important;
+    padding:9px 11px!important;
+    background:#09172a!important;
+    border:1px solid rgba(255,255,255,.07)!important;
+    border-radius:10px!important;
+    overflow:hidden!important;
+  }
+
+  #inventoryView .landscape-meta-field .product-meta-label{
+    display:block!important;
+    margin-bottom:6px!important;
+    font-size:.64rem!important;
+    line-height:1!important;
+    font-weight:800!important;
+    text-transform:uppercase!important;
+    color:var(--muted)!important;
+  }
+
+  #inventoryView .landscape-meta-field .product-meta-value{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    font-size:.94rem!important;
+    line-height:1.25!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+  }
+
+  /* Header row */
+  #inventoryView .product-photo-cell{
+    width:64px!important;
+    min-width:64px!important;
+    max-width:64px!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+  }
+
+  #inventoryView .product-title-cell{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    overflow:hidden!important;
+  }
+
+  #inventoryView .product-title-cell b{
+    display:block!important;
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    line-height:1.25!important;
+  }
+
+  /* Stock stays top-right */
+  #inventoryView .product-stock-cell{
+    display:flex!important;
+    justify-content:flex-end!important;
+    align-items:flex-start!important;
+    width:104px!important;
+    min-width:104px!important;
+    max-width:104px!important;
+    padding:0!important;
+    margin:0!important;
+    border:0!important;
+    background:transparent!important;
+    overflow:visible!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  #inventoryView .stock-status{
+    width:100px!important;
+    min-width:100px!important;
+    max-width:100px!important;
+  }
+
+  #inventoryView .stock-warning,
+  #inventoryView .stock-label{
+    width:100px!important;
+    white-space:normal!important;
+    text-align:center!important;
+  }
+
+  /* Vehicle ~70%, Location ~30% */
+  #inventoryView .product-vehicle-cell,
+  #inventoryView .product-location-cell{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:68px!important;
+    padding:9px 11px!important;
+    background:#09172a!important;
+    border:1px solid rgba(255,255,255,.07)!important;
+    border-radius:10px!important;
+    overflow:hidden!important;
+  }
+
+  #inventoryView .product-vehicle-cell::before{
+    content:"VEHÍCULO"!important;
+    display:block!important;
+    margin-bottom:6px!important;
+    font-size:.64rem!important;
+    font-weight:800!important;
+    line-height:1!important;
+    color:var(--muted)!important;
+  }
+
+  #inventoryView .product-location-cell::before{
+    content:"UBICACIÓN"!important;
+    display:block!important;
+    margin-bottom:6px!important;
+    font-size:.64rem!important;
+    font-weight:800!important;
+    line-height:1!important;
+    color:var(--muted)!important;
+  }
+
+  #inventoryView .vehicle-summary{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+    line-height:1.35!important;
+    max-height:none!important;
+  }
+
+  /* Full action buttons, no clipping */
+  #inventoryView .product-actions-cell{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+  }
+
+  #inventoryView .inventory-actions{
+    display:grid!important;
+    grid-template-columns:72px repeat(3,minmax(120px,1fr))!important;
+    gap:8px!important;
+    width:min(100%,650px)!important;
+    max-width:650px!important;
+    min-width:0!important;
+    justify-content:start!important;
+  }
+
+  #inventoryView .inventory-actions .btn{
+    width:100%!important;
+    min-width:0!important;
+    min-height:40px!important;
+    padding:8px 10px!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    font-size:.78rem!important;
+  }
+
+  /* No old TD separators */
+  #inventoryView tbody tr > td{
+    border-bottom:0!important;
+  }
+}

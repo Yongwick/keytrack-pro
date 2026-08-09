@@ -1,10 +1,24 @@
-# KeyTrack Pro Enterprise 4.25 — Landscape 5-Column Fix
+# KeyTrack Pro Enterprise 4.26 — Landscape Meta Pairs Fix
 
-Correcciones principales:
-- En horizontal muestra Marca, FCC ID, SKU y OEM/PN como campos independientes.
-- Stock/cantidad y alerta permanecen visibles a la derecha.
-- Vehículo usa aproximadamente 70% del área de detalle y Ubicación 30%.
-- Evita cortes innecesarios en FCC/OEM.
-- Mantiene la barra inferior y el comportamiento móvil de v4.24.
+## Corrección principal
+En Chrome Android horizontal, `display:contents` aplicado a los TD agrupados
+podía hacer desaparecer Marca y SKU.
 
-No requiere cambios SQL.
+v4.26 elimina ese método en horizontal y usa dos contenedores reales:
+
+- MARCA | FCC ID
+- SKU | OEM / PN
+
+Los cuatro campos se muestran de forma independiente y aprovechan el ancho.
+
+## Layout horizontal
+- Foto + nombre + stock arriba.
+- Marca | FCC ID | SKU | OEM/PN.
+- Vehículo aproximadamente 70% y Ubicación aproximadamente 30%.
+- ± | Ficha | Historial | Editar sin texto cortado.
+- Barra inferior fija conservada.
+
+## Instalación
+No requiere SQL.
+Reemplaza todos los archivos en GitHub, espera Vercel,
+cierra completamente KeyTrack Pro y vuelve a abrirla.

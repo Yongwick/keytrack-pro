@@ -2622,3 +2622,224 @@ button:disabled{opacity:.55;cursor:not-allowed}
     opacity:1!important;
   }
 }
+
+
+/* ==========================================================
+   KEYTRACK PRO 4.21 — WIDE LAYOUT REBUILD
+   Reestructura la tarjeta en horizontal para evitar overflow:
+   Fila 1: Foto | Título | Stock
+   Fila 2: Marca | FCC | SKU | OEM/PN | Ubicación
+   Fila 3: Vehículo a todo el ancho
+   Fila 4: Acciones
+   ========================================================== */
+
+@media (min-width:700px) and (max-width:1180px){
+
+  #inventoryView tbody tr{
+    display:grid!important;
+    grid-template-columns:
+      72px
+      repeat(4,minmax(115px,1fr))
+      minmax(120px,.8fr)
+      112px!important;
+
+    grid-template-areas:
+      "photo title title title title title qty"
+      "photo brand fcc sku oem location qty"
+      "photo vehicle vehicle vehicle vehicle vehicle qty"
+      "photo actions actions actions actions actions actions"!important;
+
+    column-gap:12px!important;
+    row-gap:12px!important;
+    align-items:start!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+
+  /* Explicit areas */
+  #inventoryView .product-photo-cell{grid-area:photo!important}
+  #inventoryView .product-title-cell{grid-area:title!important}
+  #inventoryView .product-stock-cell{grid-area:qty!important}
+  #inventoryView .product-vehicle-cell{grid-area:vehicle!important}
+  #inventoryView .product-location-cell{grid-area:location!important}
+  #inventoryView .product-actions-cell{grid-area:actions!important}
+
+  #inventoryView .product-brand-fcc,
+  #inventoryView .product-sku-oem{
+    display:contents!important;
+  }
+
+  #inventoryView .meta-brand{grid-area:brand!important}
+  #inventoryView .meta-fcc{grid-area:fcc!important}
+  #inventoryView .meta-sku{grid-area:sku!important}
+  #inventoryView .meta-oem{grid-area:oem!important}
+
+  /* Metadata fields: true separate boxes */
+  #inventoryView .product-meta-field{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:70px!important;
+    padding:10px 12px!important;
+    background:#09172a!important;
+    border:1px solid rgba(255,255,255,.06)!important;
+    border-radius:11px!important;
+    overflow:hidden!important;
+  }
+
+  #inventoryView .product-meta-value{
+    display:block!important;
+    min-width:0!important;
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+  }
+
+  /* Title stays inside its space */
+  #inventoryView .product-title-cell{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+
+  #inventoryView .product-title-cell b{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+    padding-right:4px!important;
+  }
+
+  /* Stock gets its own permanent column */
+  #inventoryView .product-stock-cell{
+    display:flex!important;
+    justify-content:flex-end!important;
+    align-items:flex-start!important;
+    justify-self:end!important;
+    align-self:start!important;
+    width:112px!important;
+    min-width:112px!important;
+    max-width:112px!important;
+    overflow:visible!important;
+    padding:0!important;
+    background:transparent!important;
+    border:0!important;
+    z-index:6!important;
+  }
+
+  #inventoryView .stock-status{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    width:108px!important;
+    min-width:108px!important;
+    max-width:108px!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  #inventoryView .stock-status .qty-pill{
+    display:inline-flex!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  #inventoryView .stock-warning,
+  #inventoryView .stock-label{
+    display:block!important;
+    width:108px!important;
+    white-space:normal!important;
+    text-align:center!important;
+    line-height:1.15!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  /* VEHICLE: own full-width row */
+  #inventoryView .product-vehicle-cell{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:70px!important;
+    padding:10px 12px!important;
+    overflow:visible!important;
+  }
+
+  #inventoryView .vehicle-summary{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+    line-height:1.4!important;
+    max-height:none!important;
+  }
+
+  #inventoryView .vehicle-summary details{
+    width:100%!important;
+    max-width:100%!important;
+  }
+
+  #inventoryView .vehicle-summary details div{
+    width:100%!important;
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  /* Location stays compact but never steals vehicle width */
+  #inventoryView .product-location-cell{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:70px!important;
+    padding:10px 12px!important;
+    overflow:hidden!important;
+  }
+
+  /* Actions */
+  #inventoryView .product-actions-cell,
+  #inventoryView .inventory-actions{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+  }
+
+  #inventoryView .inventory-actions{
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(105px,145px))!important;
+    gap:8px!important;
+    justify-content:start!important;
+  }
+}
+
+/* Landscape reinforcement */
+@media (orientation:landscape) and (min-width:700px) and (max-width:1180px){
+  #inventoryView .product-stock-cell,
+  #inventoryView .stock-status,
+  #inventoryView .qty-pill,
+  #inventoryView .stock-warning,
+  #inventoryView .stock-label{
+    display:flex!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  #inventoryView .stock-warning,
+  #inventoryView .stock-label{
+    display:block!important;
+  }
+}

@@ -1,27 +1,39 @@
-# KeyTrack Pro Enterprise 4.21 — Wide Layout Rebuild
+# KeyTrack Pro Enterprise 4.22 — Wide Nav + Brand Fix
 
-## Cambio principal
-En vez de seguir parchando el layout ancho, esta versión lo reestructura:
+## Barra inferior
+La barra tipo app ahora se muestra también en tablet y pantallas anchas:
 
-### Pantalla horizontal / tablet
-- Fila 1: Foto + Nombre + Stock.
-- Fila 2: Marca + FCC ID + SKU + OEM/PN + Ubicación.
-- Fila 3: Vehículo ocupa todo el ancho disponible.
-- Fila 4: ± + Ficha + Historial + Editar.
+- Inicio
+- Inventario
+- Nuevo
+- Ventas
+- Más
 
-## Correcciones
-- Stock siempre visible arriba a la derecha.
-- Stock bajo y sin existencia siguen mostrando advertencia.
-- Vehículo ya no comparte columna angosta con otros campos.
-- Vehículo no debe cortarse lateralmente.
-- Título no invade el stock.
-- Ubicación queda compacta.
-- Marca, FCC, SKU y OEM/PN siguen separados.
-- Conserva todos los cambios anteriores de v4.19/v4.20.
+Permanece fija en la parte inferior y se reserva espacio para no tapar contenido.
+
+## Inventario en horizontal
+Se fuerza la visualización de todos los campos:
+
+- Marca
+- FCC ID
+- SKU
+- OEM / PN
+- Ubicación
+- Vehículo
+- Stock
+
+Marca y SKU ya no deben desaparecer por reglas responsive antiguas.
+
+## Distribución
+- Foto + nombre + stock arriba.
+- Marca | FCC | SKU | OEM/PN | Ubicación en una fila.
+- Vehículo usa una fila completa.
+- Acciones debajo.
+- Stock permanece fijo a la derecha.
 
 ## Instalación
 1. No requiere SQL.
-2. Reemplaza todos los archivos en GitHub.
+2. Reemplaza todos los archivos del ZIP en GitHub.
 3. Espera Vercel.
-4. No desinstales la PWA.
-5. Cierra completamente KeyTrack Pro y vuelve a abrirla.
+4. No desinstales KeyTrack Pro.
+5. Cierra completamente la PWA y vuelve a abrirla.

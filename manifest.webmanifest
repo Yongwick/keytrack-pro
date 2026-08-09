@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 4.21",
+  "name": "KeyTrack Pro Enterprise 4.22",
   "short_name": "KeyTrack Pro",
-  "description": "Inventario multiempresa con layout horizontal reestructurado.",
+  "description": "Inventario multiempresa con barra inferior universal y campos completos en horizontal.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

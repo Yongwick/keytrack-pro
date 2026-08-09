@@ -2843,3 +2843,271 @@ button:disabled{opacity:.55;cursor:not-allowed}
     display:block!important;
   }
 }
+
+
+/* ==========================================================
+   KEYTRACK PRO 4.22 — WIDE NAV + BRAND FIX
+   - Barra inferior tipo app visible también en pantallas anchas
+   - Marca / SKU / FCC / OEM visibles en horizontal
+   ========================================================== */
+
+/* ----------------------------------------------------------
+   BOTTOM NAV — visible en TODAS las pantallas
+   ---------------------------------------------------------- */
+body{
+  padding-bottom:82px!important;
+}
+
+.mobile-bottom-nav{
+  display:grid!important;
+  grid-template-columns:1fr 1fr 1.15fr 1fr 1fr!important;
+  position:fixed!important;
+  z-index:950!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  min-height:70px!important;
+  padding:6px 14px max(6px,env(safe-area-inset-bottom))!important;
+  background:rgba(7,18,34,.98)!important;
+  border-top:1px solid var(--line)!important;
+  box-shadow:0 -10px 30px rgba(0,0,0,.34)!important;
+  backdrop-filter:blur(14px)!important;
+}
+
+.mobile-nav-item,
+.mobile-nav-new{
+  appearance:none!important;
+  border:0!important;
+  background:transparent!important;
+  color:#9fb0c6!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:3px!important;
+  min-width:0!important;
+  font:inherit!important;
+}
+
+.mobile-nav-item span{
+  font-size:1.25rem!important;
+  line-height:1!important;
+}
+
+.mobile-nav-item small,
+.mobile-nav-new small{
+  font-size:.72rem!important;
+}
+
+.mobile-nav-item.active{
+  color:#5f9cff!important;
+}
+
+.mobile-nav-new span{
+  display:grid!important;
+  place-items:center!important;
+  width:52px!important;
+  height:52px!important;
+  margin-top:-20px!important;
+  border-radius:999px!important;
+  background:#4f8cff!important;
+  color:#fff!important;
+  font-size:2rem!important;
+  box-shadow:0 8px 24px rgba(79,140,255,.42)!important;
+}
+
+.mobile-nav-new small{
+  color:#d9e5f5!important;
+}
+
+/* Desktop/tablet: nav remains app-like but less oversized */
+@media (min-width:761px){
+  .mobile-bottom-nav{
+    min-height:72px!important;
+    padding-left:max(28px,env(safe-area-inset-left))!important;
+    padding-right:max(28px,env(safe-area-inset-right))!important;
+  }
+
+  .mobile-nav-item,
+  .mobile-nav-new{
+    max-width:220px!important;
+    width:100%!important;
+    justify-self:center!important;
+  }
+
+  .mobile-nav-item small,
+  .mobile-nav-new small{
+    font-size:.78rem!important;
+  }
+}
+
+/* ----------------------------------------------------------
+   WIDE INVENTORY — FORCE ALL META FIELDS VISIBLE
+   ---------------------------------------------------------- */
+@media (min-width:700px) and (max-width:1180px){
+
+  /* Rebuild again with explicit dedicated fields */
+  #inventoryView tbody tr{
+    display:grid!important;
+    grid-template-columns:
+      72px
+      minmax(110px,.8fr)
+      minmax(130px,.9fr)
+      minmax(115px,.8fr)
+      minmax(150px,1fr)
+      minmax(120px,.75fr)
+      112px!important;
+    grid-template-areas:
+      "photo title title title title title qty"
+      "photo brand fcc sku oem location qty"
+      "photo vehicle vehicle vehicle vehicle vehicle qty"
+      "photo actions actions actions actions actions actions"!important;
+    column-gap:12px!important;
+    row-gap:12px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow:hidden!important;
+    align-items:start!important;
+  }
+
+  #inventoryView .product-brand-fcc,
+  #inventoryView .product-sku-oem{
+    display:contents!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  /* Brand */
+  #inventoryView .meta-brand{
+    grid-area:brand!important;
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  /* FCC */
+  #inventoryView .meta-fcc{
+    grid-area:fcc!important;
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  /* SKU */
+  #inventoryView .meta-sku{
+    grid-area:sku!important;
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  /* OEM */
+  #inventoryView .meta-oem{
+    grid-area:oem!important;
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  #inventoryView .product-meta-field{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:72px!important;
+    padding:10px 12px!important;
+    background:#09172a!important;
+    border:1px solid rgba(255,255,255,.07)!important;
+    border-radius:11px!important;
+    overflow:hidden!important;
+  }
+
+  #inventoryView .product-meta-label{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    margin-bottom:6px!important;
+    font-size:.66rem!important;
+    font-weight:800!important;
+    text-transform:uppercase!important;
+    color:var(--muted)!important;
+  }
+
+  #inventoryView .product-meta-value{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    min-width:0!important;
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+    font-size:.94rem!important;
+  }
+
+  /* Remove inherited nth-child hiding/formatting from old versions */
+  #inventoryView tbody td:nth-child(3),
+  #inventoryView tbody td:nth-child(4){
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  /* Vehicle gets full dedicated row */
+  #inventoryView .product-vehicle-cell{
+    grid-area:vehicle!important;
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:72px!important;
+    overflow:visible!important;
+    padding:10px 12px!important;
+  }
+
+  /* Location */
+  #inventoryView .product-location-cell{
+    grid-area:location!important;
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    min-width:0!important;
+    max-width:100%!important;
+  }
+
+  /* Stock */
+  #inventoryView .product-stock-cell{
+    grid-area:qty!important;
+    display:flex!important;
+    visibility:visible!important;
+    opacity:1!important;
+    width:112px!important;
+    min-width:112px!important;
+    max-width:112px!important;
+    overflow:visible!important;
+    justify-content:flex-end!important;
+    z-index:6!important;
+  }
+}
+
+/* Very wide displays: keep Brand visible in classic/table mode too */
+@media (min-width:1181px){
+  #inventoryView .meta-brand,
+  #inventoryView .meta-fcc,
+  #inventoryView .meta-sku,
+  #inventoryView .meta-oem,
+  #inventoryView .product-meta-field,
+  #inventoryView .product-meta-label,
+  #inventoryView .product-meta-value{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  #inventoryView .product-brand-fcc,
+  #inventoryView .product-sku-oem{
+    visibility:visible!important;
+    opacity:1!important;
+  }
+}

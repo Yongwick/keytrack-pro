@@ -1,50 +1,35 @@
-# KeyTrack Pro Enterprise 5.0 — Clean Responsive Rebuild
+# KeyTrack Pro Enterprise 5.1 — Div Card Inventory
 
-## Base
-Esta versión parte de **v4.19**, elegida como base estable.
+## Cambio principal
+El inventario deja de usar completamente:
+- table
+- tr
+- td
 
-## Conserva de v4.19
-- Ficha contextual desde cada producto.
-- Indicadores de stock.
-- Inventario y ventas estables.
-- Estructura de datos existente.
-- Sin cambios SQL.
+Cada producto ahora se renderiza como una tarjeta DIV independiente.
 
-## Reconstrucción responsive
-Se crea una única tarjeta de inventario:
+Esto elimina el problema de:
+- tarjetas con altura gigantesca
+- contenido desplazado al fondo
+- columnas que colapsan
+- comportamiento extraño al rotar el celular
 
-- Foto
-- Nombre
-- Stock
+## Layout
+### Vertical
+- Foto + nombre + stock
 - Marca
 - FCC ID
 - SKU
 - OEM / PN
 - Vehículo
 - Ubicación
-- ±
-- Ficha
-- Historial
-- Editar
-
-### Vertical
-- Tarjetas compactas.
-- Sin datos duplicados.
-- Sin campos cruzados.
-- Stock arriba a la derecha.
+- ± | Ficha | Historial | Editar
 
 ### Horizontal / tablet
-- Marca | FCC | SKU | OEM en cuatro columnas.
-- Vehículo ~70% | Ubicación ~30%.
-- Stock separado.
-- Acciones separadas.
-- Sin columnas colapsadas.
-- Sin espacios gigantes.
-
-### Navegación
-- Barra inferior fija.
-- Celular horizontal sigue usando shell móvil.
-- El menú lateral solo funciona como drawer en teléfono horizontal.
+- Foto + nombre + stock
+- Marca | FCC | SKU | OEM
+- Vehículo ~70% | Ubicación ~30%
+- Acciones separadas
 
 ## Instalación
 No requiere SQL.

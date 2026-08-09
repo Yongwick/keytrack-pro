@@ -52,61 +52,60 @@ export function renderInventory(){
 
   body.innerHTML=rows.map(x=>{
     const qty=safeNumber(x.quantity),min=safeNumber(x.minimum_quantity);
-    return `<tr class="inventory-card-row">
-      <td class="product-photo-cell">
-        ${x.image_url?`<img class="product-photo" src="${esc(x.image_url)}" alt="">`:'<div class="photo-placeholder">🔑</div>'}
-      </td>
-
-      <td class="product-title-cell">
-        <b>${esc(x.name)}</b>
-        <div class="muted">${esc(x.notes||'Sin notas')}</div>
-      </td>
-
-      <td class="product-stock-cell">${qtyPill(qty,min)}</td>
-
-      <td class="product-meta-cell">
-        <div class="product-meta-grid">
-          <div class="product-meta-field">
-            <span class="product-meta-label">Marca</span>
-            <span class="product-meta-value">${esc(x.brand||'—')}</span>
-          </div>
-          <div class="product-meta-field">
-            <span class="product-meta-label">FCC ID</span>
-            <span class="product-meta-value muted">${esc(x.fcc_id||'Sin FCC')}</span>
-          </div>
-          <div class="product-meta-field">
-            <span class="product-meta-label">SKU</span>
-            <span class="product-meta-value strong">${esc(x.sku||'—')}</span>
-          </div>
-          <div class="product-meta-field">
-            <span class="product-meta-label">OEM / PN</span>
-            <span class="product-meta-value muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</span>
-          </div>
+    return `<div class="inventory-card" data-product-id="${x.id}">
+      <div class="inventory-card-head">
+        <div class="inventory-card-photo">
+          ${x.image_url?`<img class="product-photo" src="${esc(x.image_url)}" alt="">`:'<div class="photo-placeholder">🔑</div>'}
         </div>
-      </td>
 
-      <td class="product-info-cell">
-        <div class="product-info-grid">
-          <div class="product-vehicle-box">
-            <span class="product-meta-label">Vehículo</span>
-            <div class="product-info-value">${vehicle(x.vehicle_compatibility)}</div>
-          </div>
-          <div class="product-location-box">
-            <span class="product-meta-label">Ubicación</span>
-            <div class="product-info-value">${esc(x.locations?.name||'—')}</div>
-          </div>
+        <div class="inventory-card-title">
+          <b>${esc(x.name)}</b>
+          <div class="muted">${esc(x.notes||'Sin notas')}</div>
         </div>
-      </td>
 
-      <td class="product-actions-cell">
-        <div class="inventory-actions">
-          <button class="btn small" data-product-action="move" data-id="${x.id}">±</button>
-          <button class="btn small" data-product-action="view" data-id="${x.id}">Ficha</button>
-          <button class="btn small" data-product-action="history" data-id="${x.id}">Historial</button>
-          <button class="btn small" data-product-action="edit" data-id="${x.id}">Editar</button>
+        <div class="inventory-card-stock">
+          ${qtyPill(qty,min)}
         </div>
-      </td>
-    </tr>`;
+      </div>
+
+      <div class="inventory-card-meta">
+        <div class="inventory-meta-box">
+          <span class="product-meta-label">Marca</span>
+          <span class="product-meta-value">${esc(x.brand||'—')}</span>
+        </div>
+        <div class="inventory-meta-box">
+          <span class="product-meta-label">FCC ID</span>
+          <span class="product-meta-value muted">${esc(x.fcc_id||'Sin FCC')}</span>
+        </div>
+        <div class="inventory-meta-box">
+          <span class="product-meta-label">SKU</span>
+          <span class="product-meta-value strong">${esc(x.sku||'—')}</span>
+        </div>
+        <div class="inventory-meta-box">
+          <span class="product-meta-label">OEM / PN</span>
+          <span class="product-meta-value muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</span>
+        </div>
+      </div>
+
+      <div class="inventory-card-info">
+        <div class="inventory-info-box inventory-vehicle-box">
+          <span class="product-meta-label">Vehículo</span>
+          <div class="product-info-value">${vehicle(x.vehicle_compatibility)}</div>
+        </div>
+
+        <div class="inventory-info-box inventory-location-box">
+          <span class="product-meta-label">Ubicación</span>
+          <div class="product-info-value">${esc(x.locations?.name||'—')}</div>
+        </div>
+      </div>
+
+      <div class="inventory-card-actions">
+        <button class="btn small" data-product-action="move" data-id="${x.id}">±</button>
+        <button class="btn small" data-product-action="view" data-id="${x.id}">Ficha</button>
+        <button class="btn small" data-product-action="history" data-id="${x.id}">Historial</button>
+        <button class="btn small" data-product-action="edit" data-id="${x.id}">Editar</button>
+      </div>
+    </div>`;
   }).join('');
 
   $('#count').textContent=`${rows.length} resultado${rows.length===1?'':'s'}`;

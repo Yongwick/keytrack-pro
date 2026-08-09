@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 5.0",
+  "name": "KeyTrack Pro Enterprise 5.1",
   "short_name": "KeyTrack Pro",
-  "description": "Reconstrucción responsive limpia basada en la versión estable 4.19.",
+  "description": "Inventario reconstruido con DIV cards, sin table layout.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

@@ -1,23 +1,18 @@
-# KeyTrack Pro Enterprise 4.14 — Mobile Compact
+# KeyTrack Pro Enterprise 4.15 — Action Buttons Fix
 
-Conserva todas las funciones de v4.13 y compacta el inventario móvil.
+Corrige el problema visible en v4.14 donde los botones ±, Ficha, Historial,
+Editar y Borrar podían comprimirse hasta mostrar las letras verticalmente.
 
 ## Cambios
-- En teléfonos medianos/grandes:
-  - Marca / FCC y SKU / OEM quedan lado a lado.
-  - Vehículo usa todo el ancho.
-  - Ubicación más compacta.
-  - Acciones caben en una fila cuando hay espacio.
-  - Borrar queda separado y menos prominente.
-- En teléfonos muy angostos:
-  - Los metadatos siguen uno debajo del otro para evitar superposiciones.
-  - Se reducen paddings y alturas.
-- Fotos y badges de stock más compactos.
-- Conserva cámara corregida, importación Excel, PWA, ventas y Super Admin.
+- Botones siempre horizontales.
+- En celular: acciones en 2 columnas.
+- En pantallas móviles más anchas: hasta 4 columnas cuando caben.
+- Borrar ya no se convierte en una columna angosta.
+- Eliminado espacio vacío innecesario debajo de las acciones.
+- Conserva el diseño compacto de Marca/FCC + SKU/OEM.
+- Conserva cámara, Excel, PWA, ventas, Super Admin y datos existentes.
 
 ## Instalación
-1. No requiere SQL.
-2. Reemplaza todos los archivos en GitHub.
-3. Espera Vercel.
-4. No desinstales la app.
-5. Cierra completamente KeyTrack Pro y vuelve a abrirla.
+No requiere SQL ni desinstalar la PWA.
+Reemplaza todos los archivos en GitHub, espera el deploy de Vercel,
+cierra completamente KeyTrack Pro y vuelve a abrirla.

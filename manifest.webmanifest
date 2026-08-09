@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 4.14",
+  "name": "KeyTrack Pro Enterprise 4.15",
   "short_name": "KeyTrack Pro",
-  "description": "Inventario y POS multiempresa con tarjetas móviles compactas.",
+  "description": "Inventario y POS multiempresa con controles móviles corregidos.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

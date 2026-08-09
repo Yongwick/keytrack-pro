@@ -119,17 +119,41 @@ window.addEventListener('unhandledrejection',e=>console.error('KeyTrack async:',
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(console.warn));
 
 const mobileMenuToggle=document.querySelector('#mobileMenuToggle');
+const mobileMenuClose=document.querySelector('#mobileMenuClose');
 const sidebar=document.querySelector('.sidebar');
-if(mobileMenuToggle && sidebar){
-  mobileMenuToggle.addEventListener('click',()=>{
-    sidebar.classList.toggle('mobile-open');
-    mobileMenuToggle.textContent=sidebar.classList.contains('mobile-open')?'✕ Cerrar':'☰ Menú';
-  });
-  sidebar.addEventListener('click',event=>{
-    const button=event.target.closest('[data-view]');
-    if(button && window.matchMedia('(max-width:760px)').matches){
-      sidebar.classList.remove('mobile-open');
-      mobileMenuToggle.textContent='☰ Menú';
-    }
-  });
+
+function openMobileMenu(){
+  if(!sidebar)return;
+  sidebar.classList.add('mobile-open');
+  document.body.classList.add('mobile-menu-open');
 }
+function closeMobileMenu(){
+  if(!sidebar)return;
+  sidebar.classList.remove('mobile-open');
+  document.body.classList.remove('mobile-menu-open');
+}
+
+mobileMenuToggle?.addEventListener('click',openMobileMenu);
+mobileMenuClose?.addEventListener('click',closeMobileMenu);
+
+sidebar?.addEventListener('click',event=>{
+  const button=event.target.closest('[data-view]');
+  if(button && window.matchMedia('(max-width:760px)').matches){
+    closeMobileMenu();
+  }
+});
+
+document.querySelectorAll('[data-mobile-view]').forEach(button=>{
+  button.addEventListener('click',()=>{
+    const view=button.dataset.mobileView;
+    if(view==='superadmin'&&!state.isPlatformAdmin)return toast('Acceso restringido');
+    switchView(view);
+    document.querySelectorAll('[data-mobile-view]').forEach(x=>x.classList.toggle('active',x===button));
+  });
+});
+
+document.querySelector('[data-mobile-new]')?.addEventListener('click',()=>{
+  document.querySelector('#add')?.click();
+});
+
+document.querySelector('[data-mobile-more]')?.addEventListener('click',openMobileMenu);

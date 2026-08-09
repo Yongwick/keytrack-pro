@@ -7,7 +7,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
-<title>KeyTrack Pro Enterprise 4.8</title>
+<title>KeyTrack Pro Enterprise 4.9</title>
 <link rel="stylesheet" href="./app.css">
 </head>
 <body>
@@ -28,24 +28,31 @@
 
 <div id="app" class="app hidden">
 <header>
- <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.8 · Mobile Polished</div></div></div>
+ <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.9 · Mobile Navigation</div></div></div>
  <div class="row">
   <span class="status"><span id="dot" class="dot"></span><span id="cloud">Conectando…</span></span>
-  <span id="versionBadge" class="badge" title="Versión estable">v4.8</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
+  <span id="versionBadge" class="badge" title="Versión estable">v4.9</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
   <button id="mobileMenuToggle" class="btn mobile-only" type="button">☰ Menú</button>
 <button id="installApp" class="btn hidden" type="button">⬇ Instalar app</button>
-<button id="csv" class="btn">CSV</button><button id="logout" class="btn">Salir</button><button id="add" class="btn primary">+ Nuevo</button>
+<button id="csv" class="btn">CSV</button><button id="add" class="btn primary">+ Nuevo</button>
  </div>
 </header>
-<div class="layout-shell"><aside class="sidebar"><div class="nav" style="display:flex;gap:8px;overflow:auto;margin-bottom:14px">
+<div class="layout-shell"><aside class="sidebar">
+<div class="mobile-menu-head">
+  <div><b>Menú</b><div class="muted">KeyTrack Pro</div></div>
+  <button id="mobileMenuClose" class="btn mobile-only" type="button" aria-label="Cerrar menú">✕</button>
+</div>
+<div class="nav" style="display:flex;gap:8px;overflow:auto;margin-bottom:14px">
   <button class="btn active" data-view="inventory">Inventario</button>
   <button class="btn" data-view="dashboard">Dashboard</button>
   <button class="btn" data-view="detail">Ficha de producto</button>
   <button class="btn" data-view="movements">Movimientos</button>
   <button class="btn" data-view="branches">Sucursales</button><button class="btn" data-view="customers">Clientes</button><button class="btn" data-view="suppliers">Proveedores</button><button class="btn" data-view="purchases">Compras</button><button class="btn" data-view="sales">Ventas</button><button id="superAdminNav" class="btn hidden" data-view="superadmin">Super Admin</button>
 </div>
-
-
+<div class="sidebar-footer">
+  <button id="logout" class="btn logout-btn" type="button">⇥ Salir de KeyTrack Pro</button>
+  <div class="muted logout-note">Cierra la sesión únicamente en este dispositivo.</div>
+</div>
 </aside><main class="workspace"><section id="inventoryView">
 <section class="stats">
  <div class="card"><div class="muted">Artículos</div><div id="si" class="num">0</div></div>
@@ -151,6 +158,15 @@
 </div>
 
 </main></div>
+
+<nav id="mobileBottomNav" class="mobile-bottom-nav" aria-label="Navegación móvil">
+  <button type="button" class="mobile-nav-item" data-mobile-view="dashboard"><span>⌂</span><small>Inicio</small></button>
+  <button type="button" class="mobile-nav-item active" data-mobile-view="inventory"><span>▣</span><small>Inventario</small></button>
+  <button type="button" class="mobile-nav-new" data-mobile-new><span>＋</span><small>Nuevo</small></button>
+  <button type="button" class="mobile-nav-item" data-mobile-view="sales"><span>▱</span><small>Ventas</small></button>
+  <button type="button" class="mobile-nav-item" data-mobile-more><span>•••</span><small>Más</small></button>
+</nav>
+
 <dialog id="item">
  <div class="dh row"><h3 id="ititle">Nuevo artículo</h3><button id="ix" class="btn">×</button></div>
  <form id="if"><input id="iid" type="hidden"><input id="oldimg" type="hidden">

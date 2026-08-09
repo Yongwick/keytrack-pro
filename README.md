@@ -1,17 +1,24 @@
-# KeyTrack Pro Enterprise 4.8 — Mobile Polished
+# KeyTrack Pro Enterprise 4.9 — Mobile Navigation
 
-Mejora la interfaz móvil sin modificar Supabase ni los datos.
+Mejora la navegación de la aplicación instalada.
 
-- Menú móvil con botón ☰ Menú.
-- Todos los módulos visibles sin desplazamiento horizontal.
-- Tarjetas de inventario más limpias.
-- Acciones táctiles más grandes.
-- Header reorganizado para teléfonos.
-- POS y ventas mejor adaptados.
+## Cambios
+- Se elimina **Salir** de la cabecera.
+- **Salir de KeyTrack Pro** queda al final del menú.
+- El botón superior siempre dice **☰ Menú**.
+- El menú abre como panel lateral y tiene su propia **X** para cerrar.
+- Nueva barra inferior móvil:
+  - Inicio
+  - Inventario
+  - + Nuevo
+  - Ventas
+  - Más
+- CSV y + Nuevo permanecen accesibles arriba.
+- No modifica Supabase ni los datos existentes.
 
 ## Instalación
 1. No requiere SQL.
-2. Reemplaza/sube los archivos en GitHub.
+2. Reemplaza/sube todos los archivos en GitHub.
 3. Espera Vercel.
-4. No desinstales la app.
-5. Ciérrala y vuelve a abrirla.
+4. No desinstales la PWA.
+5. Cierra KeyTrack Pro completamente y vuelve a abrirlo.

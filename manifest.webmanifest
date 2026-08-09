@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 5.1",
+  "name": "KeyTrack Pro Enterprise 5.2",
   "short_name": "KeyTrack Pro",
-  "description": "Inventario reconstruido con DIV cards, sin table layout.",
+  "description": "Inventario estable con barra inferior oscura consistente en vertical y horizontal.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

@@ -2988,3 +2988,117 @@ body{
     display:inline-flex!important;
   }
 }
+
+
+/* ==========================================================
+   KEYTRACK PRO 5.2 — BOTTOM NAV THEME FIX
+   Misma barra inferior oscura en vertical y horizontal.
+   ========================================================== */
+
+.mobile-bottom-nav{
+  display:grid!important;
+  grid-template-columns:1fr 1fr 1.15fr 1fr 1fr!important;
+  position:fixed!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  z-index:950!important;
+  min-height:70px!important;
+  padding:6px 14px max(6px,env(safe-area-inset-bottom))!important;
+  background:rgba(7,18,34,.98)!important;
+  background-color:#071222!important;
+  border-top:1px solid var(--line)!important;
+  box-shadow:0 -10px 30px rgba(0,0,0,.34)!important;
+  backdrop-filter:blur(14px)!important;
+  -webkit-backdrop-filter:blur(14px)!important;
+  color:#9fb0c6!important;
+}
+
+.mobile-bottom-nav button{
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  border:0!important;
+  background:transparent!important;
+  color:#9fb0c6!important;
+  font:inherit!important;
+}
+
+.mobile-nav-item,
+.mobile-nav-new{
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  background:transparent!important;
+  border:0!important;
+  color:#9fb0c6!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:3px!important;
+  min-width:0!important;
+  box-shadow:none!important;
+}
+
+.mobile-nav-item span{
+  color:inherit!important;
+}
+
+.mobile-nav-item small,
+.mobile-nav-new small{
+  color:inherit!important;
+}
+
+.mobile-nav-item.active{
+  color:#5f9cff!important;
+}
+
+.mobile-nav-new{
+  color:#d9e5f5!important;
+}
+
+.mobile-nav-new span{
+  display:grid!important;
+  place-items:center!important;
+  width:52px!important;
+  height:52px!important;
+  margin-top:-20px!important;
+  border-radius:999px!important;
+  background:#4f8cff!important;
+  color:#fff!important;
+  font-size:2rem!important;
+  box-shadow:0 8px 24px rgba(79,140,255,.42)!important;
+}
+
+/* Explicit landscape override: Chrome must not apply default button styles */
+@media (orientation:landscape){
+  .mobile-bottom-nav{
+    background:#071222!important;
+    background-color:#071222!important;
+    border-top-color:var(--line)!important;
+  }
+
+  .mobile-bottom-nav button,
+  .mobile-nav-item,
+  .mobile-nav-new{
+    background:transparent!important;
+    background-color:transparent!important;
+    border:0!important;
+    outline:0!important;
+    box-shadow:none!important;
+    color:#9fb0c6!important;
+  }
+
+  .mobile-nav-item.active{
+    color:#5f9cff!important;
+  }
+
+  .mobile-nav-new{
+    color:#d9e5f5!important;
+  }
+
+  .mobile-nav-new span{
+    background:#4f8cff!important;
+    color:#fff!important;
+    box-shadow:0 8px 24px rgba(79,140,255,.42)!important;
+  }
+}

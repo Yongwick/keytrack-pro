@@ -1,35 +1,24 @@
-# KeyTrack Pro Enterprise 5.1 — Div Card Inventory
+# KeyTrack Pro Enterprise 5.2 — Bottom Nav Theme Fix
 
-## Cambio principal
-El inventario deja de usar completamente:
-- table
-- tr
-- td
+## Base
+Parte de la v5.1 estable.
 
-Cada producto ahora se renderiza como una tarjeta DIV independiente.
+## Corrección
+La barra inferior ahora mantiene exactamente el mismo estilo oscuro en:
+- vertical
+- horizontal
+- tablet
 
-Esto elimina el problema de:
-- tarjetas con altura gigantesca
-- contenido desplazado al fondo
-- columnas que colapsan
-- comportamiento extraño al rotar el celular
+Se eliminan estilos blancos/nativos del navegador en los botones de la barra inferior.
 
-## Layout
-### Vertical
-- Foto + nombre + stock
-- Marca
-- FCC ID
-- SKU
-- OEM / PN
-- Vehículo
-- Ubicación
-- ± | Ficha | Historial | Editar
-
-### Horizontal / tablet
-- Foto + nombre + stock
-- Marca | FCC | SKU | OEM
-- Vehículo ~70% | Ubicación ~30%
-- Acciones separadas
+## Se conserva
+- Inventario con DIV cards
+- Stock visible
+- Marca / FCC / SKU / OEM
+- Vehículo / Ubicación
+- Barra inferior fija
+- Ficha contextual
+- Sin cambios SQL
 
 ## Instalación
 No requiere SQL.

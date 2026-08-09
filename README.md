@@ -1,36 +1,52 @@
-# KeyTrack Pro Enterprise 4.29 — Clean Responsive Cards
+# KeyTrack Pro Enterprise 5.0 — Clean Responsive Rebuild
 
-## Cambio importante
-Se dejó de usar la estructura antigua de celdas agrupadas para el inventario.
-Cada producto ahora usa una única estructura estable:
+## Base
+Esta versión parte de **v4.19**, elegida como base estable.
+
+## Conserva de v4.19
+- Ficha contextual desde cada producto.
+- Indicadores de stock.
+- Inventario y ventas estables.
+- Estructura de datos existente.
+- Sin cambios SQL.
+
+## Reconstrucción responsive
+Se crea una única tarjeta de inventario:
 
 - Foto
 - Nombre
+- Stock
 - Marca
 - FCC ID
 - SKU
 - OEM / PN
 - Vehículo
 - Ubicación
-- Stock
-- Acciones
+- ±
+- Ficha
+- Historial
+- Editar
 
-## Vertical
-- Marca, FCC, SKU y OEM aparecen una sola vez.
-- Vehículo contiene únicamente vehículos.
-- Ubicación contiene únicamente ubicación.
-- Stock queda arriba a la derecha.
-- Sin columnas colapsadas ni datos duplicados.
+### Vertical
+- Tarjetas compactas.
+- Sin datos duplicados.
+- Sin campos cruzados.
+- Stock arriba a la derecha.
 
-## Horizontal
-- Marca | FCC ID | SKU | OEM/PN en cuatro columnas reales.
-- Vehículo 70% | Ubicación 30%.
-- Stock tiene su propia columna.
-- ± | Ficha | Historial | Editar quedan separados del stock.
-- No hay nombre de producto en una letra por línea.
-- Se eliminan los grandes espacios vacíos generados por los layouts anteriores.
+### Horizontal / tablet
+- Marca | FCC | SKU | OEM en cuatro columnas.
+- Vehículo ~70% | Ubicación ~30%.
+- Stock separado.
+- Acciones separadas.
+- Sin columnas colapsadas.
+- Sin espacios gigantes.
+
+### Navegación
+- Barra inferior fija.
+- Celular horizontal sigue usando shell móvil.
+- El menú lateral solo funciona como drawer en teléfono horizontal.
 
 ## Instalación
 No requiere SQL.
-Reemplaza todos los archivos en GitHub, espera Vercel,
+Reemplaza todos los archivos del ZIP en GitHub, espera Vercel,
 cierra completamente KeyTrack Pro y vuelve a abrirla.

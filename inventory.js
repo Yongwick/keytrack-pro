@@ -62,21 +62,23 @@ export function renderInventory(){
         <div class="muted">${esc(x.notes||'Sin notas')}</div>
       </td>
 
+      <td class="product-stock-cell">${qtyPill(qty,min)}</td>
+
       <td class="product-meta-cell">
         <div class="product-meta-grid">
-          <div class="product-meta-field meta-brand">
+          <div class="product-meta-field">
             <span class="product-meta-label">Marca</span>
             <span class="product-meta-value">${esc(x.brand||'—')}</span>
           </div>
-          <div class="product-meta-field meta-fcc">
+          <div class="product-meta-field">
             <span class="product-meta-label">FCC ID</span>
             <span class="product-meta-value muted">${esc(x.fcc_id||'Sin FCC')}</span>
           </div>
-          <div class="product-meta-field meta-sku">
+          <div class="product-meta-field">
             <span class="product-meta-label">SKU</span>
             <span class="product-meta-value strong">${esc(x.sku||'—')}</span>
           </div>
-          <div class="product-meta-field meta-oem">
+          <div class="product-meta-field">
             <span class="product-meta-label">OEM / PN</span>
             <span class="product-meta-value muted">${esc(x.oem_number||x.barcode||'Sin OEM')}</span>
           </div>
@@ -94,10 +96,6 @@ export function renderInventory(){
             <div class="product-info-value">${esc(x.locations?.name||'—')}</div>
           </div>
         </div>
-      </td>
-
-      <td class="product-stock-cell">
-        ${qtyPill(qty,min)}
       </td>
 
       <td class="product-actions-cell">

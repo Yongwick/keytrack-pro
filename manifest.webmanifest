@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 4.29",
+  "name": "KeyTrack Pro Enterprise 5.0",
   "short_name": "KeyTrack Pro",
-  "description": "Inventario con tarjetas responsive limpias y estructura única.",
+  "description": "Reconstrucción responsive limpia basada en la versión estable 4.19.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

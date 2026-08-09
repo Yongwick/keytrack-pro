@@ -3644,3 +3644,80 @@ body{
     transform:translateX(0)!important;
   }
 }
+
+/* ==========================================================
+   KEYTRACK PRO 4.25 — LANDSCAPE 5-COLUMN META FIX
+   Landscape: MARCA | FCC ID | SKU | OEM/PN | STOCK
+   Vehicle 70% | Location 30%
+   ========================================================== */
+@media (orientation:landscape) and (max-height:560px) and (min-width:600px){
+  #inventoryView tbody tr{
+    grid-template-columns:64px repeat(4,minmax(145px,1fr)) 108px!important;
+    grid-template-areas:
+      "photo title title title title qty"
+      ". brand fcc sku oem qty"
+      ". vehicle vehicle vehicle location qty"
+      ". actions actions actions actions ."!important;
+    align-items:start!important;
+  }
+
+  #inventoryView .product-brand-fcc,
+  #inventoryView .product-sku-oem{display:contents!important}
+
+  #inventoryView .meta-brand,
+  #inventoryView .meta-fcc,
+  #inventoryView .meta-sku,
+  #inventoryView .meta-oem{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    position:static!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    min-height:68px!important;
+  }
+  #inventoryView .meta-brand{grid-area:brand!important}
+  #inventoryView .meta-fcc{grid-area:fcc!important}
+  #inventoryView .meta-sku{grid-area:sku!important}
+  #inventoryView .meta-oem{grid-area:oem!important}
+
+  #inventoryView .meta-brand .product-meta-label,
+  #inventoryView .meta-fcc .product-meta-label,
+  #inventoryView .meta-sku .product-meta-label,
+  #inventoryView .meta-oem .product-meta-label,
+  #inventoryView .meta-brand .product-meta-value,
+  #inventoryView .meta-fcc .product-meta-value,
+  #inventoryView .meta-sku .product-meta-value,
+  #inventoryView .meta-oem .product-meta-value{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  #inventoryView .product-meta-value{
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+  }
+
+  #inventoryView .product-vehicle-cell{grid-area:vehicle!important}
+  #inventoryView .product-location-cell{grid-area:location!important}
+
+  #inventoryView .product-vehicle-cell::before{
+    content:"VEHÍCULO"!important;display:block!important;font-size:.64rem!important;
+    color:var(--muted)!important;font-weight:800!important;margin-bottom:6px!important;
+  }
+  #inventoryView .product-location-cell::before{
+    content:"UBICACIÓN"!important;display:block!important;font-size:.64rem!important;
+    color:var(--muted)!important;font-weight:800!important;margin-bottom:6px!important;
+  }
+
+  #inventoryView .product-stock-cell{
+    grid-area:qty!important;width:108px!important;min-width:108px!important;max-width:108px!important;
+  }
+  #inventoryView .stock-status{width:104px!important;min-width:104px!important;max-width:104px!important}
+  #inventoryView .stock-warning,#inventoryView .stock-label{width:104px!important}
+
+  #inventoryView .product-actions-cell{grid-area:actions!important}
+  #inventoryView .inventory-actions{max-width:620px!important}
+}

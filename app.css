@@ -1077,3 +1077,181 @@ button:disabled{opacity:.55;cursor:not-allowed}
     padding: 9px 11px !important;
   }
 }
+
+/* KEYTRACK PRO 4.12 — RESPONSIVE INVENTORY CARDS */
+@media (max-width: 980px) {
+  #inventoryView .table{overflow:visible!important;width:100%!important}
+  #inventoryView table{display:block!important;width:100%!important;min-width:0!important;table-layout:auto!important}
+  #inventoryView thead{display:none!important}
+  #inventoryView tbody{display:grid!important;gap:12px!important;width:100%!important}
+
+  #inventoryView tbody tr{
+    display:grid!important;
+    grid-template-columns:72px minmax(0,1fr) auto!important;
+    grid-template-areas:
+      "photo title qty"
+      "brand brand brand"
+      "sku sku sku"
+      "vehicle vehicle vehicle"
+      "location location location"
+      "actions actions actions"!important;
+    column-gap:12px!important;
+    row-gap:10px!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:0!important;
+    height:auto!important;
+    padding:12px!important;
+    border:1px solid var(--line)!important;
+    border-radius:15px!important;
+    background:rgba(16,27,45,.96)!important;
+    box-sizing:border-box!important;
+  }
+
+  #inventoryView tbody td{
+    display:block!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:0!important;
+    height:auto!important;
+    padding:0!important;
+    margin:0!important;
+    border:0!important;
+    overflow:visible!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+    position:static!important;
+    box-sizing:border-box!important;
+  }
+
+  #inventoryView tbody td:nth-child(1){grid-area:photo!important}
+  #inventoryView tbody td:nth-child(2){grid-area:title!important}
+  #inventoryView tbody td:nth-child(3){grid-area:brand!important}
+  #inventoryView tbody td:nth-child(4){grid-area:sku!important}
+  #inventoryView tbody td:nth-child(5){grid-area:vehicle!important}
+  #inventoryView tbody td:nth-child(6){grid-area:location!important}
+  #inventoryView tbody td:nth-child(7){grid-area:qty!important}
+  #inventoryView tbody td:nth-child(8){grid-area:actions!important}
+
+  #inventoryView tbody td:nth-child(2) b{
+    display:block!important;
+    font-size:1rem!important;
+    line-height:1.28!important;
+  }
+
+  #inventoryView .product-photo,
+  #inventoryView .photo-placeholder{
+    width:64px!important;
+    height:64px!important;
+    max-width:64px!important;
+    max-height:64px!important;
+    object-fit:contain!important;
+  }
+
+  #inventoryView tbody td:nth-child(7){
+    justify-self:end!important;
+    align-self:start!important;
+  }
+
+  #inventoryView .qty-pill{
+    min-width:48px!important;
+    min-height:38px!important;
+    padding:7px 10px!important;
+    justify-content:center!important;
+    font-weight:900!important;
+  }
+
+  #inventoryView tbody td:nth-child(3),
+  #inventoryView tbody td:nth-child(4),
+  #inventoryView tbody td:nth-child(5),
+  #inventoryView tbody td:nth-child(6){
+    display:block!important;
+    width:100%!important;
+    padding:10px 12px!important;
+    background:#09172a!important;
+    border:1px solid rgba(255,255,255,.06)!important;
+    border-radius:11px!important;
+    line-height:1.38!important;
+    margin-right:0!important;
+    float:none!important;
+  }
+
+  #inventoryView tbody td:nth-child(3)::before,
+  #inventoryView tbody td:nth-child(4)::before,
+  #inventoryView tbody td:nth-child(5)::before,
+  #inventoryView tbody td:nth-child(6)::before{
+    display:block!important;
+    margin-bottom:4px!important;
+    font-size:.68rem!important;
+    font-weight:700!important;
+    letter-spacing:.04em!important;
+    text-transform:uppercase!important;
+    color:var(--muted)!important;
+  }
+
+  #inventoryView tbody td:nth-child(3)::before{content:"Marca / FCC"!important}
+  #inventoryView tbody td:nth-child(4)::before{content:"SKU / OEM"!important}
+  #inventoryView tbody td:nth-child(5)::before{content:"Vehículo"!important}
+  #inventoryView tbody td:nth-child(6)::before{content:"Ubicación"!important}
+
+  #inventoryView .vehicle-summary{
+    max-height:3.9em!important;
+    line-height:1.45!important;
+    overflow:hidden!important;
+  }
+  #inventoryView .vehicle-summary.expanded{max-height:none!important}
+
+  #inventoryView .inventory-actions,
+  #inventoryView tbody td:nth-child(8){
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+    width:100%!important;
+    margin-top:2px!important;
+  }
+
+  #inventoryView .inventory-actions .btn,
+  #inventoryView tbody td:nth-child(8) .btn,
+  #inventoryView tbody td:nth-child(8) button{
+    width:100%!important;
+    min-width:0!important;
+    min-height:42px!important;
+    justify-content:center!important;
+    padding:8px 7px!important;
+    font-size:.8rem!important;
+  }
+
+  #inventoryView .inventory-actions .danger:last-child,
+  #inventoryView tbody td:nth-child(8) .danger:last-child{
+    grid-column:auto!important;
+  }
+
+  #inventoryView .panel{overflow:visible!important}
+}
+
+@media (max-width: 480px) {
+  #inventoryView tbody tr{
+    grid-template-columns:58px minmax(0,1fr) auto!important;
+    column-gap:10px!important;
+    padding:10px!important;
+  }
+
+  #inventoryView .product-photo,
+  #inventoryView .photo-placeholder{
+    width:52px!important;
+    height:52px!important;
+    max-width:52px!important;
+    max-height:52px!important;
+  }
+
+  #inventoryView tbody td:nth-child(3),
+  #inventoryView tbody td:nth-child(4),
+  #inventoryView tbody td:nth-child(5),
+  #inventoryView tbody td:nth-child(6){
+    padding:9px 10px!important;
+  }
+
+  #inventoryView tbody td:nth-child(2) b{font-size:.95rem!important}
+}

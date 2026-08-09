@@ -1,19 +1,16 @@
-# KeyTrack Pro Enterprise 4.11 — Mobile Cards Fix
+# KeyTrack Pro Enterprise 4.12 — Responsive Cards
 
-Esta versión conserva las funciones de 4.10 y corrige la presentación del inventario en celular.
+- Hasta 980 px el inventario usa tarjetas, no tabla.
+- Foto + nombre + stock arriba.
+- Marca / FCC en una fila.
+- SKU / OEM en otra fila.
+- Vehículo y ubicación a ancho completo.
+- Botones en dos columnas.
+- Conserva Importar / Exportar, Excel, ventas, PWA, escáner y Super Admin.
+- No requiere SQL.
 
-## Cambios
-- MARCA / FCC ya no se enciman con SKU / OEM.
-- Cada bloque de información usa una fila independiente en móvil.
-- Vehículo y ubicación ocupan todo el ancho.
-- Textos largos pueden envolver sin invadir otros campos.
-- Botones de acciones quedan debajo del producto.
-- Conserva Importar / Exportar Excel/CSV, ventas, PWA y navegación móvil.
-- Nuevo caché PWA `keytrack-v4-11-shell` para forzar la actualización del CSS.
-
-## Instalación
-1. Reemplaza en GitHub todos los archivos con los del ZIP.
-2. Espera el deployment de Vercel.
-3. NO necesitas desinstalar KeyTrack Pro.
-4. Cierra completamente la app y vuelve a abrirla.
-5. Si aún aparece la versión anterior, abre primero el sitio en Chrome y recarga.
+Instalación:
+1. Reemplaza todos los archivos en GitHub.
+2. Espera Vercel.
+3. No desinstales la app.
+4. Cierra completamente KeyTrack Pro y vuelve a abrirla.

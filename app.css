@@ -1255,3 +1255,129 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
   #inventoryView tbody td:nth-child(2) b{font-size:.95rem!important}
 }
+
+
+/* ==========================================================
+   KEYTRACK PRO 4.13 — CAMERA SCANNER
+   ========================================================== */
+#scanner{
+  width:min(620px,96vw);
+  max-width:620px;
+}
+.scanner-head h3{margin:0}
+.scanner-subtitle{margin-top:3px;font-size:.78rem}
+.scanner-body{padding:16px!important;gap:12px!important}
+.camera-stage{
+  position:relative;
+  width:100%;
+  aspect-ratio:3/4;
+  min-height:300px;
+  max-height:62vh;
+  overflow:hidden;
+  border-radius:16px;
+  background:#000;
+  border:1px solid var(--line);
+}
+#video{
+  display:block;
+  width:100%;
+  height:100%;
+  max-height:none!important;
+  object-fit:cover;
+  background:#000;
+  border-radius:0;
+}
+.scanner-guide{
+  pointer-events:none;
+  position:absolute;
+  inset:14%;
+}
+.scanner-guide .corner{
+  position:absolute;
+  width:40px;
+  height:40px;
+  border-color:#5c99ff;
+  border-style:solid;
+}
+.scanner-guide .tl{top:0;left:0;border-width:4px 0 0 4px;border-radius:9px 0 0 0}
+.scanner-guide .tr{top:0;right:0;border-width:4px 4px 0 0;border-radius:0 9px 0 0}
+.scanner-guide .bl{bottom:0;left:0;border-width:0 0 4px 4px;border-radius:0 0 0 9px}
+.scanner-guide .br{bottom:0;right:0;border-width:0 4px 4px 0;border-radius:0 0 9px 0}
+.scan-line{
+  position:absolute;
+  left:7%;
+  right:7%;
+  top:50%;
+  height:2px;
+  background:rgba(92,153,255,.9);
+  box-shadow:0 0 10px rgba(92,153,255,.8);
+  animation:keytrack-scan-line 2.2s ease-in-out infinite;
+}
+@keyframes keytrack-scan-line{
+  0%,100%{transform:translateY(-90px);opacity:.5}
+  50%{transform:translateY(90px);opacity:1}
+}
+.camera-loading{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-content:center;
+  justify-items:center;
+  gap:12px;
+  color:#fff;
+  background:rgba(0,0,0,.66);
+  z-index:5;
+}
+.camera-spinner{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:4px solid rgba(255,255,255,.2);
+  border-top-color:#5c99ff;
+  animation:keytrack-spin .85s linear infinite;
+}
+@keyframes keytrack-spin{to{transform:rotate(360deg)}}
+.scanner-message{
+  padding:10px 12px;
+  border-radius:11px;
+  background:#0a1729;
+  color:var(--muted);
+  border:1px solid var(--line);
+}
+.scanner-message.scanner-error{
+  color:#fda4af;
+  border-color:rgba(244,63,94,.3);
+  background:rgba(127,29,29,.12);
+}
+.scanner-message.scanner-success{
+  color:#4ade80;
+  border-color:rgba(34,197,94,.28);
+  background:rgba(22,101,52,.12);
+}
+.scanner-error-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.camera-help{
+  padding:12px;
+  display:grid;
+  gap:5px;
+  border-radius:11px;
+  border:1px solid rgba(96,165,250,.25);
+  background:rgba(30,64,175,.08);
+  font-size:.84rem;
+}
+@media(max-width:760px){
+  #scanner{
+    width:calc(100vw - 18px)!important;
+    max-height:94vh;
+  }
+  .camera-stage{
+    aspect-ratio:4/5;
+    max-height:57vh;
+  }
+  .scanner-error-actions{
+    grid-template-columns:1fr;
+  }
+}

@@ -1,16 +1,31 @@
-# KeyTrack Pro Enterprise 4.12 — Responsive Cards
+# KeyTrack Pro Enterprise 4.13 — Camera Scanner Fix
 
-- Hasta 980 px el inventario usa tarjetas, no tabla.
-- Foto + nombre + stock arriba.
-- Marca / FCC en una fila.
-- SKU / OEM en otra fila.
-- Vehículo y ubicación a ancho completo.
-- Botones en dos columnas.
-- Conserva Importar / Exportar, Excel, ventas, PWA, escáner y Super Admin.
-- No requiere SQL.
+Corrige la pantalla negra del escáner en móvil/PWA.
 
-Instalación:
-1. Reemplaza todos los archivos en GitHub.
-2. Espera Vercel.
-3. No desinstales la app.
-4. Cierra completamente KeyTrack Pro y vuelve a abrirla.
+## Mejoras
+- Solicita permiso de cámara correctamente.
+- Intenta usar la cámara trasera.
+- Si falla la selección trasera, intenta una cámara disponible.
+- Espera a que el video esté listo y ejecuta `video.play()`.
+- Video configurado con `autoplay`, `muted` y `playsinline`.
+- Muestra estado de carga.
+- Muestra mensajes claros si:
+  - cámara bloqueada
+  - cámara ocupada
+  - no existe cámara
+  - el navegador no permite cámara
+- Botón **Reintentar cámara**.
+- Ayuda para permisos.
+- Detiene la cámara al cerrar el escáner.
+- Detiene la cámara si la PWA pasa a segundo plano.
+- Marco visual de escaneo.
+- Conserva ingreso manual.
+- Conserva todas las funciones de v4.12.
+
+## Instalación
+1. No requiere SQL.
+2. Reemplaza todos los archivos del ZIP en GitHub.
+3. Espera Vercel.
+4. No desinstales KeyTrack Pro.
+5. Cierra completamente la PWA y vuelve a abrirla.
+6. La primera vez, acepta el permiso de cámara.

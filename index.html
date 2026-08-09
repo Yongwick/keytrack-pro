@@ -7,7 +7,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
-<title>KeyTrack Pro Enterprise 4.12</title>
+<title>KeyTrack Pro Enterprise 4.13</title>
 <link rel="stylesheet" href="./app.css">
 </head>
 <body>
@@ -28,10 +28,10 @@
 
 <div id="app" class="app hidden">
 <header>
- <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.12 · Responsive Cards</div></div></div>
+ <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.13 · Camera Scanner Fix</div></div></div>
  <div class="row">
   <span class="status"><span id="dot" class="dot"></span><span id="cloud">Conectando…</span></span>
-  <span id="versionBadge" class="badge" title="Versión estable">v4.12</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
+  <span id="versionBadge" class="badge" title="Versión estable">v4.13</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
   <button id="mobileMenuToggle" class="btn mobile-only" type="button">☰ Menú</button>
 <button id="installApp" class="btn hidden" type="button">⬇ Instalar app</button>
 <button id="csv" class="btn">⇅ Importar / Exportar</button><button id="add" class="btn primary">+ Nuevo</button>
@@ -273,8 +273,43 @@
 </dialog>
 
 <dialog id="scanner">
- <div class="dh row"><h3>Escanear código</h3><button id="sx" class="btn">×</button></div>
- <div class="scanbox" style="padding:16px"><video id="video" playsinline></video><div class="muted" id="scanmsg">Apunta la cámara al código de barras o QR.</div><button id="manual" class="btn">Ingresar manualmente</button></div>
+ <div class="dh row scanner-head">
+   <div>
+     <h3>Escanear código</h3>
+     <div class="muted scanner-subtitle">Usa la cámara trasera para leer códigos de barras o QR.</div>
+   </div>
+   <button id="sx" class="btn" type="button">×</button>
+ </div>
+ <div class="scanbox scanner-body">
+   <div id="cameraStage" class="camera-stage">
+     <video id="video" playsinline autoplay muted></video>
+     <div class="scanner-guide" aria-hidden="true">
+       <span class="corner tl"></span><span class="corner tr"></span>
+       <span class="corner bl"></span><span class="corner br"></span>
+       <div class="scan-line"></div>
+     </div>
+     <div id="cameraLoading" class="camera-loading">
+       <div class="camera-spinner"></div>
+       <b>Iniciando cámara…</b>
+     </div>
+   </div>
+
+   <div id="scanmsg" class="scanner-message">Solicitando permiso de cámara…</div>
+
+   <div id="cameraErrorActions" class="scanner-error-actions hidden">
+     <button id="retryCamera" class="btn primary" type="button">↻ Reintentar cámara</button>
+     <button id="openCameraHelp" class="btn" type="button">Permisos de cámara</button>
+   </div>
+
+   <div id="cameraHelp" class="camera-help hidden">
+     <b>Si la cámara está bloqueada:</b>
+     <div>1. Abre los permisos de KeyTrack Pro o del navegador.</div>
+     <div>2. Permite el acceso a <b>Cámara</b>.</div>
+     <div>3. Regresa y toca <b>Reintentar cámara</b>.</div>
+   </div>
+
+   <button id="manual" class="btn" type="button">Ingresar manualmente</button>
+ </div>
 </dialog>
 
 <dialog id="history">

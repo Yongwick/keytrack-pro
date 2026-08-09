@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 5.2",
+  "name": "KeyTrack Pro Enterprise 5.3",
   "short_name": "KeyTrack Pro",
-  "description": "Inventario estable con barra inferior oscura consistente en vertical y horizontal.",
+  "description": "Búsqueda unificada con filtros opcionales por vehículo.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

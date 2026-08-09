@@ -4,18 +4,31 @@ import {$,state,esc,safeNumber,toast,downloadText} from './core.js';
 export function filteredItems(){
   const q=($('#search')?.value||'').trim().toLowerCase();
   const category=$('#filter')?.value||'';
+  const make=($('#vehicleMake')?.value||'').trim().toLowerCase();
+  const model=($('#vehicleModel')?.value||'').trim().toLowerCase();
+  const year=($('#vehicleYear')?.value||'').trim().toLowerCase();
+
   return state.items.filter(x=>{
     const qty=safeNumber(x.quantity),min=safeNumber(x.minimum_quantity);
     const stock=!state.stockFilter ||
       (state.stockFilter==='low'&&qty>0&&qty<=min) ||
       (state.stockFilter==='out'&&qty===0);
     const cat=!category||x.category===category;
+
+    const vehicleText=String(x.vehicle_compatibility||'').toLowerCase();
+    const brandText=String(x.brand||'').toLowerCase();
     const haystack=[
       x.name,x.sku,x.serial_number,x.barcode,x.fcc_id,x.ic_number,
       x.brand,x.oem_number,x.frequency,x.chip_type,x.vehicle_compatibility,
       x.supplier,x.equivalences,x.locations?.name,x.notes
     ].join(' ').toLowerCase();
-    return stock&&cat&&(!q||haystack.includes(q));
+
+    const qOk=!q||haystack.includes(q);
+    const makeOk=!make||brandText.includes(make)||vehicleText.includes(make);
+    const modelOk=!model||vehicleText.includes(model);
+    const yearOk=!year||vehicleText.includes(year);
+
+    return stock&&cat&&qOk&&makeOk&&modelOk&&yearOk;
   });
 }
 
@@ -118,15 +131,26 @@ export function renderInventory(){
 export function initInventory({switchView}){
   $('#search').addEventListener('input',renderInventory);
   $('#filter').addEventListener('change',renderInventory);
+
+  ['vehicleMake','vehicleModel','vehicleYear'].forEach(id=>{
+    $('#'+id)?.addEventListener('input',renderInventory);
+  });
+
+  $('#toggleVehicleFilters')?.addEventListener('click',()=>{
+    const box=$('#vehicleFilters');
+    if(!box)return;
+    const open=box.classList.toggle('open');
+    $('#toggleVehicleFilters').textContent=open?'✕ Ocultar filtros':'⚙ Filtros';
+  });
+
   $('#clear').addEventListener('click',()=>{
-    $('#search').value='';$('#filter').value='';state.stockFilter='';renderInventory();
-  });
-  $('#vehicleSearch').addEventListener('click',()=>{
-    const q=[$('#vehicleMake').value,$('#vehicleModel').value,$('#vehicleYear').value].filter(Boolean).join(' ');
-    $('#search').value=q;renderInventory();
-  });
-  $('#vehicleClear').addEventListener('click',()=>{
-    $('#vehicleMake').value='';$('#vehicleModel').value='';$('#vehicleYear').value='';$('#search').value='';renderInventory();
+    $('#search').value='';
+    $('#filter').value='';
+    if($('#vehicleMake'))$('#vehicleMake').value='';
+    if($('#vehicleModel'))$('#vehicleModel').value='';
+    if($('#vehicleYear'))$('#vehicleYear').value='';
+    state.stockFilter='';
+    renderInventory();
   });
 
   // Cards behave as filters.

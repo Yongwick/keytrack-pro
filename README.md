@@ -1,26 +1,26 @@
-# KeyTrack Pro Enterprise 5.2 — Bottom Nav Theme Fix
+# KeyTrack Pro Enterprise 5.3 — Unified Search
 
-## Base
-Parte de la v5.1 estable.
+Se unificó la búsqueda para reducir espacio y evitar búsquedas repetidas.
 
-## Corrección
-La barra inferior ahora mantiene exactamente el mismo estilo oscuro en:
-- vertical
-- horizontal
-- tablet
+## Zona principal
+- Buscar nombre, SKU, FCC, OEM, marca o vehículo
+- Categoría
+- Filtros
+- Escanear
+- Limpiar
 
-Se eliminan estilos blancos/nativos del navegador en los botones de la barra inferior.
+## Filtros opcionales
+Al tocar **⚙ Filtros** aparecen:
+- Marca
+- Modelo
+- Año
 
-## Se conserva
-- Inventario con DIV cards
-- Stock visible
-- Marca / FCC / SKU / OEM
-- Vehículo / Ubicación
-- Barra inferior fija
+Los filtros se aplican automáticamente mientras escribes.
+El botón Limpiar borra búsqueda, categoría, filtros de vehículo y filtro de stock.
+
+## Conservado
+- Tarjetas estables de v5.2
+- Barra inferior oscura
+- Stock y alertas
 - Ficha contextual
 - Sin cambios SQL
-
-## Instalación
-No requiere SQL.
-Reemplaza todos los archivos del ZIP en GitHub, espera Vercel,
-cierra completamente KeyTrack Pro y vuelve a abrirla.

@@ -3102,3 +3102,62 @@ body{
     box-shadow:0 8px 24px rgba(79,140,255,.42)!important;
   }
 }
+
+
+/* ==========================================================
+   KEYTRACK PRO 5.3 — UNIFIED SEARCH
+   Una sola zona de búsqueda + filtros opcionales.
+   ========================================================== */
+
+.unified-search-panel{
+  display:grid!important;
+  grid-template-columns:minmax(280px,2fr) minmax(190px,.9fr) auto auto auto!important;
+  gap:10px!important;
+  align-items:center!important;
+}
+
+.vehicle-filters{
+  display:none!important;
+  grid-column:1 / -1!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:10px!important;
+  padding-top:2px!important;
+}
+
+.vehicle-filters.open{
+  display:grid!important;
+}
+
+@media (max-width:699px){
+  .unified-search-panel{
+    grid-template-columns:1fr 1fr!important;
+  }
+
+  .unified-search-input,
+  .unified-search-panel #filter{
+    grid-column:1 / -1!important;
+  }
+
+  .unified-search-panel #toggleVehicleFilters{
+    grid-column:1!important;
+  }
+
+  .unified-search-panel #scan{
+    grid-column:2!important;
+  }
+
+  .unified-search-panel #clear{
+    grid-column:1 / -1!important;
+  }
+
+  .vehicle-filters,
+  .vehicle-filters.open{
+    grid-template-columns:1fr!important;
+  }
+}
+
+@media (min-width:700px) and (max-width:1180px){
+  .unified-search-panel{
+    grid-template-columns:minmax(260px,1.8fr) minmax(180px,.9fr) auto auto auto!important;
+  }
+}

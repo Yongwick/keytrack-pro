@@ -1,0 +1,71 @@
+name: Build KeyTrack Pro Android
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "android-project.zip"
+      - ".github/workflows/build-keytrack-android.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar proyecto
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Descomprimir proyecto Android
+        run: |
+          rm -rf android-build
+          mkdir android-build
+          unzip -q android-project.zip -d android-build
+          echo "Contenido:"
+          find android-build -maxdepth 3 -type f | head -100
+
+      - name: Encontrar proyecto Gradle
+        id: project
+        shell: bash
+        run: |
+          SETTINGS=$(find android-build -type f \( -name "settings.gradle" -o -name "settings.gradle.kts" \) | head -1)
+
+          if [ -z "$SETTINGS" ]; then
+            echo "ERROR: No se encontró settings.gradle o settings.gradle.kts"
+            exit 1
+          fi
+
+          PROJECT_DIR=$(dirname "$SETTINGS")
+          echo "dir=$PROJECT_DIR" >> "$GITHUB_OUTPUT"
+          echo "Proyecto encontrado en: $PROJECT_DIR"
+
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Compilar APK
+        working-directory: ${{ steps.project.outputs.dir }}
+        run: |
+          if [ -f "./gradlew" ]; then
+            chmod +x ./gradlew
+            ./gradlew assembleDebug
+          else
+            gradle assembleDebug
+          fi
+
+      - name: Localizar APK
+        run: |
+          find android-build -type f -name "*.apk" -print
+
+      - name: Subir APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: KeyTrack-Pro-Android
+          path: android-build/**/*.apk
+          if-no-files-found: error

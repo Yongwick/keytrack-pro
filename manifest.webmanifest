@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 5.6",
+  "name": "KeyTrack Pro Enterprise 5.7",
   "short_name": "KeyTrack Pro",
-  "description": "Scanner con zona estrecha dedicada a códigos de barras.",
+  "description": "Scanner con franja estrecha y confirmación por 3 lecturas iguales.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

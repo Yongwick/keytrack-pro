@@ -2,6 +2,10 @@ import {$,state,toast} from './core.js';
 
 export function initScanner({renderInventory}){
   let detector=null;
+  let stableCandidate='';
+  let stableCount=0;
+  const STABLE_REQUIRED=3;
+  let lastDetectionAt=0;
   let animationId=null;
   let opening=false;
   let currentTarget='search';
@@ -155,7 +159,14 @@ export function initScanner({renderInventory}){
     return base;
   }
 
+  function resetStableDetection(){
+    stableCandidate='';
+    stableCount=0;
+    lastDetectionAt=0;
+  }
+
   async function startDetector(){
+    resetStableDetection();
     if(!('BarcodeDetector' in window)){
       setMessage('Cámara activa. Este navegador no ofrece detección automática; puedes ingresar el código manualmente.');
       return;
@@ -183,10 +194,28 @@ export function initScanner({renderInventory}){
         try{
           const codes=await detector.detect(video);
           if(codes?.[0]?.rawValue){
-            setMessage('Código detectado.', 'success');
-            apply(codes[0].rawValue);
-            setTimeout(()=>stop(true),120);
-            return;
+            const now=Date.now();
+            const value=String(codes[0].rawValue||'').trim();
+
+            if(value && now-lastDetectionAt>90){
+              lastDetectionAt=now;
+
+              if(value===stableCandidate){
+                stableCount++;
+              }else{
+                stableCandidate=value;
+                stableCount=1;
+              }
+
+              setMessage(`Verificando código: ${value} · ${stableCount}/${STABLE_REQUIRED}`);
+
+              if(stableCount>=STABLE_REQUIRED){
+                setMessage(`Código confirmado: ${value}`, 'success');
+                apply(value);
+                setTimeout(()=>stop(true),120);
+                return;
+              }
+            }
           }
         }catch(error){
           // Ignoramos frames individuales inválidos.

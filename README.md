@@ -1,7 +1,7 @@
-# KeyTrack Pro Enterprise 5.6 — Narrow Barcode Scan Zone
+# KeyTrack Pro Enterprise 5.7 — Stable Barcode Confirm
 
-Cambio principal:
-- Zona de lectura más estrecha y centrada para códigos de barras.
-- Exterior de la zona de lectura ligeramente oscurecido.
-- Se mantienen zoom, linterna y enfoque continuo.
+- Franja de lectura más estrecha, centrada en las barras.
+- El lector exige 3 lecturas consecutivas iguales.
+- Si cambia el valor detectado, el contador reinicia.
+- Se mantienen enfoque continuo, zoom y linterna.
 - No requiere SQL.

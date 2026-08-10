@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 5.8",
+  "name": "KeyTrack Pro Enterprise 5.9",
   "short_name": "KeyTrack Pro",
-  "description": "Scanner que analiza únicamente la franja central de lectura.",
+  "description": "Lectura robusta de códigos con ROI, formatos priorizados y validación multiframe.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

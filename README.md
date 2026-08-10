@@ -1,7 +1,9 @@
-# KeyTrack Pro Enterprise 5.7 — Stable Barcode Confirm
+# KeyTrack Pro Enterprise 5.8 — Cropped Scan ROI
 
-- Franja de lectura más estrecha, centrada en las barras.
-- El lector exige 3 lecturas consecutivas iguales.
-- Si cambia el valor detectado, el contador reinicia.
+Cambios:
+- El detector ya NO analiza todo el frame de la cámara.
+- Se recorta digitalmente exactamente la franja central visible.
+- BarcodeDetector recibe solo esa zona.
+- Se mantienen 3 lecturas consecutivas iguales.
 - Se mantienen enfoque continuo, zoom y linterna.
 - No requiere SQL.

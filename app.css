@@ -3256,3 +3256,19 @@ body{
   right:5%!important;
   top:50%!important;
 }
+
+
+/* ==========================================================
+   KEYTRACK PRO 5.8 — REAL CROPPED SCAN ROI
+   Visual guide and detector crop use the same percentages.
+   ========================================================== */
+.scanner-guide-narrow{
+  left:11%!important;
+  right:11%!important;
+  top:44%!important;
+  height:12%!important;
+  min-height:64px!important;
+  max-height:90px!important;
+}
+.scanner-mask-top{height:44%!important}
+.scanner-mask-bottom{top:56%!important}

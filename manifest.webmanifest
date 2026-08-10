@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 5.7",
+  "name": "KeyTrack Pro Enterprise 5.8",
   "short_name": "KeyTrack Pro",
-  "description": "Scanner con franja estrecha y confirmación por 3 lecturas iguales.",
+  "description": "Scanner que analiza únicamente la franja central de lectura.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

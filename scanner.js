@@ -5,6 +5,8 @@ export function initScanner({renderInventory}){
   let stableCandidate='';
   let stableCount=0;
   const STABLE_REQUIRED=3;
+  const roiCanvas=document.createElement('canvas');
+  const roiCtx=roiCanvas.getContext('2d',{willReadFrequently:false});
   let lastDetectionAt=0;
   let animationId=null;
   let opening=false;
@@ -165,6 +167,42 @@ export function initScanner({renderInventory}){
     lastDetectionAt=0;
   }
 
+
+  function getScanRoi(){
+    // Must match the visible v5.8 guide: ~78% width and ~12% height.
+    const vw=video.videoWidth||0;
+    const vh=video.videoHeight||0;
+    if(!vw || !vh)return null;
+
+    const x=Math.round(vw*0.11);
+    const y=Math.round(vh*0.44);
+    const w=Math.round(vw*0.78);
+    const h=Math.round(vh*0.12);
+
+    return {
+      x:Math.max(0,Math.min(x,vw-1)),
+      y:Math.max(0,Math.min(y,vh-1)),
+      w:Math.max(1,Math.min(w,vw-x)),
+      h:Math.max(1,Math.min(h,vh-y))
+    };
+  }
+
+  function drawRoiFrame(){
+    const roi=getScanRoi();
+    if(!roi)return null;
+
+    if(roiCanvas.width!==roi.w)roiCanvas.width=roi.w;
+    if(roiCanvas.height!==roi.h)roiCanvas.height=roi.h;
+
+    roiCtx.clearRect(0,0,roi.w,roi.h);
+    roiCtx.drawImage(
+      video,
+      roi.x,roi.y,roi.w,roi.h,
+      0,0,roi.w,roi.h
+    );
+    return roiCanvas;
+  }
+
   async function startDetector(){
     resetStableDetection();
     if(!('BarcodeDetector' in window)){
@@ -192,28 +230,31 @@ export function initScanner({renderInventory}){
 
       if(video.readyState>=2 && !video.paused){
         try{
-          const codes=await detector.detect(video);
-          if(codes?.[0]?.rawValue){
-            const now=Date.now();
-            const value=String(codes[0].rawValue||'').trim();
+          const roiFrame=drawRoiFrame();
+          if(roiFrame){
+            const codes=await detector.detect(roiFrame);
+            if(codes?.[0]?.rawValue){
+              const now=Date.now();
+              const value=String(codes[0].rawValue||'').trim();
 
-            if(value && now-lastDetectionAt>90){
-              lastDetectionAt=now;
+              if(value && now-lastDetectionAt>90){
+                lastDetectionAt=now;
 
-              if(value===stableCandidate){
-                stableCount++;
-              }else{
-                stableCandidate=value;
-                stableCount=1;
-              }
+                if(value===stableCandidate){
+                  stableCount++;
+                }else{
+                  stableCandidate=value;
+                  stableCount=1;
+                }
 
-              setMessage(`Verificando código: ${value} · ${stableCount}/${STABLE_REQUIRED}`);
+                setMessage(`Verificando zona central: ${value} · ${stableCount}/${STABLE_REQUIRED}`);
 
-              if(stableCount>=STABLE_REQUIRED){
-                setMessage(`Código confirmado: ${value}`, 'success');
-                apply(value);
-                setTimeout(()=>stop(true),120);
-                return;
+                if(stableCount>=STABLE_REQUIRED){
+                  setMessage(`Código confirmado: ${value}`, 'success');
+                  apply(value);
+                  setTimeout(()=>stop(true),120);
+                  return;
+                }
               }
             }
           }

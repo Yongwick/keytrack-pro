@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 5.3",
+  "name": "KeyTrack Pro Enterprise 5.5",
   "short_name": "KeyTrack Pro",
-  "description": "Búsqueda unificada con filtros opcionales por vehículo.",
+  "description": "Unified Search + Scanner Focus Fix + Android 16 Ready",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

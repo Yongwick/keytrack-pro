@@ -5,12 +5,14 @@ export function initScanner({renderInventory}){
   let animationId=null;
   let opening=false;
   let currentTarget='search';
+  let videoTrack=null, zoomMin=1, zoomMax=1, zoomStep=.2, currentZoom=1, torchOn=false;
 
   const video=$('#video');
   const message=$('#scanmsg');
   const loading=$('#cameraLoading');
   const errorActions=$('#cameraErrorActions');
   const help=$('#cameraHelp');
+  const zoomOut=$('#zoomOut'), zoomIn=$('#zoomIn'), zoomValue=$('#zoomValue'), torchToggle=$('#torchToggle');
 
   function setMessage(text,type='normal'){
     message.textContent=text;
@@ -24,6 +26,50 @@ export function initScanner({renderInventory}){
 
   function setErrorActions(show){
     errorActions.classList.toggle('hidden',!show);
+  }
+
+
+  function updateCameraControls(){
+    if(zoomValue) zoomValue.textContent=(Number(currentZoom)||1).toFixed(1)+'×';
+    if(zoomOut) zoomOut.disabled=!videoTrack||zoomMax<=zoomMin||currentZoom<=zoomMin+.001;
+    if(zoomIn) zoomIn.disabled=!videoTrack||zoomMax<=zoomMin||currentZoom>=zoomMax-.001;
+    if(torchToggle){
+      const hasTorch=!!(videoTrack?.getCapabilities?.()||{}).torch;
+      torchToggle.disabled=!hasTorch;
+      torchToggle.classList.toggle('active',torchOn);
+      torchToggle.textContent=torchOn?'💡':'🔦';
+    }
+  }
+
+  async function configureCameraTrack(){
+    videoTrack=state.stream?.getVideoTracks?.()[0]||null;
+    if(!videoTrack){updateCameraControls();return}
+    const caps=videoTrack.getCapabilities?.()||{};
+    if(Array.isArray(caps.focusMode)&&caps.focusMode.includes('continuous')){
+      try{await videoTrack.applyConstraints({advanced:[{focusMode:'continuous'}]})}catch{}
+    }
+    if(caps.zoom){
+      zoomMin=Number(caps.zoom.min??1); zoomMax=Number(caps.zoom.max??zoomMin);
+      zoomStep=Math.max(Number(caps.zoom.step||.1),.1);
+      currentZoom=Math.min(Math.max(zoomMin,1),zoomMax);
+      try{await videoTrack.applyConstraints({advanced:[{zoom:currentZoom}]})}catch{}
+    }else{zoomMin=zoomMax=currentZoom=1}
+    updateCameraControls();
+  }
+
+  async function setZoom(next){
+    if(!videoTrack||zoomMax<=zoomMin)return;
+    currentZoom=Math.min(zoomMax,Math.max(zoomMin,next));
+    try{await videoTrack.applyConstraints({advanced:[{zoom:currentZoom}]})}catch{}
+    updateCameraControls();
+  }
+
+  async function toggleTorch(){
+    if(!videoTrack||!(videoTrack.getCapabilities?.()||{}).torch)return;
+    torchOn=!torchOn;
+    try{await videoTrack.applyConstraints({advanced:[{torch:torchOn}]})}
+    catch{torchOn=!torchOn}
+    updateCameraControls();
   }
 
   async function stopStreamOnly(){
@@ -45,6 +91,7 @@ export function initScanner({renderInventory}){
     }
 
     detector=null;
+    videoTrack=null; torchOn=false; updateCameraControls();
   }
 
   async function stop(closeDialog=true){
@@ -82,8 +129,9 @@ export function initScanner({renderInventory}){
       audio:false,
       video:{
         facingMode:{ideal:'environment'},
-        width:{ideal:1920},
-        height:{ideal:1080}
+        width:{ideal:1920,min:1280},
+        height:{ideal:1080,min:720},
+        frameRate:{ideal:30,min:15}
       }
     };
 
@@ -97,8 +145,9 @@ export function initScanner({renderInventory}){
       if(rear?.deviceId){
         base.video={
           deviceId:{exact:rear.deviceId},
-          width:{ideal:1920},
-          height:{ideal:1080}
+          width:{ideal:1920,min:1280},
+          height:{ideal:1080,min:720},
+          frameRate:{ideal:30,min:15}
         };
       }
     }catch{}
@@ -257,8 +306,9 @@ export function initScanner({renderInventory}){
         await video.play();
       }
 
+      await configureCameraTrack();
       setLoading(false);
-      setMessage('Apunta la cámara al código. Mantén el código dentro del recuadro.');
+      setMessage('Enfoque continuo activo. Aleja un poco el teléfono y usa + Zoom si lo necesitas.');
       await startDetector();
 
     }catch(error){
@@ -282,6 +332,10 @@ export function initScanner({renderInventory}){
 
     await openCamera();
   }
+
+  zoomOut?.addEventListener('click',()=>setZoom(currentZoom-Math.max(zoomStep,.2)));
+  zoomIn?.addEventListener('click',()=>setZoom(currentZoom+Math.max(zoomStep,.2)));
+  torchToggle?.addEventListener('click',toggleTorch);
 
   $('#scan').onclick=()=>start('search');
   $('#scanField').onclick=()=>start('field');

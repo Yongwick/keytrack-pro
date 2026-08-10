@@ -4,7 +4,7 @@ export function initScanner({renderInventory}){
   let detector=null;
   let stableCandidate='';
   let stableCount=0;
-  const STABLE_REQUIRED=3;
+  const STABLE_REQUIRED=5;
   const roiCanvas=document.createElement('canvas');
   const roiCtx=roiCanvas.getContext('2d',{willReadFrequently:false});
   let lastDetectionAt=0;
@@ -175,9 +175,9 @@ export function initScanner({renderInventory}){
     if(!vw || !vh)return null;
 
     const x=Math.round(vw*0.11);
-    const y=Math.round(vh*0.44);
+    const y=Math.round(vh*0.415);
     const w=Math.round(vw*0.78);
-    const h=Math.round(vh*0.12);
+    const h=Math.round(vh*0.17);
 
     return {
       x:Math.max(0,Math.min(x,vw-1)),
@@ -217,7 +217,9 @@ export function initScanner({renderInventory}){
         formats=formats.filter(f=>supported.includes(f));
       }
 
-      detector=new BarcodeDetector(formats.length?{formats}:undefined);
+      const preferred=['code_128','code_39','ean_13','ean_8','upc_a','upc_e','qr_code'];
+      const selected=preferred.filter(f=>formats.includes(f));
+      detector=new BarcodeDetector(selected.length?{formats:selected}:undefined);
     }catch(error){
       console.warn('BarcodeDetector:',error);
       detector=null;
@@ -236,8 +238,16 @@ export function initScanner({renderInventory}){
             if(codes?.[0]?.rawValue){
               const now=Date.now();
               const value=String(codes[0].rawValue||'').trim();
+              const plausible=/^[A-Z0-9._\/-]{4,32}$/i.test(value);
+              if(!plausible){
+                stableCandidate='';
+                stableCount=0;
+                setMessage('Lectura inestable. Mantén las barras centradas.');
+                animationId=requestAnimationFrame(tick);
+                return;
+              }
 
-              if(value && now-lastDetectionAt>90){
+              if(value && now-lastDetectionAt>180){
                 lastDetectionAt=now;
 
                 if(value===stableCandidate){

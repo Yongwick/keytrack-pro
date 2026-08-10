@@ -3272,15 +3272,3 @@ body{
 }
 .scanner-mask-top{height:44%!important}
 .scanner-mask-bottom{top:56%!important}
-
-/* KeyTrack Pro 5.9 robust scan guide */
-.scanner-guide-narrow{
-  left:11%!important;
-  right:11%!important;
-  top:41.5%!important;
-  height:17%!important;
-  min-height:82px!important;
-  max-height:125px!important;
-}
-.scanner-mask-top{height:41.5%!important}
-.scanner-mask-bottom{top:58.5%!important}

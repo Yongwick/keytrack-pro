@@ -3166,3 +3166,69 @@ body{
 .scanner-control{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(20,38,64,.94);color:#fff;font-size:1.35rem;font-weight:800}
 .scanner-control:disabled{opacity:.35}.scanner-control.active{box-shadow:0 0 0 2px rgba(92,153,255,.5) inset}
 .scanner-zoom-value{min-width:48px;text-align:center;color:#fff;font-weight:800}
+
+
+/* ==========================================================
+   KEYTRACK PRO 5.6 — NARROW BARCODE SCAN ZONE
+   ========================================================== */
+.scanner-stage{
+  position:relative!important;
+  overflow:hidden!important;
+}
+
+.scanner-guide-narrow{
+  position:absolute!important;
+  z-index:6!important;
+  left:8%!important;
+  right:8%!important;
+  top:39%!important;
+  bottom:auto!important;
+  height:22%!important;
+  min-height:110px!important;
+  max-height:180px!important;
+  pointer-events:none!important;
+}
+
+.scanner-mask{
+  position:absolute!important;
+  z-index:5!important;
+  left:0!important;
+  right:0!important;
+  background:rgba(2,8,18,.38)!important;
+  pointer-events:none!important;
+}
+.scanner-mask-top{
+  top:0!important;
+  height:39%!important;
+}
+.scanner-mask-bottom{
+  top:61%!important;
+  bottom:0!important;
+}
+
+.scanner-guide-narrow .corner{
+  width:44px!important;
+  height:44px!important;
+}
+.scanner-guide-narrow .scan-line{
+  left:10%!important;
+  right:10%!important;
+  top:50%!important;
+}
+
+.scanner-camera-controls{
+  z-index:8!important;
+}
+
+@media(max-width:760px){
+  .scanner-guide-narrow{
+    left:12%!important;
+    right:12%!important;
+    top:40%!important;
+    height:20%!important;
+    min-height:96px!important;
+    max-height:150px!important;
+  }
+  .scanner-mask-top{height:40%!important}
+  .scanner-mask-bottom{top:60%!important}
+}

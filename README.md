@@ -1,4 +1,4 @@
-# KeyTrack Pro Enterprise 5.10 — Bluetooth Ready
+# KeyTrack Pro Enterprise 5.11 — Sale Input Fix + Bluetooth Ready
 
 Base: v5.8 estable.
 

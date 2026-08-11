@@ -1,7 +1,7 @@
 {
-  "name": "KeyTrack Pro Enterprise 5.9a",
+  "name": "KeyTrack Pro Enterprise 5.10",
   "short_name": "KeyTrack Pro",
-  "description": "v5.8 estable + mejoras de scanner sin cambios de autenticación.",
+  "description": "Inventario optimizado para scanner Bluetooth/USB, sin cámara.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

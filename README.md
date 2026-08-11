@@ -1,16 +1,15 @@
-# KeyTrack Pro Enterprise 5.9a — Scanner Only
+# KeyTrack Pro Enterprise 5.10 — Bluetooth Ready
 
 Base: v5.8 estable.
 
-Cambios realizados:
-- NO se modifica auth.js.
-- NO se modifica la estructura del login/crear cuenta.
-- ROI real de v5.8 conservado.
-- Zona de lectura ligeramente más alta para capturar todas las barras.
-- 5 lecturas consecutivas iguales antes de confirmar.
-- Mayor separación temporal entre lecturas.
-- Prioridad para Code 128 / Code 39 / EAN / UPC.
-- Rechazo básico de lecturas claramente inestables.
-- Se conservan zoom, enfoque continuo y linterna.
-
-No requiere SQL.
+Cambios:
+- Eliminado completamente el escáner por cámara.
+- Eliminado BarcodeDetector, zoom, linterna y permisos/lógica de cámara.
+- El campo principal queda optimizado para scanner Bluetooth/USB tipo teclado.
+- Enter o Tab después del código confirma la lectura.
+- Coincidencia exacta por código de barras, SKU, OEM/PN, FCC, serie o IC.
+- Si existe una sola coincidencia exacta, abre directamente la ficha.
+- En Nuevo producto, el campo Código de barras acepta directamente el scanner Bluetooth.
+- En Ventas, el buscador ya acepta scanner Bluetooth + Enter para agregar producto.
+- Login, sincronización, inventario y base de datos permanecen sin cambios.
+- No requiere SQL.

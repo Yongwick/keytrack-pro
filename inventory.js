@@ -128,8 +128,99 @@ export function renderInventory(){
   $('#sz').textContent=state.items.filter(x=>safeNumber(x.quantity)===0).length;
 }
 
+
+function exactScannerMatch(raw){
+  const q=String(raw||'').trim().toLowerCase();
+  if(!q)return null;
+
+  const matches=state.items.filter(x=>[
+    x.barcode,x.sku,x.oem_number,x.fcc_id,x.serial_number,x.ic_number
+  ].some(v=>String(v||'').trim().toLowerCase()===q));
+
+  return matches.length===1?matches[0]:null;
+}
+
+function openExactScannerResult(raw){
+  const product=exactScannerMatch(raw);
+  if(!product)return false;
+
+  const search=$('#search');
+  search.value=String(raw||'').trim();
+  renderInventory();
+
+  requestAnimationFrame(()=>{
+    const button=document.querySelector(
+      `[data-product-action="view"][data-id="${product.id}"]`
+    );
+    button?.click();
+  });
+  return true;
+}
+
 export function initInventory({switchView}){
   $('#search').addEventListener('input',renderInventory);
+
+  // Scanner Bluetooth / USB: normalmente se comporta como teclado.
+  // Si envía Enter después del código, abre directamente la ficha cuando
+  // existe una coincidencia exacta por barcode, SKU, OEM, FCC, serie o IC.
+  $('#search').addEventListener('keydown',event=>{
+    if(event.key!=='Enter' && event.key!=='Tab')return;
+    const raw=event.currentTarget.value.trim();
+    if(!raw)return;
+    event.preventDefault();
+
+    if(!openExactScannerResult(raw)){
+      renderInventory();
+      toast('Código recibido. No hay coincidencia exacta.');
+    }
+  });
+
+  // Mantener la búsqueda preparada al entrar al inventario.
+  setTimeout(()=>$('#search')?.focus({preventScroll:true}),120);
+
+  // Captura opcional de scanners tipo "keyboard wedge" aun cuando el
+  // campo de búsqueda no tenga foco. Solo acepta ráfagas rápidas.
+  let btBuffer='';
+  let btLast=0;
+  let btTimer=null;
+
+  document.addEventListener('keydown',event=>{
+    if(document.querySelector('dialog[open]'))return;
+
+    const active=document.activeElement;
+    const editable=active && (
+      active.tagName==='INPUT' ||
+      active.tagName==='TEXTAREA' ||
+      active.tagName==='SELECT' ||
+      active.isContentEditable
+    );
+    if(editable)return;
+
+    const now=Date.now();
+
+    if(event.key==='Enter' || event.key==='Tab'){
+      if(btBuffer.length>=4 && now-btLast<400){
+        event.preventDefault();
+        const value=btBuffer;
+        btBuffer='';
+        clearTimeout(btTimer);
+        $('#search').value=value;
+        if(!openExactScannerResult(value))renderInventory();
+      }
+      return;
+    }
+
+    if(event.key.length!==1 || event.ctrlKey || event.altKey || event.metaKey)return;
+
+    // Los scanners escriben mucho más rápido que una persona.
+    if(now-btLast>180)btBuffer='';
+    btBuffer+=event.key;
+    btLast=now;
+
+    clearTimeout(btTimer);
+    btTimer=setTimeout(()=>{btBuffer='';},450);
+  });
+
   $('#filter').addEventListener('change',renderInventory);
 
   ['vehicleMake','vehicleModel','vehicleYear'].forEach(id=>{

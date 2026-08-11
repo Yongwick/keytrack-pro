@@ -88,6 +88,17 @@ function openMove(product){
 }
 
 export function initProducts({reload,switchView}){
+  // Bluetooth barcode field: scanners suelen enviar Enter.
+  // Evita guardar accidentalmente el formulario al terminar el escaneo.
+  setTimeout(()=>{
+    $('#ibar')?.addEventListener('keydown',event=>{
+      if(event.key==='Enter' || event.key==='Tab'){
+        event.preventDefault();
+        $('#ifcc')?.focus();
+      }
+    });
+  },0);
+
   $('#add').onclick=()=>openProduct();
   $('#ix').onclick=$('#icancel').onclick=()=>$('#item').close();
   $('#mx').onclick=$('#mcancel').onclick=()=>$('#move').close();

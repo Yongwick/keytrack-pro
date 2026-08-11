@@ -7,7 +7,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
-<title>KeyTrack Pro Enterprise 5.3 · Unified Search</title>
+<title>KeyTrack Pro Enterprise 5.10 · Bluetooth Ready</title>
 <link rel="stylesheet" href="./app.css">
 </head>
 <body>
@@ -31,7 +31,7 @@
  <div class="brand"><div class="logo"><img src="/icon-192.png" alt="KeyTrack Pro"></div><div><h1>KeyTrack Pro</h1><div class="muted">Enterprise 4.19 · Context Detail + Stock Alerts</div></div></div>
  <div class="row">
   <span class="status"><span id="dot" class="dot"></span><span id="cloud">Conectando…</span></span>
-  <span id="versionBadge" class="badge" title="Versión estable">v5.9a</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
+  <span id="versionBadge" class="badge" title="Versión estable">v5.10</span><span id="companyBadge" class="badge">Empresa</span><span id="role" class="badge">employee</span><span id="user" class="muted toptext"></span>
   <button id="mobileMenuToggle" class="btn mobile-only" type="button">☰ Menú</button>
 <button id="installApp" class="btn hidden" type="button">⬇ Instalar app</button>
 <button id="csv" class="btn">⇅ Importar / Exportar</button><button id="add" class="btn primary">+ Nuevo</button>
@@ -64,8 +64,11 @@
  <input id="search" class="field unified-search-input" placeholder="Buscar nombre, SKU, FCC, OEM, marca o vehículo…">
  <select id="filter" class="field"><option value="">Todas las categorías</option><option>Llave</option><option>Control</option><option>Máquina</option><option>Herramienta</option><option>Accesorio</option><option>Otro</option></select>
  <button id="toggleVehicleFilters" class="btn" type="button">⚙ Filtros</button>
- <button id="scan" class="btn">📷 Escanear</button>
  <button id="clear" class="btn">Limpiar</button>
+ <div class="bluetooth-ready-hint" title="Los scanners Bluetooth normalmente funcionan como teclado">
+   <span class="bt-dot"></span>
+   <span>Scanner Bluetooth listo</span>
+ </div>
 
  <div id="vehicleFilters" class="vehicle-filters">
    <input id="vehicleMake" class="field" placeholder="Marca">
@@ -235,7 +238,7 @@
    <div><label>Serie</label><input id="iser" class="field"></div>
    <div><label>Ubicación</label><select id="iloc" class="field"></select></div>
    <div><label>Mínimo</label><input id="imin" class="field" type="number" min="0" value="2"></div>
-   <div><label>Código de barras / QR</label><div class="row"><input id="ibar" class="field" style="flex:1"><button id="scanField" type="button" class="btn">📷</button></div></div>
+   <div><label>Código de barras</label><input id="ibar" class="field" autocomplete="off" placeholder="Escanea con Bluetooth o escribe el código"></div>
    <div><label>FCC ID</label><input id="ifcc" class="field"></div>
    <div><label>IC</label><input id="iic" class="field"></div>
    <div><label>Frecuencia</label><input id="ifreq" class="field" placeholder="315 MHz"></div>
@@ -297,53 +300,7 @@
  </div><div class="row fa"><button id="mcancel" type="button" class="btn">Cancelar</button><button class="btn primary">Aplicar</button></div></form>
 </dialog>
 
-<dialog id="scanner">
- <div class="dh row scanner-head">
-   <div>
-     <h3>Escanear código</h3>
-     <div class="muted scanner-subtitle">Enfoque continuo, zoom y linterna para códigos de barras o QR.</div>
-   </div>
-   <button id="sx" class="btn" type="button">×</button>
- </div>
- <div class="scanbox scanner-body">
-   <div id="cameraStage" class="camera-stage">
-     <video id="video" playsinline autoplay muted></video>
-     <div class="scanner-mask scanner-mask-top" aria-hidden="true"></div>
-     <div class="scanner-mask scanner-mask-bottom" aria-hidden="true"></div>
-     <div class="scanner-guide scanner-guide-narrow" aria-hidden="true">
-       <span class="corner tl"></span><span class="corner tr"></span>
-       <span class="corner bl"></span><span class="corner br"></span>
-       <div class="scan-line"></div>
-     </div>
-     <div class="scanner-camera-controls">
-       <button id="zoomOut" class="scanner-control" type="button">−</button>
-       <span id="zoomValue" class="scanner-zoom-value">1.0×</span>
-       <button id="zoomIn" class="scanner-control" type="button">+</button>
-       <button id="torchToggle" class="scanner-control" type="button">🔦</button>
-     </div>
-     <div id="cameraLoading" class="camera-loading">
-       <div class="camera-spinner"></div>
-       <b>Iniciando cámara…</b>
-     </div>
-   </div>
 
-   <div id="scanmsg" class="scanner-message">Solicitando permiso de cámara…</div>
-
-   <div id="cameraErrorActions" class="scanner-error-actions hidden">
-     <button id="retryCamera" class="btn primary" type="button">↻ Reintentar cámara</button>
-     <button id="openCameraHelp" class="btn" type="button">Permisos de cámara</button>
-   </div>
-
-   <div id="cameraHelp" class="camera-help hidden">
-     <b>Si la cámara está bloqueada:</b>
-     <div>1. Abre los permisos de KeyTrack Pro o del navegador.</div>
-     <div>2. Permite el acceso a <b>Cámara</b>.</div>
-     <div>3. Regresa y toca <b>Reintentar cámara</b>.</div>
-   </div>
-
-   <button id="manual" class="btn" type="button">Ingresar manualmente</button>
- </div>
-</dialog>
 
 <dialog id="history">
  <div class="dh row"><h3 id="htitle">Historial</h3><button id="hx" class="btn">×</button></div>
@@ -398,7 +355,6 @@
           <label>Buscar producto</label>
           <div class="pos-search-row">
             <input id="saleProductSearch" class="field" placeholder="SKU, código, FCC ID, OEM o nombre...">
-            <button type="button" class="btn" id="saleScan">📷 Escanear</button>
           </div>
         </div>
 

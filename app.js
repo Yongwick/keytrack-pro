@@ -7,7 +7,6 @@ import {initProducts} from './products.js';
 import {initOperations,renderOperational} from './operations.js';
 import {initBranches,renderBranches} from './branches.js';
 import {initSuperAdmin,loadSuperAdmin} from './superadmin.js';
-import {initScanner} from './scanner.js';
 import {initInstallApp} from './install.js';
 import {initDataTransfer} from './data-transfer.js';
 
@@ -106,7 +105,6 @@ initProducts({reload,switchView});
 initOperations({reload,switchView});
 initBranches({reload});
 initSuperAdmin();
-initScanner({renderInventory});
 initInstallApp();
 initDataTransfer({reload});
 

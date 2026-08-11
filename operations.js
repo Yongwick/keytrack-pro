@@ -362,23 +362,6 @@ export function initOperations({reload,switchView}){
     if(product)addProductToSale(product);
   });
 
-  // Escáner simple: usa prompt como fallback seguro.
-  $('#saleScan').onclick=()=>{
-    const code=prompt('Escanea o escribe el código / SKU');
-    if(!code)return;
-    const q=code.trim().toLowerCase();
-    const product=state.items.find(x=>[
-      x.barcode,x.sku,x.fcc_id,x.oem_number
-    ].some(v=>String(v||'').trim().toLowerCase()===q));
-
-    if(product){
-      addProductToSale(product);
-    }else{
-      $('#saleProductSearch').value=code;
-      renderSaleSearchResults(code);
-    }
-  };
-
   // Carrito
   $('#saleCartBody').addEventListener('input',event=>{
     let index;

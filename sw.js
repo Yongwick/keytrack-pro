@@ -1,4 +1,4 @@
-const CACHE='keytrack-v5-12-shell';
+const CACHE='keytrack-v5-11-shell';
 
 const ASSETS=[
   '/',

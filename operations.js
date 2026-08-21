@@ -54,7 +54,7 @@ function renderSaleCart(){
           value="${safeNumber(item.discount)}"
           data-cart-discount="${index}">
       </td>
-      <td><b data-cart-subtotal="${index}">${money(Math.max((safeNumber(item.unit_price)*safeNumber(item.quantity))-safeNumber(item.discount),0))}</b></td>
+      <td><b>${money(Math.max((safeNumber(item.unit_price)*safeNumber(item.quantity))-safeNumber(item.discount),0))}</b></td>
       <td><button type="button" class="btn small danger" data-cart-remove="${index}">×</button></td>
     </tr>
   `).join(''):'<tr><td colspan="7" class="muted">Agrega al menos un producto.</td></tr>';
@@ -363,73 +363,29 @@ export function initOperations({reload,switchView}){
   });
 
   // Carrito
-  // IMPORTANTE: no volver a renderizar toda la fila en cada pulsación.
-  // En Android eso destruía el <input> enfocado y hacía que sólo aceptara
-  // un dígito o que Backspace pareciera no funcionar.
   $('#saleCartBody').addEventListener('input',event=>{
-    const target=event.target;
-    let index=-1;
+    let index;
 
-    if(target.matches('[data-cart-price]')){
-      index=Number(target.dataset.cartPrice);
-      // Permitimos temporalmente el campo vacío mientras el usuario edita.
-      saleCart[index].unit_price=target.value===''?0:Math.max(safeNumber(target.value),0);
-    }else if(target.matches('[data-cart-qty]')){
-      index=Number(target.dataset.cartQty);
-      if(target.value!==''){
-        const max=saleCart[index].stock;
-        const qty=Math.min(Math.max(Math.floor(safeNumber(target.value)),1),max);
-        saleCart[index].quantity=qty;
-      }
-    }else if(target.matches('[data-cart-discount]')){
-      index=Number(target.dataset.cartDiscount);
-      saleCart[index].discount=target.value===''?0:Math.max(safeNumber(target.value),0);
-    }else{
-      return;
+    if(event.target.matches('[data-cart-price]')){
+      index=Number(event.target.dataset.cartPrice);
+      saleCart[index].unit_price=Math.max(safeNumber(event.target.value),0);
     }
 
-    // Actualizamos sólo el subtotal de esta línea y los totales generales,
-    // conservando el foco/cursor y la selección del teclado móvil.
-    const subtotalEl=$(`[data-cart-subtotal="${index}"]`);
-    if(subtotalEl){
-      const item=saleCart[index];
-      subtotalEl.textContent=money(Math.max((safeNumber(item.unit_price)*safeNumber(item.quantity))-safeNumber(item.discount),0));
-    }
-    updateSaleTotals();
-  });
-
-  // Al terminar de editar normalizamos límites y formato sin interrumpir
-  // la escritura. Esto también permite borrar todo y escribir un valor nuevo.
-  $('#saleCartBody').addEventListener('change',event=>{
-    const target=event.target;
-    let index=-1;
-
-    if(target.matches('[data-cart-price]')){
-      index=Number(target.dataset.cartPrice);
-      const value=Math.max(safeNumber(target.value),0);
-      saleCart[index].unit_price=value;
-      target.value=value;
-    }else if(target.matches('[data-cart-qty]')){
-      index=Number(target.dataset.cartQty);
+    if(event.target.matches('[data-cart-qty]')){
+      index=Number(event.target.dataset.cartQty);
       const max=saleCart[index].stock;
-      const qty=Math.min(Math.max(Math.floor(safeNumber(target.value)||1),1),max);
+      let qty=Math.max(Math.floor(safeNumber(event.target.value)),1);
+      qty=Math.min(qty,max);
       saleCart[index].quantity=qty;
-      target.value=qty;
-    }else if(target.matches('[data-cart-discount]')){
-      index=Number(target.dataset.cartDiscount);
-      const value=Math.max(safeNumber(target.value),0);
-      saleCart[index].discount=value;
-      target.value=value;
-    }else{
-      return;
+      event.target.value=qty;
     }
 
-    const subtotalEl=$(`[data-cart-subtotal="${index}"]`);
-    if(subtotalEl){
-      const item=saleCart[index];
-      subtotalEl.textContent=money(Math.max((safeNumber(item.unit_price)*safeNumber(item.quantity))-safeNumber(item.discount),0));
+    if(event.target.matches('[data-cart-discount]')){
+      index=Number(event.target.dataset.cartDiscount);
+      saleCart[index].discount=Math.max(safeNumber(event.target.value),0);
     }
-    updateSaleTotals();
+
+    renderSaleCart();
   });
 
   $('#saleCartBody').addEventListener('click',event=>{

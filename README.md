@@ -1,15 +1,15 @@
-# KeyTrack Pro Enterprise 5.11 — Sale Input Fix + Bluetooth Ready
+# KeyTrack Pro v5.11 — Clean Header
 
-Base: v5.8 estable.
+Base: v5.10 Bluetooth Ready.
 
 Cambios:
-- Eliminado completamente el escáner por cámara.
-- Eliminado BarcodeDetector, zoom, linterna y permisos/lógica de cámara.
-- El campo principal queda optimizado para scanner Bluetooth/USB tipo teclado.
-- Enter o Tab después del código confirma la lectura.
-- Coincidencia exacta por código de barras, SKU, OEM/PN, FCC, serie o IC.
-- Si existe una sola coincidencia exacta, abre directamente la ficha.
-- En Nuevo producto, el campo Código de barras acepta directamente el scanner Bluetooth.
-- En Ventas, el buscador ya acepta scanner Bluetooth + Enter para agregar producto.
-- Login, sincronización, inventario y base de datos permanecen sin cambios.
+- Oculta el texto descriptivo debajo del nombre KeyTrack Pro.
+- Oculta la versión visible del encabezado.
+- Mantiene intactas todas las funciones de v5.10:
+  - scanner Bluetooth/USB;
+  - búsqueda por barcode, SKU, OEM/PN, FCC, serie o IC;
+  - apertura automática de ficha;
+  - captura Bluetooth en Nuevo producto;
+  - uso Bluetooth en Ventas;
+  - login, sincronización e inventario.
 - No requiere SQL.
